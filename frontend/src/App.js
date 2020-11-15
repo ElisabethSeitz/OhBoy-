@@ -3,7 +3,8 @@ import { setup } from './service/MonsterService';
 
 function App() {
   setup().then(
-    (text) => (document.getElementById('spanText').innerText = text)
+    (monsters) =>
+      (document.getElementById('spanText').innerText = monsters[0].name)
   );
   return (
     <div>
