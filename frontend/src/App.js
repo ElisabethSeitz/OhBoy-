@@ -1,10 +1,13 @@
-import React from "react";
-
+import React from 'react';
+import { setup } from './service/MonsterService';
 
 function App() {
+  setup().then(
+    (text) => (document.getElementById('spanText').innerText = text)
+  );
   return (
     <div>
-      Home
+      <span id="spanText"></span>
     </div>
   );
 }
