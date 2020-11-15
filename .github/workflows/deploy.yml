@@ -46,7 +46,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: backend-build.jar
-          path: backend/target/ohboy.jar
+          path: backend/target/
 
   deploy:
     name: deploy to heroku
@@ -58,7 +58,7 @@ jobs:
         run: mkdir backend/target
       - uses: actions/download-artifact@v2
         with:
-          name: ohboy.jar
+          name: backend-build.jar
           path: backend/target
       - name: login to heroku container
         env:
