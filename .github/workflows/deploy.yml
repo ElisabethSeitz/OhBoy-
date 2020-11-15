@@ -58,7 +58,7 @@ jobs:
         run: mkdir backend/target
       - uses: actions/download-artifact@v2
         with:
-          name: backend-build.jar
+          name: ohboy.jar
           path: backend/target
       - name: login to heroku container
         env:
