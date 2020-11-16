@@ -1,16 +1,8 @@
 import React from 'react';
-import { setup } from './service/MonsterService';
+import LoginWithFacebook from './facebookLogin/LoginWithFacebook';
 
 function App() {
-  setup().then(
-    (monsters) =>
-      (document.getElementById('spanText').innerText = monsters[0].name)
-  );
-  return (
-    <div>
-      <span id="spanText"></span>
-    </div>
-  );
+  return <LoginWithFacebook />;
 }
 
 export default App;
