@@ -1,35 +1,21 @@
-import React, { useState } from 'react';
-import FacebookLogin from 'react-facebook-login';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 export default function LoginWithFacebook() {
-  const [login, setLogin] = useState(false);
-  const [data, setData] = useState({});
+  const [config, setConfig] = useState();
 
-  const responseFacebook = (response) => {
-    console.log(response);
-    setData(response);
-    if (response.accessToken) {
-      setLogin(true);
-    } else {
-      setLogin(false);
-    }
-  };
+  useEffect(() => {
+    axios
+      .get('/auth/login/facebook')
+      .then((response) => setConfig(response.data));
+  }, []);
 
-  return (
-    <>
-      <div>
-        {!login && (
-          <FacebookLogin
-            appId="403563560686849"
-            autoLoad={true}
-            fields="name"
-            scope="public_profile"
-            callback={responseFacebook}
-            icon="fa-facebook"
-          />
-        )}
-        {login && data.name}
-      </div>
-    </>
-  );
+  if (!config) {
+    return <div>loading</div>;
+  }
+
+  const state = '';
+  const url = `https://www.facebook.com/v9.0/dialog/oauth?client_id=${config?.clientId}&redirect_uri=${config?.redirectUri}&state=${state}`;
+
+  return <a href={url}>Login with Facebook</a>;
 }
