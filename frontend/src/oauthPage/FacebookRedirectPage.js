@@ -11,15 +11,15 @@ export default function FacebookRedirectPage() {
   useEffect(() => {
     if (code) {
       loginWithFacebookCode(code)
-        .then(() => history.push('/monsters'))
+        .then(() => history.push('/'))
         .catch(console.log);
     }
+    // eslint-disable-next-line
   }, [code]);
 
   return (
     <>
-      <title>Login</title>
-      <p>Success</p>
+      <p>Success, welcome to OhBoy</p>
     </>
   );
 }

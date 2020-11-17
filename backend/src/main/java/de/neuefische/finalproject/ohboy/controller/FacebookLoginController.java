@@ -18,15 +18,17 @@ public class FacebookLoginController {
         this.facebookConfig = facebookConfig;
     }
 
-    @PostMapping
-    public String loginWithFacebook (@RequestBody FacebookCodeDto dto) {
-        return facebookLoginService.getFacebookAccessToken(dto.getCode());
-    }
-
     @GetMapping
     public FacebookConfigDto getConfig(){
         return new FacebookConfigDto(
                 facebookConfig.getClientId(),
                 facebookConfig.getRedirectUri());
     }
+
+    @PostMapping
+    public String loginWithFacebook (@RequestBody FacebookCodeDto dto) {
+        return facebookLoginService.getFacebookAccessToken(dto.getCode());
+    }
+
+
 }
