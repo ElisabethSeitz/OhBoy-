@@ -32,7 +32,7 @@ public class FacebookLoginService {
         // get user data from user
         FacebookUserDto userData = apiService.getFacebookUserData(accessToken);
 
-        // add / update user
+        // add / update user in dao
         OhBoyUser ohBoyUser = saveUserData(userData);
 
         // generate jwt token
