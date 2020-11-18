@@ -4,7 +4,7 @@ import MonsterList from '../lists/MonsterList';
 export default function MonsterPage() {
   return (
     <>
-      <p>Monsters</p>
+      <h1>Monsters</h1>
       <MonsterList />
     </>
   );
