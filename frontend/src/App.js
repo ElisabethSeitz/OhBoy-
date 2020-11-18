@@ -6,6 +6,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import ProtectedRoute from './routing/ProtectedRoute';
 import MonsterPage from './pages/MonsterPage';
 import MonsterContextProvider from './contexts/MonsterContextProvider';
+import AddMonsterPage from './pages/AddMonsterPage';
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
             path="/auth/facebook/redirect"
             component={FacebookRedirectPage}
           />
-          <ProtectedRoute path="/monsters" component={MonsterPage} />
+          <ProtectedRoute exact path="/monsters" component={MonsterPage} />
+          <ProtectedRoute path="/monsters/create" component={AddMonsterPage} />
           <Route path="/">
             <Redirect to="/monsters" />
           </Route>

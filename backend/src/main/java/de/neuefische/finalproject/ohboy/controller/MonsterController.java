@@ -1,12 +1,11 @@
 package de.neuefische.finalproject.ohboy.controller;
 
+import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
 import de.neuefische.finalproject.ohboy.model.Monster;
 import de.neuefische.finalproject.ohboy.service.MonsterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.lang.NonNull;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,5 +30,9 @@ public class MonsterController {
         return monsterService.findAllByUserId(userId);
     }
 
+    @PostMapping
+    public Monster add(@RequestBody AddMonsterDto dto){
+        return this.monsterService.add(dto);
+    }
 
 }

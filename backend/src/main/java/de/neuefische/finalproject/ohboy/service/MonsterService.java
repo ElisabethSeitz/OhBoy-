@@ -1,7 +1,10 @@
 package de.neuefische.finalproject.ohboy.service;
 
 import de.neuefische.finalproject.ohboy.dao.MonsterMongoDao;
+import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
 import de.neuefische.finalproject.ohboy.model.Monster;
+import de.neuefische.finalproject.ohboy.utils.IdUtils;
+import de.neuefische.finalproject.ohboy.utils.TimestampUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +14,13 @@ import java.util.List;
 public class MonsterService {
 
     private final MonsterMongoDao monsterMongoDao;
+    private final IdUtils idUtils;
+
 
     @Autowired
-    public MonsterService(MonsterMongoDao monsterMongoDao) {
+    public MonsterService(MonsterMongoDao monsterMongoDao, IdUtils idUtils) {
         this.monsterMongoDao = monsterMongoDao;
+        this.idUtils = idUtils;
     }
 
     public List<Monster> getAll() {
@@ -23,5 +29,14 @@ public class MonsterService {
 
     public List<Monster> findAllByUserId(String userId) {
         return monsterMongoDao.findAllByUserId(userId);
+    }
+
+    public Monster add(AddMonsterDto dto) {
+        Monster monsterToBeSaved = Monster.builder()
+                                        .id(idUtils.generateId())
+                                        .name(dto.getName())
+                                        .userId(dto.getUserId())
+                                        .build();
+        return monsterMongoDao.save(monsterToBeSaved);
     }
 }
