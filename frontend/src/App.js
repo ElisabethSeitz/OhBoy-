@@ -1,15 +1,29 @@
 import React from 'react';
-import { setup } from './service/MonsterService';
+import LoginWithFacebook from './facebookLogin/LoginWithFacebook';
+import UserContextProvider from './contexts/UserContextProvider';
+import FacebookRedirectPage from './pages/FacebookRedirectPage';
+import { Route, Switch, Redirect } from 'react-router-dom';
+import ProtectedRoute from './routing/ProtectedRoute';
+import MonsterPage from './pages/MonsterPage';
+import MonsterContextProvider from './contexts/MonsterContextProvider';
 
 function App() {
-  setup().then(
-    (monsters) =>
-      (document.getElementById('spanText').innerText = monsters[0].name)
-  );
   return (
-    <div>
-      <span id="spanText"></span>
-    </div>
+    <UserContextProvider>
+      <MonsterContextProvider>
+        <Switch>
+          <Route path="/login" component={LoginWithFacebook} />
+          <Route
+            path="/auth/facebook/redirect"
+            component={FacebookRedirectPage}
+          />
+          <ProtectedRoute path="/monsters" component={MonsterPage} />
+          <Route path="/">
+            <Redirect to="/monsters" />
+          </Route>
+        </Switch>
+      </MonsterContextProvider>
+    </UserContextProvider>
   );
 }
 
