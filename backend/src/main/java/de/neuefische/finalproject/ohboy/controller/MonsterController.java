@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/monster")
+@RequestMapping(value= "/api/monster")
 public class MonsterController {
 
     private final MonsterService monsterService;
