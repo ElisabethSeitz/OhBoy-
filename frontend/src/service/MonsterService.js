@@ -6,5 +6,7 @@ const header = (token) => ({
   },
 });
 
-export const getMonsters = (token) =>
-  axios.get('/api/monster', header(token)).then((response) => response.data);
+export const getMonstersByUserId = (token, userId) =>
+  axios
+    .get('/api/monster/' + userId, header(token))
+    .then((response) => response.data);

@@ -4,6 +4,7 @@ import de.neuefische.finalproject.ohboy.model.Monster;
 import de.neuefische.finalproject.ohboy.service.MonsterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,5 +25,11 @@ public class MonsterController {
     public List<Monster> getAll() {
         return monsterService.getAll();
     }
+
+    @GetMapping("{userId}")
+    public List<Monster> getAllByUserId(@PathVariable String userId) {
+        return monsterService.findAllByUserId(userId);
+    }
+
 
 }

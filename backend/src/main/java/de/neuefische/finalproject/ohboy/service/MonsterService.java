@@ -21,4 +21,7 @@ public class MonsterService {
         return monsterMongoDao.findAll();
     }
 
+    public List<Monster> findAllByUserId(String userId) {
+        return monsterMongoDao.findAllByUserId(userId);
+    }
 }
