@@ -14,8 +14,8 @@ export default function MonsterContextProvider({ children }) {
         .catch(console.log);
   }, [token, tokenIsValid]);
 
-  const create = (name) =>
-    addMonster(token, name, userData.sub)
+  const create = (name, image) =>
+    addMonster(token, name, userData.sub, image)
       .then((addedMonster) => setMonsters([...monsters, addedMonster]))
       .catch(console.log);
 

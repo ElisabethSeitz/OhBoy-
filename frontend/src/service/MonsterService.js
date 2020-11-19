@@ -11,7 +11,7 @@ export const getMonstersByUserId = (token, userId) =>
     .get('/api/monster/' + userId, header(token))
     .then((response) => response.data);
 
-export const addMonster = (token, name, userId) =>
+export const addMonster = (token, name, userId, image) =>
   axios
-    .post('/api/monster', { name, userId }, header(token))
+    .post('/api/monster', { name, userId, image }, header(token))
     .then((response) => response.data);
