@@ -7,14 +7,14 @@ const initialState = {
   name: '',
 };
 
-export default function MonsterForm({ monster = initialState}) {
+export default function MonsterForm({ monster = initialState }) {
   const [monsterData, setMonsterData] = useState(monster);
   const { create } = useContext(MonsterContext);
   const history = useHistory();
 
   return (
     <form onSubmit={handleSubmit}>
-      <MonsterGallery/>
+      <MonsterGallery />
       <label>
         name
         <input
