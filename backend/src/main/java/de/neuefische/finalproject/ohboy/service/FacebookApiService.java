@@ -41,7 +41,6 @@ public class FacebookApiService {
         if (response.getStatusCode() != HttpStatus.OK) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "failed to login");
         }
-
         return response.getBody().getAccess_token();
     }
 

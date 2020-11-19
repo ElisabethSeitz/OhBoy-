@@ -17,6 +17,7 @@ public class Monster {
     private String id;
     private String userId;
     private String name;
+    private String image;
     private int balance;
     private int payoutDoneRewards;
     private int scoreDoneTasks;
@@ -25,9 +26,10 @@ public class Monster {
     private int countOpenRewards;
     private int countDoneRewards;
 
-    public Monster(String id, String userId, String name) {
+    public Monster(String id, String userId, String name, String image) {
         this.id = id;
         this.userId = userId;
         this.name = name;
+        this.image = image;
     }
 }

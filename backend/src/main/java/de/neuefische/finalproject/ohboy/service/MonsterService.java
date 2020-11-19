@@ -36,6 +36,7 @@ public class MonsterService {
                                         .id(idUtils.generateId())
                                         .name(dto.getName())
                                         .userId(dto.getUserId())
+                                        .image(dto.getImage())
                                         .build();
         return monsterMongoDao.save(monsterToBeSaved);
     }
