@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function MonsterGallery() {
-  const amount = 2;
+  const amount = 5;
   let images = [];
   let currentImage = 0;
 
