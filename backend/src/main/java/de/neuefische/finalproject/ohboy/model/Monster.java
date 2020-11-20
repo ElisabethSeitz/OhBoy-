@@ -26,6 +26,7 @@ public class Monster {
     private int countOpenRewards;
     private int countDoneRewards;
 
+
     public Monster(String id, String userId, String name, String image) {
         this.id = id;
         this.userId = userId;

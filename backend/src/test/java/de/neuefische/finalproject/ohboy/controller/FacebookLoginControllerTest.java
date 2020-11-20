@@ -62,14 +62,14 @@ class FacebookLoginControllerTest {
     @Test
     public void getJwtTokenWithValidAccessCode(){
 
-        // MOCK github access token response
+        // MOCK facebook access token response
         String accessUrl ="https://graph.facebook.com/v9.0/oauth/access_token?client_id=facebookClient&code=test-facebook-code&client_secret=secret&redirect_uri=redirectUri";
         FacebookGetAccessTokenResponseDto access_token = new FacebookGetAccessTokenResponseDto("access_token");
         ResponseEntity<FacebookGetAccessTokenResponseDto> responseMockAccessToken = new ResponseEntity<>(access_token,HttpStatus.OK);
         when(mockServerRestTemplate.exchange(eq(accessUrl),eq(HttpMethod.GET),any(), eq(FacebookGetAccessTokenResponseDto.class))).thenReturn(responseMockAccessToken);
 
 
-        //MOCK github user response
+        //MOCK facebook user response
         String userUrl ="https://graph.facebook.com/v9.0/me?access_token=access_token";
 
         when(mockServerRestTemplate.exchange(eq(userUrl), eq(HttpMethod.GET), any(), eq(FacebookUserDto.class))).thenReturn(
