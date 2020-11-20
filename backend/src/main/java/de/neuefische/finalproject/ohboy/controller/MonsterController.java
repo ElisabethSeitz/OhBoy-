@@ -1,12 +1,16 @@
 package de.neuefische.finalproject.ohboy.controller;
 
 import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
+import de.neuefische.finalproject.ohboy.dto.UpdateMonsterDto;
 import de.neuefische.finalproject.ohboy.model.Monster;
 import de.neuefische.finalproject.ohboy.service.MonsterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -33,6 +37,14 @@ public class MonsterController {
     @PostMapping
     public Monster add(@RequestBody AddMonsterDto dto){
         return this.monsterService.add(dto);
+    }
+
+    @PutMapping("{monsterId}")
+    public Monster update(@RequestBody UpdateMonsterDto updatedMonster, @PathVariable String monsterId) {
+        if(!monsterId.equals(updatedMonster.getId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        return monsterService.update(updatedMonster);
     }
 
 }
