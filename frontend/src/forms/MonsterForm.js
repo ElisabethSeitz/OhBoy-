@@ -12,7 +12,7 @@ export default function MonsterForm({ onSave, monster = initialState }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <MonsterGallery />
+      <MonsterGallery monsterImage={monster.image} />
       <label>
         name
         <input
