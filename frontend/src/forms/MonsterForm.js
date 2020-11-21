@@ -1,15 +1,13 @@
-import React, { useContext, useState } from 'react';
-import MonsterContext from '../contexts/MonsterContext';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
 import MonsterGallery from './MonsterGallery';
+import { useHistory } from 'react-router-dom';
 
 const initialState = {
   name: '',
 };
 
-export default function MonsterForm({ monster = initialState }) {
+export default function MonsterForm({ onSave, monster = initialState }) {
   const [monsterData, setMonsterData] = useState(monster);
-  const { create } = useContext(MonsterContext);
   const history = useHistory();
 
   return (
@@ -25,7 +23,7 @@ export default function MonsterForm({ monster = initialState }) {
           required
         />
       </label>
-      <button id="save">Save</button>
+      <button>Save</button>
       <button type="button" onClick={handleCancel}>
         Cancel
       </button>
@@ -34,13 +32,9 @@ export default function MonsterForm({ monster = initialState }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    handleSave(monsterData.name);
-  }
-
-  function handleSave() {
-    const monsterImage = window.document.getElementById('currentImage').src;
-    create(monsterData.name, monsterImage);
-    history.push('/monsters');
+    const imageSrc = window.document.getElementById('currentImage').src;
+    const imageSrcToBeSaved = imageSrc.slice(-27);
+    onSave(monsterData, imageSrcToBeSaved);
   }
 
   function handleChange(event) {

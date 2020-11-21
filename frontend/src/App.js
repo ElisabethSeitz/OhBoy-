@@ -7,6 +7,7 @@ import ProtectedRoute from './routing/ProtectedRoute';
 import MonsterPage from './pages/MonsterPage';
 import MonsterContextProvider from './contexts/MonsterContextProvider';
 import AddMonsterPage from './pages/AddMonsterPage';
+import EditMonsterPage from './pages/EditMonsterPage';
 
 function App() {
   return (
@@ -20,6 +21,10 @@ function App() {
           />
           <ProtectedRoute exact path="/monsters" component={MonsterPage} />
           <ProtectedRoute path="/monsters/create" component={AddMonsterPage} />
+          <ProtectedRoute
+            path="/monsters/edit/:id"
+            component={EditMonsterPage}
+          />
           <Route path="/">
             <Redirect to="/monsters" />
           </Route>

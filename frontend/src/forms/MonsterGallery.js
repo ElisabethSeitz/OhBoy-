@@ -7,7 +7,7 @@ export default function MonsterGallery() {
 
   function initImages() {
     for (let i = 0; i < amount; i++) {
-      images[i] = 'monster' + i + '.jpg';
+      images[i] = '/monsterImages/monster' + i + '.jpg';
     }
   }
   initImages();
@@ -39,7 +39,7 @@ export default function MonsterGallery() {
         prev
       </button>
 
-      <img src="monster0.jpg" alt="monster image" id="currentImage" />
+      <img src="/monsterImages/monster0.jpg" alt="monster" id="currentImage" />
 
       <button type="button" id="next" onClick={nextImage}>
         next
