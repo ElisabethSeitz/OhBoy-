@@ -2,14 +2,19 @@ package de.neuefische.finalproject.ohboy.service;
 
 import de.neuefische.finalproject.ohboy.dao.MonsterMongoDao;
 import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
+import de.neuefische.finalproject.ohboy.dto.UpdateMonsterDto;
 import de.neuefische.finalproject.ohboy.model.Monster;
 import de.neuefische.finalproject.ohboy.utils.IdUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -93,5 +98,101 @@ class MonsterServiceTest {
         //Then
         assertThat(newMonster, is(expectedMonster));
         verify(monsterMongoDao).save(expectedMonster);
+    }
+
+    @Test
+    @DisplayName("The \"update\" method should return the updated Monster object")
+    void update() {
+        //Given
+        String monsterId = "randomId";
+
+        UpdateMonsterDto monsterDto = new UpdateMonsterDto(
+                monsterId,
+                "some userId",
+                "some updatedName",
+                "some updatedImage"
+        );
+
+        Monster monster = new Monster(
+                monsterId,
+                "some userId",
+                "some name",
+                "some image",
+                5, 10, 20, 2, 4, 6, 7
+        );
+
+        Monster updatedMonster = new Monster(
+                monsterId,
+                "some userId",
+                "some updatedName",
+                "some updatedImage",
+                5, 10, 20, 2, 4, 6, 7
+        );
+
+        when(monsterMongoDao.findById(monsterId)).thenReturn(Optional.of(monster));
+        when(monsterMongoDao.save(updatedMonster)).thenReturn(updatedMonster);
+
+        //When
+        Monster result = monsterService.update(monsterDto);
+
+        //Then
+        assertThat(result, is(updatedMonster));
+        verify(monsterMongoDao).save(updatedMonster);
+    }
+
+    @Test
+    @DisplayName("The \"update\" method should throw forbidden when user with not matching userId try to modify a Monster object")
+    void updateForbidden() {
+        //Given
+        String monsterId = "randomId";
+
+        UpdateMonsterDto monsterDto = new UpdateMonsterDto(
+                monsterId,
+                "some otherUserId",
+                "some updatedName",
+                "some updatedImage"
+        );
+
+        Monster monster = new Monster(
+                monsterId,
+                "some userId",
+                "some name",
+                "some image",
+                5, 10, 20, 2, 4, 6, 7
+        );
+
+        when(monsterMongoDao.findById(monsterId)).thenReturn(Optional.of(monster));
+
+        //When
+        try {
+            monsterService.update(monsterDto);
+            fail("missing exception");
+        } catch (ResponseStatusException exception) {
+            assertThat(exception.getStatus(), is(HttpStatus.FORBIDDEN));
+        }
+    }
+
+    @Test
+    @DisplayName("The \"update\" method should throw not found when id not found")
+    void updateNotFound() {
+        //Given
+        String monsterId = "randomId";
+
+        UpdateMonsterDto monsterDto = new UpdateMonsterDto(
+                monsterId,
+                "some otherUserId",
+                "some updatedName",
+                "some updatedImage"
+        );
+
+        when(monsterMongoDao.findById(monsterId)).thenReturn(Optional.empty());
+
+        //When
+        try {
+            monsterService.update(monsterDto);
+            fail("missing exception");
+        } catch (ResponseStatusException exception) {
+            assertThat(exception.getStatus(), is(HttpStatus.NOT_FOUND));
+        }
     }
 }
