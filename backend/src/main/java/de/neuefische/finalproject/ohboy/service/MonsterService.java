@@ -57,11 +57,13 @@ public class MonsterService {
                 .userId(update.getUserId())
                 .name(update.getName())
                 .image(update.getImage())
-                .balance(update.getBalance())
-                .countOpenTasks(update.getCountOpenTasks())
-                .countDoneTasks(update.getCountDoneTasks())
-                .countOpenRewards(update.getCountOpenRewards())
-                .countDoneRewards(update.getPayoutDoneRewards())
+                .balance(monster.getBalance())
+                .payoutDoneRewards(monster.getPayoutDoneRewards())
+                .scoreDoneTasks(monster.getScoreDoneTasks())
+                .countOpenTasks(monster.getCountOpenTasks())
+                .countDoneTasks(monster.getCountDoneTasks())
+                .countOpenRewards(monster.getCountOpenRewards())
+                .countDoneRewards(monster.getCountDoneRewards())
                 .build();
 
         return monsterMongoDao.save(updatedMonster);
