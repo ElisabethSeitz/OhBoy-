@@ -1,13 +1,19 @@
 import React from 'react';
 
-export default function MonsterGallery() {
-  const amount = 2;
+export default function MonsterGallery({ monsterImage }) {
+  const imageToDisplay = !monsterImage
+    ? '/monsterImages/monster0.jpg'
+    : monsterImage;
+
+  const numberOfDisplayedImage = parseInt(imageToDisplay.slice(-5, -4));
+
+  const amount = 5;
   let images = [];
-  let currentImage = 0;
+  let currentImage = numberOfDisplayedImage;
 
   function initImages() {
     for (let i = 0; i < amount; i++) {
-      images[i] = 'monster' + i + '.jpg';
+      images[i] = '/monsterImages/monster' + i + '.jpg';
     }
   }
   initImages();
@@ -39,7 +45,7 @@ export default function MonsterGallery() {
         prev
       </button>
 
-      <img src="monster0.jpg" alt="monster image" id="currentImage" />
+      <img src={imageToDisplay} alt="monster" id="currentImage" />
 
       <button type="button" id="next" onClick={nextImage}>
         next

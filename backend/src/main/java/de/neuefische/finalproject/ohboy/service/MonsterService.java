@@ -2,13 +2,17 @@ package de.neuefische.finalproject.ohboy.service;
 
 import de.neuefische.finalproject.ohboy.dao.MonsterMongoDao;
 import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
+import de.neuefische.finalproject.ohboy.dto.UpdateMonsterDto;
 import de.neuefische.finalproject.ohboy.model.Monster;
 import de.neuefische.finalproject.ohboy.utils.IdUtils;
 import de.neuefische.finalproject.ohboy.utils.TimestampUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class MonsterService {
@@ -39,5 +43,29 @@ public class MonsterService {
                                         .image(dto.getImage())
                                         .build();
         return monsterMongoDao.save(monsterToBeSaved);
+    }
+
+    public Monster update(UpdateMonsterDto update) {
+        Monster monster = monsterMongoDao.findById(update.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if(!Objects.equals(monster.getUserId(), update.getUserId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
+        Monster updatedMonster = Monster.builder()
+                .id(update.getId())
+                .userId(update.getUserId())
+                .name(update.getName())
+                .image(update.getImage())
+                .balance(monster.getBalance())
+                .payoutDoneRewards(monster.getPayoutDoneRewards())
+                .scoreDoneTasks(monster.getScoreDoneTasks())
+                .countOpenTasks(monster.getCountOpenTasks())
+                .countDoneTasks(monster.getCountDoneTasks())
+                .countOpenRewards(monster.getCountOpenRewards())
+                .countDoneRewards(monster.getCountDoneRewards())
+                .build();
+
+        return monsterMongoDao.save(updatedMonster);
     }
 }
