@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
-        "jwt.secretkey=somesecrettoken",
+        "jwt.secretkey=somesecretkey",
         "oauth.facebook.client.id=facebookClient",
         "oauth.facebook.client.secret=secret",
         "oauth.facebook.redirect.uri=redirectUri",
@@ -137,8 +137,21 @@ class MonsterControllerTest {
         // THEN
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
         List<Monster> stockMonsters = new ArrayList<>(List.of(
-                new Monster("someId", "someUserId", "someName", "someImage", 0, 0, 0, 0, 0, 0, 0)
+                Monster.builder()
+                .id("someId")
+                .userId("someUserId")
+                .name("someName")
+                .image("someImage")
+                .balance(0)
+                .scoreDoneTasks(0)
+                .countOpenTasks(0)
+                .countDoneTasks(0)
+                .countOpenRewards(0)
+                .countDoneRewards(0)
+                .payoutDoneRewards(0)
+                .build()
         ));
+
         assertThat(response.getBody(), is(stockMonsters.toArray()));
     }
 
@@ -159,8 +172,19 @@ class MonsterControllerTest {
 
         // THEN
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
-        assertThat(response.getBody(), is(new Monster(
-                "some generated id", "facebook@someUserId", "some name", "some image",  0, 0, 0, 0, 0, 0, 0)
+        assertThat(response.getBody(), is(Monster.builder()
+                .id("some generated id")
+                .userId("facebook@someUserId")
+                .name("some name")
+                .image("some image")
+                .balance(0)
+                .scoreDoneTasks(0)
+                .countOpenTasks(0)
+                .countDoneTasks(0)
+                .countOpenRewards(0)
+                .countDoneRewards(0)
+                .payoutDoneRewards(0)
+                .build()
         ));
     }
 
