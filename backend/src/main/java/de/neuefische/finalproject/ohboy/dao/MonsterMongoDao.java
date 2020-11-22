@@ -8,4 +8,6 @@ import java.util.List;
 public interface MonsterMongoDao extends PagingAndSortingRepository<Monster,String> {
 
     List<Monster> findAll();
+
+    List<Monster> findAllByUserId(String userId);
 }
