@@ -5,6 +5,7 @@ import de.neuefische.finalproject.ohboy.dao.UserDao;
 import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
 import de.neuefische.finalproject.ohboy.dto.FacebookCodeDto;
 import de.neuefische.finalproject.ohboy.dto.FacebookUserDto;
+import de.neuefische.finalproject.ohboy.dto.UpdateMonsterDto;
 import de.neuefische.finalproject.ohboy.model.Monster;
 import de.neuefische.finalproject.ohboy.model.OhBoyUser;
 import de.neuefische.finalproject.ohboy.service.FacebookApiService;
@@ -21,6 +22,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -58,9 +60,9 @@ class MonsterControllerTest {
     public void setupMonsterDao() {
         monsterDao.deleteAll();
         monsterDao.saveAll(List.of(
-                new Monster("someId", "someUserId", "someName", "someImage"),
-                new Monster("someId2", "facebook@123", "someName2", "someImage2"),
-                new Monster("someId3", "someUserId3", "someName3", "someImage3")
+                new Monster("someId", "someUserId", "someName", "someImage", 0, 0, 0, 0, 0, 0, 0),
+                new Monster("someId2", "facebook@123", "someName2", "someImage2", 100, 50, 4, 3, 2, 6, 6),
+                new Monster("someId3", "someUserId3", "someName3", "someImage3", 0, 0, 0, 0, 0, 0, 0)
         ));
 
         userDao.deleteAll();
@@ -94,9 +96,9 @@ class MonsterControllerTest {
     public void testGetMapping() {
         //GIVEN
         List<Monster> stockMonsters = new ArrayList<>(List.of(
-                new Monster("someId", "someUserId", "someName", "someImage"),
-                new Monster("someId2", "facebook@123", "someName2", "someImage2"),
-                new Monster("someId3", "someUserId3", "someName3", "someImage3")
+                new Monster("someId", "someUserId", "someName", "someImage", 0, 0, 0, 0, 0, 0, 0),
+                new Monster("someId2", "facebook@123", "someName2", "someImage2", 100, 50, 4, 3, 2, 6, 6),
+                new Monster("someId3", "someUserId3", "someName3", "someImage3", 0, 0, 0, 0, 0, 0, 0)
         ));
 
         String url = getMonstersUrl();
@@ -135,7 +137,7 @@ class MonsterControllerTest {
         // THEN
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
         List<Monster> stockMonsters = new ArrayList<>(List.of(
-                new Monster("someId", "someUserId", "someName", "someImage")
+                new Monster("someId", "someUserId", "someName", "someImage", 0, 0, 0, 0, 0, 0, 0)
         ));
         assertThat(response.getBody(), is(stockMonsters.toArray()));
     }
@@ -158,8 +160,124 @@ class MonsterControllerTest {
         // THEN
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
         assertThat(response.getBody(), is(new Monster(
-                "some generated id", "facebook@someUserId", "some name", "some image")
+                "some generated id", "facebook@someUserId", "some name", "some image",  0, 0, 0, 0, 0, 0, 0)
         ));
+    }
+
+    @Test
+    public void updateMonsterShouldUpdateExistingMonster() {
+        //GIVEN
+        String url = getMonstersUrl() + "/someId2";
+
+        UpdateMonsterDto updateMonster = UpdateMonsterDto.builder()
+                .id("someId2")
+                .userId("facebook@123")
+                .name("updatedName")
+                .image("updatedImage")
+                .build();
+
+        //WHEN
+        HttpEntity<UpdateMonsterDto> entity = getValidAuthorizationEntity(updateMonster);
+        ResponseEntity<Monster> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Monster.class);
+
+        //THEN
+        Optional<Monster> savedMonster = monsterDao.findById("someId2");
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+
+        Monster expectedMonster = Monster.builder()
+                .id("someId2")
+                .userId("facebook@123")
+                .name("updatedName")
+                .image("updatedImage")
+                .balance(100)
+                .payoutDoneRewards(50)
+                .scoreDoneTasks(4)
+                .countOpenTasks(3)
+                .countDoneTasks(2)
+                .countOpenRewards(6)
+                .countDoneRewards(6)
+                .build();
+
+        assertThat(response.getBody(), is(expectedMonster));
+        assertThat(savedMonster.get(), is(expectedMonster));
+    }
+
+    @Test
+    public void updateMonsterWhenNoExistingMonsterShouldReturnNotFound() {
+        //GIVEN
+        String url = getMonstersUrl() + "/someIdXY";
+
+        UpdateMonsterDto updateMonster = UpdateMonsterDto.builder()
+                .id("someIdXY")
+                .userId("facebook@1234")
+                .name("updatedName")
+                .image("updatedImage")
+                .build();
+
+        //WHEN
+        HttpEntity<UpdateMonsterDto> entity = getValidAuthorizationEntity(updateMonster);
+        ResponseEntity<Monster> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Monster.class);
+
+        //THEN
+        Optional<Monster> savedMonster = monsterDao.findById("someIdXY");
+        assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
+    }
+
+    @Test
+    public void updateMonsterWithNotMatchingUserIdShouldReturnForbidden() {
+        //GIVEN
+        String url = getMonstersUrl() + "/someId2";
+
+        UpdateMonsterDto updateMonster = UpdateMonsterDto.builder()
+                .id("someId2")
+                .userId("facebook@1234")
+                .name("updatedName")
+                .image("updatedImage")
+                .build();
+
+        //WHEN
+        HttpEntity<UpdateMonsterDto> entity = getValidAuthorizationEntity(updateMonster);
+        ResponseEntity<Monster> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Monster.class);
+
+        //THEN
+        Optional<Monster> savedMonster = monsterDao.findById("someId2");
+        assertThat(response.getStatusCode(), is(HttpStatus.FORBIDDEN));
+
+        Monster expectedMonster = Monster.builder()
+                .id("someId2")
+                .userId("facebook@123")
+                .name("someName2")
+                .image("someImage2")
+                .balance(100)
+                .payoutDoneRewards(50)
+                .scoreDoneTasks(4)
+                .countOpenTasks(3)
+                .countDoneTasks(2)
+                .countOpenRewards(6)
+                .countDoneRewards(6)
+                .build();
+
+        assertThat(savedMonster.get(), is(expectedMonster));
+    }
+
+    @Test
+    public void updateMonsterWithNotMatchingIdsShouldReturnBadRequest() {
+        //GIVEN
+        String url = getMonstersUrl() + "/someId";
+
+        UpdateMonsterDto updateMonster = UpdateMonsterDto.builder()
+                .id("someId2")
+                .userId("facebook@1234")
+                .name("updatedName")
+                .image("updatedImage")
+                .build();
+
+        //WHEN
+        HttpEntity<UpdateMonsterDto> entity = getValidAuthorizationEntity(updateMonster);
+        ResponseEntity<Monster> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Monster.class);
+
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 
 }
