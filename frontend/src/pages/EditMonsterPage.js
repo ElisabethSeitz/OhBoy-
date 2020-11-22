@@ -16,8 +16,8 @@ export default function EditMonsterPage() {
     </>
   );
 
-  function handleSave(monster, image) {
-    edit(monster.id, monster.name, image);
+  function handleSave(monsterName, monsterImage) {
+    edit(monster.id, monsterName, monsterImage);
     history.push('/monsters');
   }
 }

@@ -14,8 +14,8 @@ export default function AddMonsterPage() {
     </>
   );
 
-  function handleSave(monster, image) {
-    create(monster.name, image);
+  function handleSave(monsterName, monsterImage) {
+    create(monsterName, monsterImage);
     history.push('/monsters');
   }
 }

@@ -1,55 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-export default function MonsterGallery({ monsterImage }) {
-  const imageToDisplay = !monsterImage
-    ? '/monsterImages/monster0.jpg'
-    : monsterImage;
+export default function MonsterGallery({
+  savedMonsterImage,
+  imageChangedHandler,
+}) {
+  const images = [
+    '/monsterImages/monster0.jpg',
+    '/monsterImages/monster1.jpg',
+    '/monsterImages/monster2.jpg',
+    '/monsterImages/monster3.jpg',
+    '/monsterImages/monster4.jpg',
+  ];
 
-  const numberOfDisplayedImage = parseInt(imageToDisplay.slice(-5, -4));
+  const savedMonsterIndex = savedMonsterImage
+    ? images.indexOf(savedMonsterImage)
+    : -1;
 
-  const amount = 5;
-  let images = [];
-  let currentImage = numberOfDisplayedImage;
+  const [currentImage, setCurrentImage] = useState('');
+  const [imageIndex, setImageIndex] = useState(Math.max(savedMonsterIndex, 0));
 
-  function initImages() {
-    for (let i = 0; i < amount; i++) {
-      images[i] = '/monsterImages/monster' + i + '.jpg';
-    }
-  }
-  initImages();
-
-  function setImage() {
-    const currentlyDisplayedImage = window.document.getElementById(
-      'currentImage'
-    );
-    currentlyDisplayedImage.src = images[currentImage];
-  }
+  useEffect(() => {
+    setCurrentImage(images[imageIndex]);
+    imageChangedHandler(images[imageIndex]);
+  }, [imageIndex]);
 
   function nextImage() {
-    if (currentImage < amount - 1) {
-      currentImage++;
-      setImage();
-    }
+    setImageIndex((imageIndex + 1) % images.length);
   }
 
   function previousImage() {
-    if (currentImage > 0) {
-      currentImage--;
-      setImage();
-    }
+    setImageIndex((imageIndex > 0 ? imageIndex : images.length) - 1);
   }
 
   return (
-    <div>
+    <section>
       <button type="button" onClick={previousImage}>
         prev
       </button>
 
-      <img src={imageToDisplay} alt="monster" id="currentImage" />
+      <img src={currentImage} alt="monster" />
 
-      <button type="button" id="next" onClick={nextImage}>
+      <button type="button" onClick={nextImage}>
         next
       </button>
-    </div>
+    </section>
   );
 }
