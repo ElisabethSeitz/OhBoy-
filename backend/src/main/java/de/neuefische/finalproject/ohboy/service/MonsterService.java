@@ -2,6 +2,7 @@ package de.neuefische.finalproject.ohboy.service;
 
 import de.neuefische.finalproject.ohboy.dao.MonsterMongoDao;
 import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
+import de.neuefische.finalproject.ohboy.dto.RemoveMonsterDto;
 import de.neuefische.finalproject.ohboy.dto.UpdateMonsterDto;
 import de.neuefische.finalproject.ohboy.model.Monster;
 import de.neuefische.finalproject.ohboy.utils.IdUtils;
@@ -67,5 +68,15 @@ public class MonsterService {
                 .build();
 
         return monsterMongoDao.save(updatedMonster);
+    }
+
+    public void remove(RemoveMonsterDto remove) {
+        Monster monster = monsterMongoDao.findById(remove.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if(!Objects.equals(monster.getUserId(), remove.getUserId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
+        monsterMongoDao.deleteById(remove.getId());
     }
 }
