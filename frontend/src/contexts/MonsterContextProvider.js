@@ -16,7 +16,7 @@ export default function MonsterContextProvider({ children }) {
       getMonstersByUserId(token, userData.sub)
         .then(setMonsters)
         .catch(console.log);
-  }, [token, tokenIsValid, userData.sub]);
+  }, [token, tokenIsValid, userData]);
 
   const create = (name, image) =>
     addMonster(token, name, userData.sub, image)
@@ -25,12 +25,14 @@ export default function MonsterContextProvider({ children }) {
 
   const edit = (monsterId, name, image) => {
     updateMonster(monsterId, userData.sub, name, image, token)
-      .then((updatedMonster) =>
-        setMonsters([
-          ...monsters.filter((monster) => monster.id !== updatedMonster.id),
-          updatedMonster,
-        ])
-      )
+      .then((updatedMonster) => {
+        const newState = [...monsters];
+        const updatedMonsterIndex = newState.findIndex(
+          (monster) => monster.id === updatedMonster.id
+        );
+        newState.splice(updatedMonsterIndex, 1, updatedMonster);
+        setMonsters(newState);
+      })
       .catch(console.log);
   };
 
