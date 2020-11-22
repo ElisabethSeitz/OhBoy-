@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 const initialState = {
   name: '',
+  image: '',
 };
 
 export default function MonsterForm({ onSave, monster = initialState }) {
@@ -12,7 +13,10 @@ export default function MonsterForm({ onSave, monster = initialState }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <MonsterGallery monsterImage={monster.image} />
+      <MonsterGallery
+        savedMonsterImage={monster.image}
+        imageChangedHandler={setMonsterImage}
+      />
       <label>
         name
         <input
@@ -32,9 +36,11 @@ export default function MonsterForm({ onSave, monster = initialState }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    const imageSrc = window.document.getElementById('currentImage').src;
-    const imageSrcToBeSaved = imageSrc.slice(-27);
-    onSave(monsterData, imageSrcToBeSaved);
+    onSave(monsterData.name, monsterData.image);
+  }
+
+  function setMonsterImage(monsterImage) {
+    setMonsterData({ ...monsterData, image: monsterImage });
   }
 
   function handleChange(event) {

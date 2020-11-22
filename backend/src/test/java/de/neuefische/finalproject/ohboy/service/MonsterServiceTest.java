@@ -56,9 +56,20 @@ class MonsterServiceTest {
         //Given
         String userId = "@facebookSomeUserId";
 
-        List<Monster> expectedMonsters = new ArrayList<>(List.of(new Monster(
-                "userId", userId, "some name", "some image", 0, 0, 0, 0, 0, 0, 0
-        )));
+        List<Monster> expectedMonsters = new ArrayList<>(List.of(Monster.builder()
+                .id("id")
+                .userId(userId)
+                .name("some name")
+                .image("some image")
+                .balance(0)
+                .scoreDoneTasks(0)
+                .payoutDoneRewards(0)
+                .countDoneRewards(0)
+                .countDoneTasks(0)
+                .countOpenTasks(0)
+                .countOpenRewards(0)
+                .build()
+        ));
 
         when(monsterMongoDao.findAllByUserId(userId)).thenReturn(expectedMonsters);
 
@@ -81,13 +92,19 @@ class MonsterServiceTest {
                 "some image"
         );
 
-        Monster expectedMonster = new Monster(
-                expectedId,
-                "some UserId",
-                "some name",
-                "some image",
-                0, 0, 0, 0, 0, 0, 0
-        );
+        Monster expectedMonster = Monster.builder()
+               .id(expectedId)
+               .userId("some UserId")
+               .name("some name")
+               .image("some image")
+               .balance(0)
+               .scoreDoneTasks(0)
+               .payoutDoneRewards(0)
+               .countDoneRewards(0)
+               .countDoneTasks(0)
+               .countOpenTasks(0)
+               .countOpenRewards(0)
+               .build();
 
         when(idUtils.generateId()).thenReturn(expectedId);
         when(monsterMongoDao.save(expectedMonster)).thenReturn(expectedMonster);
@@ -113,21 +130,33 @@ class MonsterServiceTest {
                 "some updatedImage"
         );
 
-        Monster monster = new Monster(
-                monsterId,
-                "some userId",
-                "some name",
-                "some image",
-                5, 10, 20, 2, 4, 6, 7
-        );
+        Monster monster = Monster.builder()
+                .id(monsterId)
+                .userId("some userId")
+                .name("some name")
+                .image("some image")
+                .balance(5)
+                .payoutDoneRewards(10)
+                .scoreDoneTasks(20)
+                .countOpenTasks(2)
+                .countDoneTasks(4)
+                .countOpenRewards(6)
+                .countDoneRewards(7)
+                .build();
 
-        Monster updatedMonster = new Monster(
-                monsterId,
-                "some userId",
-                "some updatedName",
-                "some updatedImage",
-                5, 10, 20, 2, 4, 6, 7
-        );
+        Monster updatedMonster = Monster.builder()
+                .id(monsterId)
+                .userId("some userId")
+                .name("some updatedName")
+                .image("some updatedImage")
+                .balance(5)
+                .payoutDoneRewards(10)
+                .scoreDoneTasks(20)
+                .countOpenTasks(2)
+                .countDoneTasks(4)
+                .countOpenRewards(6)
+                .countDoneRewards(7)
+                .build();
 
         when(monsterMongoDao.findById(monsterId)).thenReturn(Optional.of(monster));
         when(monsterMongoDao.save(updatedMonster)).thenReturn(updatedMonster);
@@ -153,13 +182,19 @@ class MonsterServiceTest {
                 "some updatedImage"
         );
 
-        Monster monster = new Monster(
-                monsterId,
-                "some userId",
-                "some name",
-                "some image",
-                5, 10, 20, 2, 4, 6, 7
-        );
+        Monster monster = Monster.builder()
+                .id(monsterId)
+                .userId("some userId")
+                .name("some name")
+                .image("some image")
+                .balance(5)
+                .payoutDoneRewards(10)
+                .scoreDoneTasks(20)
+                .countOpenTasks(2)
+                .countDoneTasks(4)
+                .countOpenRewards(6)
+                .countDoneRewards(7)
+                .build();
 
         when(monsterMongoDao.findById(monsterId)).thenReturn(Optional.of(monster));
 
