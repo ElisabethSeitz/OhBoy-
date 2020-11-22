@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import MonsterGallery from './MonsterGallery';
+import { useHistory } from 'react-router-dom';
 
 const initialState = {
   name: '',
@@ -8,6 +9,7 @@ const initialState = {
 
 export default function MonsterForm({ onSave, monster = initialState }) {
   const [monsterData, setMonsterData] = useState(monster);
+  const history = useHistory();
 
   return (
     <form onSubmit={handleSubmit}>
