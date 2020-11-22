@@ -20,3 +20,13 @@ export const updateMonster = (id, userId, name, image, token) =>
   axios
     .put('/api/monster/' + id, { id, userId, name, image }, header(token))
     .then((response) => response.data);
+
+export const removeMonster = (id, userId, token) =>
+  axios({
+    method: 'DELETE',
+    url: '/api/monster/' + id,
+    data: { id, userId },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((response) => response.data);
