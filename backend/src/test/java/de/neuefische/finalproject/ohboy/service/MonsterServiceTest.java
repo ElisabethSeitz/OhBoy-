@@ -2,6 +2,7 @@ package de.neuefische.finalproject.ohboy.service;
 
 import de.neuefische.finalproject.ohboy.dao.MonsterMongoDao;
 import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
+import de.neuefische.finalproject.ohboy.dto.RemoveMonsterDto;
 import de.neuefische.finalproject.ohboy.dto.UpdateMonsterDto;
 import de.neuefische.finalproject.ohboy.model.Monster;
 import de.neuefische.finalproject.ohboy.utils.IdUtils;
@@ -225,6 +226,79 @@ class MonsterServiceTest {
         //When
         try {
             monsterService.update(monsterDto);
+            fail("missing exception");
+        } catch (ResponseStatusException exception) {
+            assertThat(exception.getStatus(), is(HttpStatus.NOT_FOUND));
+        }
+    }
+
+    @Test
+    @DisplayName("The \"remove\" method should remove the removed Monster object")
+    void remove() {
+        //Given
+        String monsterId = "randomId";
+
+        when(monsterMongoDao.findById(monsterId)).thenReturn(Optional.of(Monster.builder()
+                .id(monsterId)
+                .userId("some userId")
+                .name("some name")
+                .image("some image")
+                .balance(5)
+                .payoutDoneRewards(10)
+                .scoreDoneTasks(20)
+                .countOpenTasks(2)
+                .countDoneTasks(4)
+                .countOpenRewards(6)
+                .countDoneRewards(7)
+                .build()));
+
+        //When
+        monsterService.remove(RemoveMonsterDto.builder().id(monsterId).userId("some userId").build());
+
+        //Then
+        verify(monsterMongoDao).deleteById(monsterId);
+    }
+
+    @Test
+    @DisplayName("The \"remove\" method should throw forbidden when user with not matching userId try to remove a Monster object")
+    void removeForbidden() {
+        //Given
+        String monsterId = "randomId";
+
+        when(monsterMongoDao.findById(monsterId)).thenReturn(Optional.of(Monster.builder()
+                .id(monsterId)
+                .userId("some userId")
+                .name("some name")
+                .image("some image")
+                .balance(5)
+                .payoutDoneRewards(10)
+                .scoreDoneTasks(20)
+                .countOpenTasks(2)
+                .countDoneTasks(4)
+                .countOpenRewards(6)
+                .countDoneRewards(7)
+                .build()));
+
+        //When
+        try {
+            monsterService.remove(RemoveMonsterDto.builder().id(monsterId).userId("some otherUserId").build());
+            fail("missing exception");
+        } catch (ResponseStatusException exception) {
+            assertThat(exception.getStatus(), is(HttpStatus.FORBIDDEN));
+        }
+    }
+
+    @Test
+    @DisplayName("The \"remove\" method should throw not found when id not found")
+    void removeNotFound() {
+        //Given
+        String monsterId = "randomId";
+
+        when(monsterMongoDao.findById(monsterId)).thenReturn(Optional.empty());
+
+        //When
+        try {
+            monsterService.remove(RemoveMonsterDto.builder().id(monsterId).userId("someUserId").build());
             fail("missing exception");
         } catch (ResponseStatusException exception) {
             assertThat(exception.getStatus(), is(HttpStatus.NOT_FOUND));
