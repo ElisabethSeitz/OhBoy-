@@ -23,6 +23,6 @@ public class TaskController {
 
     @GetMapping("{monsterId}")
     public List<Task> getByMonsterId(@PathVariable String monsterId) {
-        return taskService.findByMonsterId(monsterId);
+        return taskService.findAllByMonsterId(monsterId);
     }
 }
