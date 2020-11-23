@@ -49,11 +49,11 @@ public class MonsterController {
     }
 
     @DeleteMapping("{monsterId}")
-    public void remove(@RequestBody RemoveMonsterDto removedMonster, @PathVariable String monsterId) {
-        if(!monsterId.equals(removedMonster.getId())) {
+    public void remove(@RequestBody RemoveMonsterDto removeMonster, @PathVariable String monsterId) {
+        if(!monsterId.equals(removeMonster.getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        monsterService.remove(removedMonster);
+        monsterService.remove(removeMonster);
     }
 
 }
