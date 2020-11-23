@@ -240,7 +240,6 @@ class MonsterControllerTest {
         ResponseEntity<Monster> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Monster.class);
 
         //THEN
-        Optional<Monster> savedMonster = monsterDao.findById("someIdXY");
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
     }
 
