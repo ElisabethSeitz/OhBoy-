@@ -2,6 +2,7 @@ import {
   getMonstersByUserId,
   addMonster,
   updateMonster,
+  removeMonster,
 } from '../service/MonsterService';
 import UserContext from './UserContext';
 import React, { useContext, useEffect, useState } from 'react';
@@ -26,18 +27,23 @@ export default function MonsterContextProvider({ children }) {
   const edit = (monsterId, name, image) => {
     updateMonster(monsterId, userData.sub, name, image, token)
       .then((updatedMonster) => {
-        const newState = [...monsters];
-        const updatedMonsterIndex = newState.findIndex(
-          (monster) => monster.id === updatedMonster.id
+        const newState = monsters.map((monster) =>
+          monster.id === updatedMonster.id ? updatedMonster : monster
         );
-        newState.splice(updatedMonsterIndex, 1, updatedMonster);
         setMonsters(newState);
       })
       .catch(console.log);
   };
 
+  const remove = (monsterId) =>
+    removeMonster(monsterId, userData.sub, token)
+      .then(() =>
+        setMonsters(monsters.filter((monster) => monster.id !== monsterId))
+      )
+      .catch(console.log);
+
   return (
-    <MonsterContext.Provider value={{ monsters, create, edit }}>
+    <MonsterContext.Provider value={{ monsters, create, edit, remove }}>
       {children}
     </MonsterContext.Provider>
   );

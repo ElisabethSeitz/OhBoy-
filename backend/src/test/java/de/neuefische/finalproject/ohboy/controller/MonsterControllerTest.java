@@ -2,10 +2,7 @@ package de.neuefische.finalproject.ohboy.controller;
 
 import de.neuefische.finalproject.ohboy.dao.MonsterMongoDao;
 import de.neuefische.finalproject.ohboy.dao.UserDao;
-import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
-import de.neuefische.finalproject.ohboy.dto.FacebookCodeDto;
-import de.neuefische.finalproject.ohboy.dto.FacebookUserDto;
-import de.neuefische.finalproject.ohboy.dto.UpdateMonsterDto;
+import de.neuefische.finalproject.ohboy.dto.*;
 import de.neuefische.finalproject.ohboy.model.Monster;
 import de.neuefische.finalproject.ohboy.model.OhBoyUser;
 import de.neuefische.finalproject.ohboy.service.FacebookApiService;
@@ -243,7 +240,6 @@ class MonsterControllerTest {
         ResponseEntity<Monster> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Monster.class);
 
         //THEN
-        Optional<Monster> savedMonster = monsterDao.findById("someIdXY");
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
     }
 
@@ -304,4 +300,79 @@ class MonsterControllerTest {
         assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 
+    @Test
+    public void removeMonsterShouldRemoveExistingMonster() {
+        //GIVEN
+        String url = getMonstersUrl() + "/someId2";
+
+        RemoveMonsterDto removeMonster = RemoveMonsterDto.builder()
+                .id("someId2")
+                .userId("facebook@123")
+                .build();
+
+        //WHEN
+        HttpEntity<RemoveMonsterDto> entity = getValidAuthorizationEntity(removeMonster);
+        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, Void.class);
+
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+        boolean monsterPresent = monsterDao.findById("someId2").isPresent();
+        assertThat(monsterPresent, is(false));
+    }
+
+    @Test
+    public void removeMonsterWithNotMatchingUserIdShouldReturnForbidden() {
+        //GIVEN
+        String url = getMonstersUrl() + "/someId2";
+
+        RemoveMonsterDto removeMonster = RemoveMonsterDto.builder()
+                .id("someId2")
+                .userId("facebook@1234")
+                .build();
+
+        //WHEN
+        HttpEntity<RemoveMonsterDto> entity = getValidAuthorizationEntity(removeMonster);
+        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, Void.class);
+
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.FORBIDDEN));
+        boolean monsterPresent = monsterDao.findById("someId2").isPresent();
+        assertThat(monsterPresent, is(true));
+    }
+
+    @Test
+    public void removeMonsterWhenNoExistingMonsterShouldReturnNotFound() {
+        //GIVEN
+        String url = getMonstersUrl() + "/someIdXY";
+
+        RemoveMonsterDto removeMonster = RemoveMonsterDto.builder()
+                .id("someIdXY")
+                .userId("facebook@123")
+                .build();
+
+        //WHEN
+        HttpEntity<RemoveMonsterDto> entity = getValidAuthorizationEntity(removeMonster);
+        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, Void.class);
+
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
+    }
+
+    @Test
+    public void removeMonsterWithNotMatchingIdsShouldReturnBadRequest() {
+        //GIVEN
+        String url = getMonstersUrl() + "/someId2";
+
+        RemoveMonsterDto removeMonster = RemoveMonsterDto.builder()
+                .id("someId3")
+                .userId("facebook@123")
+                .build();
+
+        //WHEN
+        HttpEntity<RemoveMonsterDto> entity = getValidAuthorizationEntity(removeMonster);
+        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, Void.class);
+
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
+    }
 }

@@ -1,6 +1,7 @@
 package de.neuefische.finalproject.ohboy.controller;
 
 import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
+import de.neuefische.finalproject.ohboy.dto.RemoveMonsterDto;
 import de.neuefische.finalproject.ohboy.dto.UpdateMonsterDto;
 import de.neuefische.finalproject.ohboy.model.Monster;
 import de.neuefische.finalproject.ohboy.service.MonsterService;
@@ -45,6 +46,14 @@ public class MonsterController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         return monsterService.update(updatedMonster);
+    }
+
+    @DeleteMapping("{monsterId}")
+    public void remove(@RequestBody RemoveMonsterDto removeMonster, @PathVariable String monsterId) {
+        if(!monsterId.equals(removeMonster.getId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        monsterService.remove(removeMonster);
     }
 
 }
