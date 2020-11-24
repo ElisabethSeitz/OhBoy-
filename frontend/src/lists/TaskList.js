@@ -1,10 +1,7 @@
-import React, { useContext } from 'react';
-import TaskContext from '../contexts/TaskContext';
+import React from 'react';
 import Task from '../commons/Task';
 
-export default function TaskList() {
-  const { tasks } = useContext(TaskContext);
-
+export default function TaskList({ tasks }) {
   return (
     <ul>
       {tasks?.map((task) => (
