@@ -65,9 +65,9 @@ class TaskControllerTest {
     public void setupTaskDao() {
         taskDao.deleteAll();
         taskDao.saveAll(List.of(
-                new Task("someId", "someMonsterId", "someDescription", 5, DONE, Instant.parse("1970-01-01T00:00:00Z")),
-                new Task("someId2", "someMonsterId2", "someDescription2", 10, OPEN, Instant.parse("1970-01-01T00:00:00Z")),
-                new Task("someId3", "someMonsterId3", "someDescription3", 15, OPEN, Instant.parse("1970-01-01T00:00:00Z"))
+                new Task("someId", "someUserId", "someMonsterId", "someDescription", 5, DONE, Instant.parse("1970-01-01T00:00:00Z")),
+                new Task("someId2", "someUserId2","someMonsterId2", "someDescription2", 10, OPEN, Instant.parse("1970-01-01T00:00:00Z")),
+                new Task("someId3", "someUserId3", "someMonsterId3", "someDescription3", 15, OPEN, Instant.parse("1970-01-01T00:00:00Z"))
         ));
 
         monsterDao.deleteAll();
@@ -125,6 +125,7 @@ class TaskControllerTest {
         List<Task> stockTasks = new ArrayList<>(List.of(
                     Task.builder()
                             .id("someId")
+                            .userId("someUserId")
                             .monsterId("someMonsterId")
                             .description("someDescription")
                             .status(DONE)

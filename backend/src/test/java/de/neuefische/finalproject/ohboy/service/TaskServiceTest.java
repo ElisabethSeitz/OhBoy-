@@ -30,9 +30,9 @@ class TaskServiceTest {
     final TaskService taskService = new TaskService(taskMongoDao);
 
     final List<Task> tasks = new ArrayList<>(List.of(
-            new Task("someId", "someMonsterId", "someDescription", 5, DONE, Instant.parse("1970-01-01T00:00:00Z")),
-            new Task("someId2", "someMonsterId2", "someDescription2", 10, OPEN, Instant.parse("1970-01-01T00:00:00Z")),
-            new Task("someId3", "someMonsterId3", "someDescription3", 15, OPEN, Instant.parse("1970-01-01T00:00:00Z"))
+            new Task("someId", "someUserId", "someMonsterId", "someDescription", 5, DONE, Instant.parse("1970-01-01T00:00:00Z")),
+            new Task("someId2", "someUserId2", "someMonsterId2", "someDescription2", 10, OPEN, Instant.parse("1970-01-01T00:00:00Z")),
+            new Task("someId3", "someUserId3", "someMonsterId3", "someDescription3", 15, OPEN, Instant.parse("1970-01-01T00:00:00Z"))
     ));
 
     final List<Task> getStockTasks(){
@@ -47,6 +47,7 @@ class TaskServiceTest {
 
         List<Task> expectedTasks = new ArrayList<>(List.of(Task.builder()
                 .id("id")
+                .userId("someUserId")
                 .monsterId(monsterId)
                 .description("someDescription")
                 .score(5)
