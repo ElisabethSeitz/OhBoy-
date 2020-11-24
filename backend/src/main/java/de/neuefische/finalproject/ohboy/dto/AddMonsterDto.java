@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 public class AddMonsterDto {
 
     private String name;
-    private String userId;
     private String image;
 }

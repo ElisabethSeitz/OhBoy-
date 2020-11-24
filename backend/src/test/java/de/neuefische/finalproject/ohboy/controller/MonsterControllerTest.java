@@ -15,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.ArrayList;
@@ -58,12 +59,12 @@ class MonsterControllerTest {
         monsterDao.deleteAll();
         monsterDao.saveAll(List.of(
                 new Monster("someId", "someUserId", "someName", "someImage", 0, 0, 0, 0, 0, 0, 0),
-                new Monster("someId2", "facebook@123", "someName2", "someImage2", 100, 50, 4, 3, 2, 6, 6),
+                new Monster("someId2", "facebook@1234", "someName2", "someImage2", 100, 50, 4, 3, 2, 6, 6),
                 new Monster("someId3", "someUserId3", "someName3", "someImage3", 0, 0, 0, 0, 0, 0, 0)
         ));
 
         userDao.deleteAll();
-        userDao.save(new OhBoyUser("facebook@123", "userName", true));
+        userDao.save(new OhBoyUser("FacebookUser", "facebook@1234", true));
     }
 
     private String getMonstersUrl() {
@@ -89,26 +90,6 @@ class MonsterControllerTest {
         return new HttpEntity<T>(data,headers);
     }
 
-    @Test
-    public void testGetMapping() {
-        //GIVEN
-        List<Monster> stockMonsters = new ArrayList<>(List.of(
-                new Monster("someId", "someUserId", "someName", "someImage", 0, 0, 0, 0, 0, 0, 0),
-                new Monster("someId2", "facebook@123", "someName2", "someImage2", 100, 50, 4, 3, 2, 6, 6),
-                new Monster("someId3", "someUserId3", "someName3", "someImage3", 0, 0, 0, 0, 0, 0, 0)
-        ));
-
-        String url = getMonstersUrl();
-
-        //WHEN
-        HttpEntity<Void> entity = getValidAuthorizationEntity(null);
-
-        ResponseEntity<Monster[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, Monster[].class);
-
-        //THEN
-        assertThat(response.getStatusCode(), is(HttpStatus.OK));
-        assertThat(response.getBody(), is(stockMonsters.toArray()));
-    }
 
     @Test
     public void testGetMappingForbiddenWhenNoValidJWT() {
@@ -125,7 +106,7 @@ class MonsterControllerTest {
     @Test
     public void testGetAllByUserIdMapping() {
         // GIVEN
-        String url = getMonstersUrl() + "/someUserId";
+        String url = getMonstersUrl();
 
         // WHEN
         HttpEntity<Void> entity = getValidAuthorizationEntity(null);
@@ -135,17 +116,17 @@ class MonsterControllerTest {
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
         List<Monster> stockMonsters = new ArrayList<>(List.of(
                 Monster.builder()
-                .id("someId")
-                .userId("someUserId")
-                .name("someName")
-                .image("someImage")
-                .balance(0)
-                .scoreDoneTasks(0)
-                .countOpenTasks(0)
-                .countDoneTasks(0)
-                .countOpenRewards(0)
-                .countDoneRewards(0)
-                .payoutDoneRewards(0)
+                .id("someId2")
+                .userId("facebook@1234")
+                .name("someName2")
+                .image("someImage2")
+                .balance(100)
+                .scoreDoneTasks(4)
+                .countOpenTasks(3)
+                .countDoneTasks(2)
+                .countOpenRewards(6)
+                .countDoneRewards(6)
+                .payoutDoneRewards(50)
                 .build()
         ));
 
@@ -158,7 +139,6 @@ class MonsterControllerTest {
         String url = getMonstersUrl();
         AddMonsterDto monsterToAdd = new AddMonsterDto(
                 "some name",
-                "facebook@someUserId",
                 "some image"
         );
         when(mockedIdUtils.generateId()).thenReturn("some generated id");
@@ -171,7 +151,7 @@ class MonsterControllerTest {
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
         assertThat(response.getBody(), is(Monster.builder()
                 .id("some generated id")
-                .userId("facebook@someUserId")
+                .userId("facebook@1234")
                 .name("some name")
                 .image("some image")
                 .balance(0)
@@ -192,7 +172,6 @@ class MonsterControllerTest {
 
         UpdateMonsterDto updateMonster = UpdateMonsterDto.builder()
                 .id("someId2")
-                .userId("facebook@123")
                 .name("updatedName")
                 .image("updatedImage")
                 .build();
@@ -207,7 +186,7 @@ class MonsterControllerTest {
 
         Monster expectedMonster = Monster.builder()
                 .id("someId2")
-                .userId("facebook@123")
+                .userId("facebook@1234")
                 .name("updatedName")
                 .image("updatedImage")
                 .balance(100)
@@ -230,7 +209,6 @@ class MonsterControllerTest {
 
         UpdateMonsterDto updateMonster = UpdateMonsterDto.builder()
                 .id("someIdXY")
-                .userId("facebook@1234")
                 .name("updatedName")
                 .image("updatedImage")
                 .build();
@@ -246,11 +224,10 @@ class MonsterControllerTest {
     @Test
     public void updateMonsterWithNotMatchingUserIdShouldReturnForbidden() {
         //GIVEN
-        String url = getMonstersUrl() + "/someId2";
+        String url = getMonstersUrl() + "/someId";
 
         UpdateMonsterDto updateMonster = UpdateMonsterDto.builder()
-                .id("someId2")
-                .userId("facebook@1234")
+                .id("someId")
                 .name("updatedName")
                 .image("updatedImage")
                 .build();
@@ -260,21 +237,21 @@ class MonsterControllerTest {
         ResponseEntity<Monster> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Monster.class);
 
         //THEN
-        Optional<Monster> savedMonster = monsterDao.findById("someId2");
+        Optional<Monster> savedMonster = monsterDao.findById("someId");
         assertThat(response.getStatusCode(), is(HttpStatus.FORBIDDEN));
 
         Monster expectedMonster = Monster.builder()
-                .id("someId2")
-                .userId("facebook@123")
-                .name("someName2")
-                .image("someImage2")
-                .balance(100)
-                .payoutDoneRewards(50)
-                .scoreDoneTasks(4)
-                .countOpenTasks(3)
-                .countDoneTasks(2)
-                .countOpenRewards(6)
-                .countDoneRewards(6)
+                .id("someId")
+                .userId("someUserId")
+                .name("someName")
+                .image("someImage")
+                .balance(0)
+                .payoutDoneRewards(0)
+                .scoreDoneTasks(0)
+                .countOpenTasks(0)
+                .countDoneTasks(0)
+                .countOpenRewards(0)
+                .countDoneRewards(0)
                 .build();
 
         assertThat(savedMonster.get(), is(expectedMonster));
@@ -287,7 +264,6 @@ class MonsterControllerTest {
 
         UpdateMonsterDto updateMonster = UpdateMonsterDto.builder()
                 .id("someId2")
-                .userId("facebook@1234")
                 .name("updatedName")
                 .image("updatedImage")
                 .build();
@@ -305,13 +281,8 @@ class MonsterControllerTest {
         //GIVEN
         String url = getMonstersUrl() + "/someId2";
 
-        RemoveMonsterDto removeMonster = RemoveMonsterDto.builder()
-                .id("someId2")
-                .userId("facebook@123")
-                .build();
-
         //WHEN
-        HttpEntity<RemoveMonsterDto> entity = getValidAuthorizationEntity(removeMonster);
+        HttpEntity<Void> entity = getValidAuthorizationEntity(null);
         ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, Void.class);
 
         //THEN
@@ -323,20 +294,15 @@ class MonsterControllerTest {
     @Test
     public void removeMonsterWithNotMatchingUserIdShouldReturnForbidden() {
         //GIVEN
-        String url = getMonstersUrl() + "/someId2";
-
-        RemoveMonsterDto removeMonster = RemoveMonsterDto.builder()
-                .id("someId2")
-                .userId("facebook@1234")
-                .build();
+        String url = getMonstersUrl() + "/someId";
 
         //WHEN
-        HttpEntity<RemoveMonsterDto> entity = getValidAuthorizationEntity(removeMonster);
+        HttpEntity<Void> entity = getValidAuthorizationEntity(null);
         ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, Void.class);
 
         //THEN
         assertThat(response.getStatusCode(), is(HttpStatus.FORBIDDEN));
-        boolean monsterPresent = monsterDao.findById("someId2").isPresent();
+        boolean monsterPresent = monsterDao.findById("someId").isPresent();
         assertThat(monsterPresent, is(true));
     }
 
@@ -345,34 +311,12 @@ class MonsterControllerTest {
         //GIVEN
         String url = getMonstersUrl() + "/someIdXY";
 
-        RemoveMonsterDto removeMonster = RemoveMonsterDto.builder()
-                .id("someIdXY")
-                .userId("facebook@123")
-                .build();
-
         //WHEN
-        HttpEntity<RemoveMonsterDto> entity = getValidAuthorizationEntity(removeMonster);
+        HttpEntity<Void> entity = getValidAuthorizationEntity(null);
         ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, Void.class);
 
         //THEN
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
     }
 
-    @Test
-    public void removeMonsterWithNotMatchingIdsShouldReturnBadRequest() {
-        //GIVEN
-        String url = getMonstersUrl() + "/someId2";
-
-        RemoveMonsterDto removeMonster = RemoveMonsterDto.builder()
-                .id("someId3")
-                .userId("facebook@123")
-                .build();
-
-        //WHEN
-        HttpEntity<RemoveMonsterDto> entity = getValidAuthorizationEntity(removeMonster);
-        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, Void.class);
-
-        //THEN
-        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
-    }
 }

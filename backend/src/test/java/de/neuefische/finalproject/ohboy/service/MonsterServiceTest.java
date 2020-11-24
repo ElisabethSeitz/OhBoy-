@@ -2,7 +2,6 @@ package de.neuefische.finalproject.ohboy.service;
 
 import de.neuefische.finalproject.ohboy.dao.MonsterMongoDao;
 import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
-import de.neuefische.finalproject.ohboy.dto.RemoveMonsterDto;
 import de.neuefische.finalproject.ohboy.dto.UpdateMonsterDto;
 import de.neuefische.finalproject.ohboy.model.Monster;
 import de.neuefische.finalproject.ohboy.utils.IdUtils;
@@ -37,18 +36,6 @@ class MonsterServiceTest {
 
     final List<Monster> getStockMonsters(){
         return monsters;
-    }
-
-    @Test
-    @DisplayName("The \"getAll\" method should return all Monster objects in a list")
-    void getAll() {
-        when(monsterMongoDao.findAll()).thenReturn(getStockMonsters());
-
-        //When
-        List<Monster> allMonsters = monsterService.getAll();
-
-        //Then
-        assertThat(allMonsters, containsInAnyOrder(getStockMonsters().toArray()));
     }
 
     @Test
@@ -89,7 +76,6 @@ class MonsterServiceTest {
 
         AddMonsterDto monsterDto = new AddMonsterDto(
                 "some name",
-                "some UserId",
                 "some image"
         );
 
@@ -111,7 +97,7 @@ class MonsterServiceTest {
         when(monsterMongoDao.save(expectedMonster)).thenReturn(expectedMonster);
 
         //When
-        Monster newMonster = monsterService.add(monsterDto);
+        Monster newMonster = monsterService.add(monsterDto, "some UserId");
 
         //Then
         assertThat(newMonster, is(expectedMonster));
@@ -126,7 +112,6 @@ class MonsterServiceTest {
 
         UpdateMonsterDto monsterDto = new UpdateMonsterDto(
                 monsterId,
-                "some userId",
                 "some updatedName",
                 "some updatedImage"
         );
@@ -163,7 +148,7 @@ class MonsterServiceTest {
         when(monsterMongoDao.save(updatedMonster)).thenReturn(updatedMonster);
 
         //When
-        Monster result = monsterService.update(monsterDto);
+        Monster result = monsterService.update(monsterDto, "some userId");
 
         //Then
         assertThat(result, is(updatedMonster));
@@ -178,7 +163,6 @@ class MonsterServiceTest {
 
         UpdateMonsterDto monsterDto = new UpdateMonsterDto(
                 monsterId,
-                "some otherUserId",
                 "some updatedName",
                 "some updatedImage"
         );
@@ -201,7 +185,7 @@ class MonsterServiceTest {
 
         //When
         try {
-            monsterService.update(monsterDto);
+            monsterService.update(monsterDto, "some otherUserId");
             fail("missing exception");
         } catch (ResponseStatusException exception) {
             assertThat(exception.getStatus(), is(HttpStatus.FORBIDDEN));
@@ -216,7 +200,6 @@ class MonsterServiceTest {
 
         UpdateMonsterDto monsterDto = new UpdateMonsterDto(
                 monsterId,
-                "some otherUserId",
                 "some updatedName",
                 "some updatedImage"
         );
@@ -225,7 +208,7 @@ class MonsterServiceTest {
 
         //When
         try {
-            monsterService.update(monsterDto);
+            monsterService.update(monsterDto, "some otherUserId");
             fail("missing exception");
         } catch (ResponseStatusException exception) {
             assertThat(exception.getStatus(), is(HttpStatus.NOT_FOUND));
@@ -253,7 +236,7 @@ class MonsterServiceTest {
                 .build()));
 
         //When
-        monsterService.remove(RemoveMonsterDto.builder().id(monsterId).userId("some userId").build());
+        monsterService.remove(monsterId,"some userId");
 
         //Then
         verify(monsterMongoDao).deleteById(monsterId);
@@ -281,7 +264,7 @@ class MonsterServiceTest {
 
         //When
         try {
-            monsterService.remove(RemoveMonsterDto.builder().id(monsterId).userId("some otherUserId").build());
+            monsterService.remove(monsterId, "some otherUserId");
             fail("missing exception");
         } catch (ResponseStatusException exception) {
             assertThat(exception.getStatus(), is(HttpStatus.FORBIDDEN));
@@ -298,7 +281,7 @@ class MonsterServiceTest {
 
         //When
         try {
-            monsterService.remove(RemoveMonsterDto.builder().id(monsterId).userId("someUserId").build());
+            monsterService.remove(monsterId, "someUserId");
             fail("missing exception");
         } catch (ResponseStatusException exception) {
             assertThat(exception.getStatus(), is(HttpStatus.NOT_FOUND));
