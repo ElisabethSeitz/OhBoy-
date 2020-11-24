@@ -10,22 +10,20 @@ import MonsterContext from './MonsterContext';
 
 export default function MonsterContextProvider({ children }) {
   const [monsters, setMonsters] = useState([]);
-  const { token, tokenIsValid, userData } = useContext(UserContext);
+  const { token, tokenIsValid } = useContext(UserContext);
 
   useEffect(() => {
     tokenIsValid() &&
-      getMonstersByUserId(token, userData.sub)
-        .then(setMonsters)
-        .catch(console.log);
-  }, [token, tokenIsValid, userData]);
+      getMonstersByUserId(token).then(setMonsters).catch(console.log);
+  }, [token, tokenIsValid]);
 
   const create = (name, image) =>
-    addMonster(token, name, userData.sub, image)
+    addMonster(token, name, image)
       .then((addedMonster) => setMonsters([...monsters, addedMonster]))
       .catch(console.log);
 
   const edit = (monsterId, name, image) => {
-    updateMonster(monsterId, userData.sub, name, image, token)
+    updateMonster(monsterId, name, image, token)
       .then((updatedMonster) => {
         const newState = monsters.map((monster) =>
           monster.id === updatedMonster.id ? updatedMonster : monster
@@ -36,7 +34,7 @@ export default function MonsterContextProvider({ children }) {
   };
 
   const remove = (monsterId) =>
-    removeMonster(monsterId, userData.sub, token)
+    removeMonster(monsterId, token)
       .then(() =>
         setMonsters(monsters.filter((monster) => monster.id !== monsterId))
       )

@@ -6,27 +6,20 @@ const header = (token) => ({
   },
 });
 
-export const getMonstersByUserId = (token, userId) =>
+export const getMonstersByUserId = (token) =>
+  axios.get('/api/monster/', header(token)).then((response) => response.data);
+
+export const addMonster = (token, name, image) =>
   axios
-    .get('/api/monster/' + userId, header(token))
+    .post('/api/monster', { name, image }, header(token))
     .then((response) => response.data);
 
-export const addMonster = (token, name, userId, image) =>
+export const updateMonster = (id, name, image, token) =>
   axios
-    .post('/api/monster', { name, userId, image }, header(token))
+    .put('/api/monster/' + id, { id, name, image }, header(token))
     .then((response) => response.data);
 
-export const updateMonster = (id, userId, name, image, token) =>
+export const removeMonster = (id, token) =>
   axios
-    .put('/api/monster/' + id, { id, userId, name, image }, header(token))
+    .delete('/api/monster/' + id, header(token))
     .then((response) => response.data);
-
-export const removeMonster = (id, userId, token) =>
-  axios({
-    method: 'DELETE',
-    url: '/api/monster/' + id,
-    data: { id, userId },
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }).then((response) => response.data);

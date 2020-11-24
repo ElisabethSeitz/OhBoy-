@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class UpdateMonsterDto {
 
     private String id;
-    private String userId;
     private String name;
     private String image;
 }

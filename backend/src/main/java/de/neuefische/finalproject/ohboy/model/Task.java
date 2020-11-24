@@ -18,6 +18,7 @@ public class Task {
 
     @Id
     private String id;
+    private String userId;
     private String monsterId;
     private String description;
     private int score;

@@ -8,7 +8,8 @@ export default function TaskPage() {
   const [monster, tasks] = useTasksByMonsterId(monsterId);
   const [status, setStatus] = useState('OPEN');
 
-  const [countTasks, setCountTasks] = useState();
+  const countTasks =
+    status === 'OPEN' ? monster?.countOpenTasks : monster?.countDoneTasks;
 
   return !monster ? null : (
     <>
@@ -31,13 +32,9 @@ export default function TaskPage() {
 
   function handleOnClickOPEN() {
     setStatus('OPEN');
-    const countOpenTasks = monster.countOpenTasks;
-    setCountTasks(countOpenTasks);
   }
 
   function handleOnClickDONE() {
     setStatus('DONE');
-    const countDoneTasks = monster.countDoneTasks;
-    setCountTasks(countDoneTasks);
   }
 }
