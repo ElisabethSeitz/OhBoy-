@@ -27,7 +27,7 @@ function App() {
             component={EditMonsterPage}
           />
           <ProtectedRoute
-            path="/monsters/tasks/:monsterId"
+            path="/monsters/:monsterId/tasks"
             component={TaskPage}
           />
           <Route path="/">

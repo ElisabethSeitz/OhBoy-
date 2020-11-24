@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/monster/tasks")
+@RequestMapping("/api/monster/")
 public class TaskController {
 
     private final TaskService taskService;
@@ -21,7 +21,7 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @GetMapping("{monsterId}")
+    @GetMapping("{monsterId}/tasks")
     public List<Task> getByMonsterId(@PathVariable String monsterId) {
         return taskService.findAllByMonsterId(monsterId);
     }

@@ -75,7 +75,7 @@ class TaskControllerTest {
     }
 
     private String getTasksUrl() {
-        return "http://localhost:" + port + "/api/monster/tasks";
+        return "http://localhost:" + port + "/api/monster/";
     }
 
     private String login(){
@@ -101,7 +101,7 @@ class TaskControllerTest {
     @Test
     public void testGetMappingForbiddenWhenNoValidJWT() {
         // GIVEN
-        String url = getTasksUrl() + "/someMonsterId";
+        String url = getTasksUrl() + "/someMonsterId/tasks";
 
         // WHEN
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
@@ -114,7 +114,7 @@ class TaskControllerTest {
     public void testGetAllByMonsterIdMapping() {
 
         // GIVEN
-        String url = getTasksUrl() + "/someMonsterId";
+        String url = getTasksUrl() + "/someMonsterId/tasks";
 
         // WHEN
         HttpEntity<Void> entity = getValidAuthorizationEntity(null);

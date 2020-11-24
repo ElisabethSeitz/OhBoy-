@@ -13,6 +13,6 @@ export default function Monster({ monster }) {
   );
 
   function handleClick() {
-    history.push('/monsters/tasks/' + monster.id);
+    history.push('/monsters/' + monster.id + '/tasks');
   }
 }
