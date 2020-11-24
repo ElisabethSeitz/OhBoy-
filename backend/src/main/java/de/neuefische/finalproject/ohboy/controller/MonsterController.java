@@ -7,11 +7,9 @@ import de.neuefische.finalproject.ohboy.model.Monster;
 import de.neuefische.finalproject.ohboy.service.MonsterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController

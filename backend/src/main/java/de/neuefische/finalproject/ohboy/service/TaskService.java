@@ -20,7 +20,7 @@ public class TaskService {
         this.taskMongoDao = taskMongoDao;
     }
 
-    public List<Task> findByMonsterId(String monsterId) {
+    public List<Task> findAllByMonsterId(String monsterId) {
         return taskMongoDao.findAllByMonsterId(monsterId);
     }
 }

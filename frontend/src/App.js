@@ -8,6 +8,7 @@ import MonsterPage from './pages/MonsterPage';
 import MonsterContextProvider from './contexts/MonsterContextProvider';
 import AddMonsterPage from './pages/AddMonsterPage';
 import EditMonsterPage from './pages/EditMonsterPage';
+import TaskPage from './pages/TaskPage';
 
 function App() {
   return (
@@ -24,6 +25,10 @@ function App() {
           <ProtectedRoute
             path="/monsters/edit/:id"
             component={EditMonsterPage}
+          />
+          <ProtectedRoute
+            path="/monsters/:monsterId/tasks"
+            component={TaskPage}
           />
           <Route path="/">
             <Redirect to="/monsters" />
