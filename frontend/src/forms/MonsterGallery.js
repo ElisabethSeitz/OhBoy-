@@ -16,13 +16,13 @@ export default function MonsterGallery({
     ? images.indexOf(savedMonsterImage)
     : -1;
 
-  const [currentImage, setCurrentImage] = useState('');
   const [imageIndex, setImageIndex] = useState(Math.max(savedMonsterIndex, 0));
+  const currentImage = images[imageIndex];
 
   useEffect(() => {
-    setCurrentImage(images[imageIndex]);
-    imageChangedHandler(images[imageIndex]);
-  }, [imageIndex]);
+    imageChangedHandler(currentImage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentImage]);
 
   function nextImage() {
     setImageIndex((imageIndex + 1) % images.length);
