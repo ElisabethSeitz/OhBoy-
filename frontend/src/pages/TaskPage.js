@@ -7,7 +7,7 @@ export default function TaskPage() {
   const { monsterId } = useParams();
   const [monster, tasks] = useTasksByMonsterId(monsterId);
 
-  return (
+  return !monster ? null : (
     <>
       <section>
         <h1>{monster.name}</h1>
