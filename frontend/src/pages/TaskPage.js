@@ -8,13 +8,19 @@ export default function TaskPage() {
   const [monster, tasks] = useTasksByMonsterId(monsterId);
   const [status, setStatus] = useState('OPEN');
 
+  const [countTasks, setCountTasks] = useState();
+
   return !monster ? null : (
     <>
-      <section>
-        <label>tasks</label>
-        <img src={monster.image} alt="monster" />
-        <label>balance</label>
-      </section>
+      <>
+        <p>{countTasks}</p>
+        <p>tasks</p>
+      </>
+      <img src={monster.image} alt="monster" />
+      <>
+        <p>{monster.balance}</p>
+        <p>balance</p>
+      </>
       <h3>{monster.name}</h3>
       <button onClick={handleOnClickOPEN}>open</button>{' '}
       <button onClick={handleOnClickDONE}>done</button>
@@ -25,9 +31,13 @@ export default function TaskPage() {
 
   function handleOnClickOPEN() {
     setStatus('OPEN');
+    const countOpenTasks = monster.countOpenTasks;
+    setCountTasks(countOpenTasks);
   }
 
   function handleOnClickDONE() {
     setStatus('DONE');
+    const countDoneTasks = monster.countDoneTasks;
+    setCountTasks(countDoneTasks);
   }
 }
