@@ -8,7 +8,7 @@ export default function MonsterList() {
   return (
     <ul>
       {monsters?.map((monster) => (
-        <li>
+        <li key={monster.id}>
           <Monster monster={monster} />
         </li>
       ))}
