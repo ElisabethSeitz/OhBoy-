@@ -155,34 +155,4 @@ class TaskServiceTest {
         }
     }
 
-    @Test
-    @DisplayName("The \"add\" method should increase the countOpenTasks by 1")
-    void addSetCountOpenTasks() {
-        //Given
-        Monster monster = Monster.builder()
-                .id("someMonsterId")
-                .userId("someUserId")
-                .countOpenTasks(4)
-                .build();
-
-        AddTaskDto taskDto = new AddTaskDto(
-                "some description",
-                10
-        );
-
-        Monster expectedMonster = Monster.builder()
-                .id("someMonsterId")
-                .userId("someUserId")
-                .countOpenTasks(5)
-                .build();
-
-        when(monsterMongoDao.findById("someMonsterId")).thenReturn(Optional.of(monster));
-
-        //When
-        Task newTask = taskService.add(taskDto, "someMonsterId", "someUserId");
-
-        //Then
-        verify(monsterMongoDao).save(expectedMonster);
-    }
-
 }

@@ -44,9 +44,6 @@ public class TaskService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
-        monster.setCountOpenTasks(monster.getCountOpenTasks()+1);
-        monsterMongoDao.save(monster);
-
         Task taskToBeSaved = Task.builder()
                 .id(idUtils.generateId())
                 .userId(userId)

@@ -21,10 +21,6 @@ public class Monster {
     private int balance;
     private int payoutDoneRewards;
     private int scoreDoneTasks;
-    private int countOpenTasks;
-    private int countDoneTasks;
-    private int countOpenRewards;
-    private int countDoneRewards;
 
 
     public Monster(String id, String userId, String name, String image) {

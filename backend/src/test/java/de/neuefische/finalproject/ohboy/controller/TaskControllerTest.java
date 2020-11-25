@@ -74,7 +74,7 @@ class TaskControllerTest {
         ));
 
         monsterDao.deleteAll();
-        monsterDao.save(new Monster("someMonsterId2", "facebook@1234", "someName2", "someImage2", 100, 50, 4, 3, 2, 6, 6));
+        monsterDao.save(new Monster("someMonsterId2", "facebook@1234", "someName2", "someImage2", 100, 50, 4));
     }
 
     private String getTasksUrl() {
