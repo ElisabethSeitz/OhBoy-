@@ -5,7 +5,7 @@ import useTasksByMonsterId from '../hook/useTasksByMonsterId.js';
 
 export default function TaskPage() {
   const { monsterId } = useParams();
-  const [monster, tasks] = useTasksByMonsterId(monsterId);
+  const { monster, tasks } = useTasksByMonsterId(monsterId);
   const [status, setStatus] = useState('OPEN');
 
   const countTasks =
@@ -26,7 +26,7 @@ export default function TaskPage() {
       <button onClick={handleOnClickOPEN}>open</button>{' '}
       <button onClick={handleOnClickDONE}>done</button>
       <TaskList tasks={tasks} status={status} />
-      <Link>add</Link>
+      <Link to={'/monsters/' + monsterId + '/tasks/create'}>add</Link>
     </>
   );
 
