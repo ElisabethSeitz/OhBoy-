@@ -4,6 +4,7 @@ import de.neuefische.finalproject.ohboy.dao.MonsterMongoDao;
 import de.neuefische.finalproject.ohboy.dao.TaskMongoDao;
 import de.neuefische.finalproject.ohboy.dto.AddTaskDto;
 import de.neuefische.finalproject.ohboy.model.Monster;
+import de.neuefische.finalproject.ohboy.model.Status;
 import de.neuefische.finalproject.ohboy.model.Task;
 import de.neuefische.finalproject.ohboy.utils.IdUtils;
 import de.neuefische.finalproject.ohboy.utils.TimestampUtils;
@@ -49,6 +50,7 @@ public class TaskService {
                 .monsterId(monsterId)
                 .description(dto.getDescription())
                 .score(dto.getScore())
+                .status(Status.OPEN)
                 .build();
         return taskMongoDao.save(taskToBeSaved);
     }
