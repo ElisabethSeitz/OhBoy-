@@ -59,7 +59,7 @@ public class TaskService {
     public Task update(UpdateTaskDto update, String userId) {
         Task task = taskMongoDao.findById(update.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if(!Objects.equals(task.getUserId(), userId)) {
+        if(!Objects.equals(task.getUserId(), userId) || task.getStatus().equals(Status.DONE)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
