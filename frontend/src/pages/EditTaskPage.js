@@ -7,7 +7,7 @@ export default function EditTaskPage() {
   const { monsterId, taskId } = useParams();
   const { edit, tasks } = useTasksByMonsterId(monsterId);
   const history = useHistory();
-  const task = tasks.find((task) => task.id === taskId);
+  const task = tasks?.find((task) => task.id === taskId);
 
   return !task ? null : (
     <>
@@ -19,8 +19,8 @@ export default function EditTaskPage() {
     </>
   );
 
-  function handleSave(description, score) {
-    edit(task.id, description, score);
+  async function handleSave(description, score) {
+    await edit(task.id, description, score);
     history.push('/monsters/' + monsterId + '/tasks');
   }
 
