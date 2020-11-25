@@ -38,11 +38,14 @@ public class TaskService {
     }
 
     public Task add(AddTaskDto dto, String monsterId, String userId) {
-        Monster monster = monsterMongoDao.findById(monsterId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Monster monster = monsterMongoDao.findById(monsterId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
 
         if (!Objects.equals(monster.getUserId(), userId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
+
+        monster.setCountOpenTasks(monster.getCountOpenTasks()+1);
+        monsterMongoDao.save(monster);
 
         Task taskToBeSaved = Task.builder()
                 .id(idUtils.generateId())
