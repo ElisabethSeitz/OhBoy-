@@ -1,0 +1,31 @@
+import React from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import useTasksByMonsterId from '../hook/useTasksByMonsterId';
+import TaskForm from '../forms/TaskForm';
+
+export default function EditTaskPage() {
+  const { monsterId, taskId } = useParams();
+  const { edit, tasks } = useTasksByMonsterId(monsterId);
+  const history = useHistory();
+  const task = tasks.find((task) => task.id === taskId);
+
+  return !task ? null : (
+    <>
+      <h5>edit this task</h5>
+      <TaskForm onSave={handleSave} task={task} />
+      <button type="button" onClick={handleDelete}>
+        Delete
+      </button>
+    </>
+  );
+
+  function handleSave(description, score) {
+    edit(task.id, description, score);
+    history.push('/monsters/' + monsterId + '/tasks');
+  }
+
+  function handleDelete() {
+    //remove(monster.id);
+    history.push('/monsters');
+  }
+}
