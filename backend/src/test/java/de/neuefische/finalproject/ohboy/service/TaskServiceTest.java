@@ -26,8 +26,9 @@ class TaskServiceTest {
     final IdUtils idUtils = mock(IdUtils.class);
     final TimestampUtils timestampUtils = mock(TimestampUtils.class);
     final TaskMongoDao taskMongoDao = mock(TaskMongoDao.class);
+    final MonsterMongoDao monsterMongoDao = mock(MonsterMongoDao.class);
 
-    final TaskService taskService = new TaskService(taskMongoDao, idUtils);
+    final TaskService taskService = new TaskService(taskMongoDao, idUtils, timestampUtils, monsterMongoDao);
 
     final List<Task> tasks = new ArrayList<>(List.of(
             new Task("someId", "someUserId", "someMonsterId", "someDescription", 5, DONE, Instant.parse("1970-01-01T00:00:00Z")),
