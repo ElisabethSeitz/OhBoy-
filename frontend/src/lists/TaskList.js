@@ -1,12 +1,10 @@
 import React from 'react';
 import Task from '../commons/Task';
 
-export default function TaskList({ tasks, status }) {
-  const filteredTasks = tasks.filter((task) => task.status === status);
-
+export default function TaskList({ tasks }) {
   return (
     <ul>
-      {filteredTasks?.map((task) => (
+      {tasks?.map((task) => (
         <li>
           <Task task={task} />
         </li>
