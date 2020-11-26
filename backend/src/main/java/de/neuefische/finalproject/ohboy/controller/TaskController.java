@@ -42,8 +42,8 @@ public class TaskController {
     }
 
     @PutMapping("{monsterId}/tasks/{taskId}/status")
-    public Task updateStatus(@PathVariable String taskId, Principal principal) {
-        return taskService.updateStatus(taskId, principal.getName());
+    public Task updateStatus(@PathVariable String taskId, @PathVariable String monsterId, Principal principal) {
+        return taskService.updateStatus(taskId, monsterId, principal.getName());
     }
 
     @DeleteMapping("{monsterId}/tasks/{taskId}")

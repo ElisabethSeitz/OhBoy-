@@ -74,14 +74,19 @@ public class TaskService {
         return taskMongoDao.save(updatedTask);
     }
 
-    public Task updateStatus(String taskId, String userId) {
+    public Task updateStatus(String taskId, String monsterId, String userId) {
         Task task = taskMongoDao.findById(taskId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Monster monster = monsterMongoDao.findById(monsterId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if(task.getStatus().equals(Status.OPEN)){
             task.setStatus(Status.DONE);
             task.setTimestampOfDone(timestampUtils.generateTimeStampEpochSeconds());
+            monster.setScoreDoneTasks(monster.getScoreDoneTasks() + task.getScore());
         } else {task.setStatus(Status.OPEN);
-                task.setTimestampOfDone(null);}
+                task.setTimestampOfDone(null);
+                monster.setScoreDoneTasks(monster.getScoreDoneTasks() - task.getScore());
+        }
+        monsterMongoDao.save(monster);
 
         if(!Objects.equals(task.getUserId(), userId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
