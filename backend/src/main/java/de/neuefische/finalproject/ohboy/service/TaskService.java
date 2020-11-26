@@ -79,7 +79,9 @@ public class TaskService {
 
         if(task.getStatus().equals(Status.OPEN)){
             task.setStatus(Status.DONE);
-        } else task.setStatus(Status.OPEN);
+            task.setTimestampOfDone(timestampUtils.generateTimeStampEpochSeconds());
+        } else {task.setStatus(Status.OPEN);
+                task.setTimestampOfDone(null);}
 
         if(!Objects.equals(task.getUserId(), userId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
