@@ -16,7 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class TaskService {
@@ -75,4 +74,13 @@ public class TaskService {
         return taskMongoDao.save(updatedTask);
     }
 
+    public void remove(String taskId, String userId) {
+        Task task = taskMongoDao.findById(taskId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if(!Objects.equals(task.getUserId(), userId) || task.getStatus().equals(Status.DONE)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
+        taskMongoDao.deleteById(taskId);
+    }
 }
