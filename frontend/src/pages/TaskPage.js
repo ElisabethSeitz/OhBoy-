@@ -8,7 +8,7 @@ export default function TaskPage() {
   const { monster, tasks } = useTasksByMonsterId(monsterId);
   const [status, setStatus] = useState('OPEN');
 
-  const filteredTasks = tasks.filter((task) => task.status === status);
+  const filteredTasks = tasks?.filter((task) => task.status === status);
 
   const countTasks = filteredTasks.length;
 
@@ -26,7 +26,7 @@ export default function TaskPage() {
       <h3>{monster.name}</h3>
       <button onClick={handleOnClickOPEN}>open</button>{' '}
       <button onClick={handleOnClickDONE}>done</button>
-      <TaskList tasks={filteredTasks} />
+      <TaskList tasks={filteredTasks} monsterId={monsterId} />
       <Link to={'/monsters/' + monsterId + '/tasks/create'}>add</Link>
     </>
   );

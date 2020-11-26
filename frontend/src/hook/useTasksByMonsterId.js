@@ -1,4 +1,8 @@
-import { addTask, getTasksByMonsterId } from '../service/TaskService';
+import {
+  addTask,
+  getTasksByMonsterId,
+  updateTask,
+} from '../service/TaskService';
 import UserContext from '../contexts/UserContext';
 import MonsterContext from '../contexts/MonsterContext';
 import { useContext, useEffect, useState } from 'react';
@@ -20,5 +24,16 @@ export default function useTasksByMonsterId(monsterId) {
       .then((addedTask) => setTasks([...tasks, addedTask]))
       .catch(console.log);
 
-  return { monster, tasks, create };
+  const edit = (taskId, description, score) => {
+    updateTask(taskId, description, score, monsterId, token)
+      .then((updatedTask) => {
+        const newState = tasks.map((task) =>
+          task.id === updatedTask.id ? updatedTask : task
+        );
+        setTasks(newState);
+      })
+      .catch(console.log);
+  };
+
+  return { monster, tasks, create, edit };
 }

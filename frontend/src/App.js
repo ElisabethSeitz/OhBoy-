@@ -10,6 +10,7 @@ import AddMonsterPage from './pages/AddMonsterPage';
 import EditMonsterPage from './pages/EditMonsterPage';
 import TaskPage from './pages/TaskPage';
 import AddTaskPage from './pages/AddTaskPage';
+import EditTaskPage from './pages/EditTaskPage';
 
 function App() {
   return (
@@ -35,6 +36,10 @@ function App() {
           <ProtectedRoute
             path="/monsters/:monsterId/tasks/create"
             component={AddTaskPage}
+          />
+          <ProtectedRoute
+            path="/monsters/:monsterId/tasks/edit/:taskId"
+            component={EditTaskPage}
           />
           <Route path="/">
             <Redirect to="/monsters" />

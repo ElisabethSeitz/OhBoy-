@@ -3,6 +3,7 @@ package de.neuefische.finalproject.ohboy.service;
 import de.neuefische.finalproject.ohboy.dao.MonsterMongoDao;
 import de.neuefische.finalproject.ohboy.dao.TaskMongoDao;
 import de.neuefische.finalproject.ohboy.dto.AddTaskDto;
+import de.neuefische.finalproject.ohboy.dto.UpdateTaskDto;
 import de.neuefische.finalproject.ohboy.model.Monster;
 import de.neuefische.finalproject.ohboy.model.Status;
 import de.neuefische.finalproject.ohboy.model.Task;
@@ -54,4 +55,24 @@ public class TaskService {
                 .build();
         return taskMongoDao.save(taskToBeSaved);
     }
+
+    public Task update(UpdateTaskDto update, String userId) {
+        Task task = taskMongoDao.findById(update.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if(!Objects.equals(task.getUserId(), userId) || task.getStatus().equals(Status.DONE)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
+        Task updatedTask = Task.builder()
+                .id(update.getId())
+                .userId(userId)
+                .monsterId(task.getMonsterId())
+                .description(update.getDescription())
+                .score(update.getScore())
+                .status(task.getStatus())
+                .build();
+
+        return taskMongoDao.save(updatedTask);
+    }
+
 }

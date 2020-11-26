@@ -19,3 +19,12 @@ export const addTask = (description, score, token, monsterId) =>
       header(token)
     )
     .then((response) => response.data);
+
+export const updateTask = (id, description, score, monsterId, token) =>
+  axios
+    .put(
+      '/api/monster/' + monsterId + '/tasks/' + id,
+      { id, description, score },
+      header(token)
+    )
+    .then((response) => response.data);
