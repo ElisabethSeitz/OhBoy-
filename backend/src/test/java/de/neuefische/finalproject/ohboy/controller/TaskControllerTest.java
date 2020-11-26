@@ -1,12 +1,10 @@
 package de.neuefische.finalproject.ohboy.controller;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.neuefische.finalproject.ohboy.dao.MonsterMongoDao;
 import de.neuefische.finalproject.ohboy.dao.TaskMongoDao;
 import de.neuefische.finalproject.ohboy.dao.UserDao;
-import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
-import de.neuefische.finalproject.ohboy.dto.AddTaskDto;
-import de.neuefische.finalproject.ohboy.dto.FacebookCodeDto;
-import de.neuefische.finalproject.ohboy.dto.FacebookUserDto;
+import de.neuefische.finalproject.ohboy.dto.*;
 import de.neuefische.finalproject.ohboy.model.Monster;
 import de.neuefische.finalproject.ohboy.model.OhBoyUser;
 import de.neuefische.finalproject.ohboy.model.Status;
@@ -27,6 +25,7 @@ import org.springframework.test.context.TestPropertySource;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static de.neuefische.finalproject.ohboy.model.Status.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -68,9 +67,9 @@ class TaskControllerTest {
     public void setupTaskDao() {
         taskDao.deleteAll();
         taskDao.saveAll(List.of(
-                new Task("someId", "someUserId", "someMonsterId", "someDescription", 5, DONE, Instant.parse("1970-01-01T00:00:00Z")),
-                new Task("someId2", "someUserId2","someMonsterId2", "someDescription2", 10, OPEN, Instant.parse("1970-01-01T00:00:00Z")),
-                new Task("someId3", "someUserId3", "someMonsterId3", "someDescription3", 15, OPEN, Instant.parse("1970-01-01T00:00:00Z"))
+                Task.builder().id("someId").userId("facebook@1234").monsterId("someMonsterId").description("someDescription").score(5).status(DONE).timestampOfDone(Instant.parse("1970-01-01T00:00:00Z")).build(),
+                Task.builder().id("someId2").userId("facebook@1234").monsterId("someMonsterId2").description("someDescription2").score(10).status(Status.OPEN).build(),
+                Task.builder().id("someId3").userId("someUserId3").monsterId("someMonsterId3").description("someDescription3").score(15).status(OPEN).build()
         ));
 
         monsterDao.deleteAll();
@@ -104,7 +103,7 @@ class TaskControllerTest {
     @Test
     public void testGetMappingForbiddenWhenNoValidJWT() {
         // GIVEN
-        String url = getTasksUrl() + "/someMonsterId/tasks";
+        String url = getTasksUrl() + "someMonsterId/tasks";
 
         // WHEN
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
@@ -117,7 +116,7 @@ class TaskControllerTest {
     public void testGetAllByMonsterIdMapping() {
 
         // GIVEN
-        String url = getTasksUrl() + "/someMonsterId/tasks";
+        String url = getTasksUrl() + "someMonsterId/tasks";
 
         // WHEN
         HttpEntity<Void> entity = getValidAuthorizationEntity(null);
@@ -128,7 +127,7 @@ class TaskControllerTest {
         List<Task> stockTasks = new ArrayList<>(List.of(
                     Task.builder()
                             .id("someId")
-                            .userId("someUserId")
+                            .userId("facebook@1234")
                             .monsterId("someMonsterId")
                             .description("someDescription")
                             .status(DONE)
@@ -143,7 +142,7 @@ class TaskControllerTest {
     @Test
     public void postTaskShouldAddANewTask() {
         // GIVEN
-        String url = getTasksUrl() + "/someMonsterId2/tasks";
+        String url = getTasksUrl() + "someMonsterId2/tasks";
         AddTaskDto taskToAdd = new AddTaskDto(
                 "some description",
                 10
@@ -166,4 +165,117 @@ class TaskControllerTest {
                 .build()
         ));
     }
+
+    @Test
+    public void updateTaskShouldUpdateExistingTask() {
+        //GIVEN
+        String url = getTasksUrl() + "someMonsterId2/tasks/someId2";
+
+        UpdateTaskDto updateTask = new UpdateTaskDto("someId2", "some updatedDescription", 20);
+
+        //WHEN
+        HttpEntity<UpdateTaskDto> entity = getValidAuthorizationEntity(updateTask);
+        ResponseEntity<Task> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Task.class);
+
+        //THEN
+        Optional<Task> savedTask = taskDao.findById("someId2");
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+
+        Task expectedTask = Task.builder()
+                .id("someId2")
+                .userId("facebook@1234")
+                .monsterId("someMonsterId2")
+                .description("some updatedDescription")
+                .score(20)
+                .status(Status.OPEN)
+                .build();
+
+        assertThat(response.getBody(), is(expectedTask));
+        assertThat(savedTask.get(), is(expectedTask));
     }
+
+    @Test
+    public void updateTaskWhenNoExistingTaskShouldReturnNotFound() {
+        //GIVEN
+        String url = getTasksUrl() + "someMonsterId2/tasks/someIdXY";
+
+        UpdateTaskDto updateTask = new UpdateTaskDto("someIdXY", "some updatedDescription", 50);
+
+        //WHEN
+        HttpEntity<UpdateTaskDto> entity = getValidAuthorizationEntity(updateTask);
+        ResponseEntity<Task> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Task.class);
+
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
+    }
+
+    @Test
+    public void updateTaskWithNotMatchingUserIdShouldReturnForbidden() {
+        //GIVEN
+        String url = getTasksUrl() + "someMonsterId3/tasks/someId3";
+
+        UpdateTaskDto updateTask = new UpdateTaskDto("someId3", "some updatedDescription", 20);
+
+        //WHEN
+        HttpEntity<UpdateTaskDto> entity = getValidAuthorizationEntity(updateTask);
+        ResponseEntity<Task> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Task.class);
+
+        //THEN
+        Optional<Task> savedTask = taskDao.findById("someId3");
+        assertThat(response.getStatusCode(), is(HttpStatus.FORBIDDEN));
+
+        Task expectedTask = Task.builder()
+                .id("someId3")
+                .userId("someUserId3")
+                .monsterId("someMonsterId3")
+                .description("someDescription3")
+                .score(15)
+                .status(Status.OPEN)
+                .build();
+
+        assertThat(savedTask.get(), is(expectedTask));
+    }
+
+    @Test
+    public void updateTaskWithStatusDoneShouldReturnForbidden() {
+        //GIVEN
+        String url = getTasksUrl() + "someMonsterId/tasks/someId";
+
+        UpdateTaskDto updateTask = new UpdateTaskDto("someId", "some updatedDescription", 20);
+
+        //WHEN
+        HttpEntity<UpdateTaskDto> entity = getValidAuthorizationEntity(updateTask);
+        ResponseEntity<Task> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Task.class);
+
+        //THEN
+        Optional<Task> savedTask = taskDao.findById("someId");
+        assertThat(response.getStatusCode(), is(HttpStatus.FORBIDDEN));
+
+        Task expectedTask = Task.builder()
+                .id("someId")
+                .userId("facebook@1234")
+                .monsterId("someMonsterId")
+                .description("someDescription")
+                .score(5)
+                .status(Status.DONE)
+                .timestampOfDone(Instant.parse("1970-01-01T00:00:00Z"))
+                .build();
+
+        assertThat(savedTask.get(), is(expectedTask));
+    }
+
+    @Test
+    public void updateTaskWithNotMatchingIdsShouldReturnBadRequest() {
+        //GIVEN
+        String url = getTasksUrl() + "someMonsterId2/tasks/someId2";
+
+        UpdateTaskDto updateTask = new UpdateTaskDto("someId3", "some updatedDescription", 20);
+
+        //WHEN
+        HttpEntity<UpdateTaskDto> entity = getValidAuthorizationEntity(updateTask);
+        ResponseEntity<Task> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Task.class);
+
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
+    }
+}

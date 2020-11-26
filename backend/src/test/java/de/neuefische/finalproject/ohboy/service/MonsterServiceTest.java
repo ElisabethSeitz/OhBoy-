@@ -188,7 +188,7 @@ class MonsterServiceTest {
 
         //When
         try {
-            monsterService.update(monsterDto, "some otherUserId");
+            monsterService.update(monsterDto, "some userId");
             fail("missing exception");
         } catch (ResponseStatusException exception) {
             assertThat(exception.getStatus(), is(HttpStatus.NOT_FOUND));

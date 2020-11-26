@@ -2,11 +2,9 @@ package de.neuefische.finalproject.ohboy.service;
 
 import de.neuefische.finalproject.ohboy.dao.MonsterMongoDao;
 import de.neuefische.finalproject.ohboy.dao.TaskMongoDao;
-import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
 import de.neuefische.finalproject.ohboy.dto.AddTaskDto;
-import de.neuefische.finalproject.ohboy.dto.UpdateMonsterDto;
+import de.neuefische.finalproject.ohboy.dto.UpdateTaskDto;
 import de.neuefische.finalproject.ohboy.model.Monster;
-import de.neuefische.finalproject.ohboy.model.Status;
 import de.neuefische.finalproject.ohboy.model.Task;
 import de.neuefische.finalproject.ohboy.utils.IdUtils;
 import de.neuefische.finalproject.ohboy.utils.TimestampUtils;
@@ -25,7 +23,6 @@ import static de.neuefische.finalproject.ohboy.model.Status.OPEN;
 import static org.assertj.core.api.Assertions.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class TaskServiceTest {
@@ -152,6 +149,134 @@ class TaskServiceTest {
             fail("missing exception");
         } catch (ResponseStatusException exception) {
             assertThat(exception.getStatus(), is(HttpStatus.FORBIDDEN));
+        }
+    }
+
+    @Test
+    @DisplayName("The \"update\" method should return the updated Task object")
+    void update() {
+        //Given
+        String taskId = "randomId";
+
+        UpdateTaskDto taskDto = new UpdateTaskDto(
+                taskId,
+                "some updatedDescription",
+                20
+        );
+
+        Task task = Task.builder()
+                .id(taskId)
+                .userId("someUserId")
+                .monsterId("someMonsterId")
+                .description("some description")
+                .score(10)
+                .status(OPEN)
+                .build();
+
+        Task updatedTask = Task.builder()
+                .id(taskId)
+                .userId("someUserId")
+                .monsterId("someMonsterId")
+                .description("some updatedDescription")
+                .score(20)
+                .status(OPEN)
+                .build();
+
+        when(taskMongoDao.findById(taskId)).thenReturn(Optional.of(task));
+        when(taskMongoDao.save(updatedTask)).thenReturn(updatedTask);
+
+        //When
+        Task result = taskService.update(taskDto, "someUserId");
+
+        //Then
+        assertThat(result, is(updatedTask));
+        verify(taskMongoDao).save(updatedTask);
+    }
+
+    @Test
+    @DisplayName("The \"update\" method should throw forbidden when user with not matching userId try to modify a Task object")
+    void updateForbiddenUserId() {
+        //Given
+        String taskId = "randomId";
+
+        UpdateTaskDto taskDto = new UpdateTaskDto(
+                taskId,
+                "some updatedDescription",
+                20
+        );
+
+        Task task = Task.builder()
+                .id(taskId)
+                .userId("someUserId")
+                .monsterId("someMonsterId")
+                .description("some description")
+                .score(10)
+                .status(OPEN)
+                .build();
+
+        when(taskMongoDao.findById(taskId)).thenReturn(Optional.of(task));
+
+        //When
+        try {
+            taskService.update(taskDto, "some otherUserId");
+            fail("missing exception");
+        } catch (ResponseStatusException exception) {
+            assertThat(exception.getStatus(), is(HttpStatus.FORBIDDEN));
+        }
+    }
+
+    @Test
+    @DisplayName("The \"update\" method should throw forbidden when a Task object with Status DONE should be modified")
+    void updateForbiddenStatusDone() {
+        //Given
+        String taskId = "randomId";
+
+        UpdateTaskDto taskDto = new UpdateTaskDto(
+                taskId,
+                "some updatedDescription",
+                20
+        );
+
+        Task task = Task.builder()
+                .id(taskId)
+                .userId("someUserId")
+                .monsterId("someMonsterId")
+                .description("some description")
+                .score(10)
+                .status(DONE)
+                .build();
+
+        when(taskMongoDao.findById(taskId)).thenReturn(Optional.of(task));
+
+        //When
+        try {
+            taskService.update(taskDto, "someUserId");
+            fail("missing exception");
+        } catch (ResponseStatusException exception) {
+            assertThat(exception.getStatus(), is(HttpStatus.FORBIDDEN));
+        }
+    }
+
+    @Test
+    @DisplayName("The \"update\" method should throw not found when id not found")
+    void updateNotFound() {
+        //Given
+        String taskId = "randomId";
+
+        UpdateTaskDto taskDto = new UpdateTaskDto(
+                taskId,
+                "some updatedDescription",
+                20
+        );
+
+        when(taskMongoDao.findById(taskId)).thenReturn(Optional.empty());
+
+        //When
+        try {
+            taskService.update(taskDto, "some userId");
+            fail("missing exception");
+        } catch (ResponseStatusException exception) {
+            assertThat(exception.getStatus(), is(HttpStatus.NOT_FOUND));
         }
     }
 
