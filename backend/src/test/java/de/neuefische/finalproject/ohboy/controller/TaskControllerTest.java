@@ -1,12 +1,9 @@
 package de.neuefische.finalproject.ohboy.controller;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import de.neuefische.finalproject.ohboy.dao.MonsterMongoDao;
 import de.neuefische.finalproject.ohboy.dao.TaskMongoDao;
-import de.neuefische.finalproject.ohboy.dao.UserDao;
 import de.neuefische.finalproject.ohboy.dto.*;
 import de.neuefische.finalproject.ohboy.model.Monster;
-import de.neuefische.finalproject.ohboy.model.OhBoyUser;
 import de.neuefische.finalproject.ohboy.model.Status;
 import de.neuefische.finalproject.ohboy.model.Task;
 import de.neuefische.finalproject.ohboy.service.FacebookApiService;
@@ -30,7 +27,6 @@ import java.util.Optional;
 import static de.neuefische.finalproject.ohboy.model.Status.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -68,7 +64,7 @@ class TaskControllerTest {
         taskDao.deleteAll();
         taskDao.saveAll(List.of(
                 Task.builder().id("someId").userId("facebook@1234").monsterId("someMonsterId").description("someDescription").score(5).status(DONE).timestampOfDone(Instant.parse("1970-01-01T00:00:00Z")).build(),
-                Task.builder().id("someId2").userId("facebook@1234").monsterId("someMonsterId2").description("someDescription2").score(10).status(Status.OPEN).build(),
+                Task.builder().id("someId2").userId("facebook@1234").monsterId("someMonsterId2").description("someDescription2").score(10).status(OPEN).build(),
                 Task.builder().id("someId3").userId("someUserId3").monsterId("someMonsterId3").description("someDescription3").score(15).status(OPEN).build()
         ));
 
@@ -203,7 +199,7 @@ class TaskControllerTest {
 
         //WHEN
         HttpEntity<UpdateTaskDto> entity = getValidAuthorizationEntity(updateTask);
-        ResponseEntity<Task> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Task.class);
+        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
 
         //THEN
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
@@ -218,7 +214,7 @@ class TaskControllerTest {
 
         //WHEN
         HttpEntity<UpdateTaskDto> entity = getValidAuthorizationEntity(updateTask);
-        ResponseEntity<Task> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Task.class);
+        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
 
         //THEN
         Optional<Task> savedTask = taskDao.findById("someId3");
@@ -245,7 +241,7 @@ class TaskControllerTest {
 
         //WHEN
         HttpEntity<UpdateTaskDto> entity = getValidAuthorizationEntity(updateTask);
-        ResponseEntity<Task> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Task.class);
+        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
 
         //THEN
         Optional<Task> savedTask = taskDao.findById("someId");
@@ -273,7 +269,7 @@ class TaskControllerTest {
 
         //WHEN
         HttpEntity<UpdateTaskDto> entity = getValidAuthorizationEntity(updateTask);
-        ResponseEntity<Task> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Task.class);
+        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
 
         //THEN
         assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));

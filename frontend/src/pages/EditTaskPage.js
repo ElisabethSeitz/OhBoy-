@@ -5,7 +5,7 @@ import TaskForm from '../forms/TaskForm';
 
 export default function EditTaskPage() {
   const { monsterId, taskId } = useParams();
-  const { edit, tasks } = useTasksByMonsterId(monsterId);
+  const { edit, tasks, remove } = useTasksByMonsterId(monsterId);
   const history = useHistory();
   const task = tasks?.find((task) => task.id === taskId);
 
@@ -24,8 +24,8 @@ export default function EditTaskPage() {
     history.push('/monsters/' + monsterId + '/tasks');
   }
 
-  function handleDelete() {
-    //remove(monster.id);
-    history.push('/monsters');
+  async function handleDelete() {
+    await remove(task.id);
+    history.push('/monsters/' + monsterId + '/tasks');
   }
 }
