@@ -5,7 +5,7 @@ import useTasksByMonsterId from '../hook/useTasksByMonsterId.js';
 
 export default function TaskPage() {
   const { monsterId } = useParams();
-  const { monster, tasks } = useTasksByMonsterId(monsterId);
+  const { monster, tasks, editStatus } = useTasksByMonsterId(monsterId);
   const [status, setStatus] = useState('OPEN');
 
   const filteredTasks = tasks?.filter((task) => task.status === status);
@@ -20,13 +20,17 @@ export default function TaskPage() {
       </>
       <img src={monster.image} alt="monster" />
       <>
-        <p>{monster.balance}</p>
+        <p>{monster.scoreDoneTasks - monster.payoutDoneRewards}</p>
         <p>balance</p>
       </>
       <h3>{monster.name}</h3>
       <button onClick={handleOnClickOPEN}>open</button>{' '}
       <button onClick={handleOnClickDONE}>done</button>
-      <TaskList tasks={filteredTasks} monsterId={monsterId} />
+      <TaskList
+        tasks={filteredTasks}
+        monsterId={monsterId}
+        editStatus={editStatus}
+      />
       <Link to={'/monsters/' + monsterId + '/tasks/create'}>add</Link>
     </>
   );

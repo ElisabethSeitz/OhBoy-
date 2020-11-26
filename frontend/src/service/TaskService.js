@@ -29,6 +29,15 @@ export const updateTask = (id, description, score, monsterId, token) =>
     )
     .then((response) => response.data);
 
+export const updateStatus = (id, monsterId, token) =>
+  axios
+    .put(
+      '/api/monster/' + monsterId + '/tasks/' + id + '/status',
+      {},
+      header(token)
+    )
+    .then((response) => response.data);
+
 export const removeTask = (id, monsterId, token) =>
   axios
     .delete('/api/monster/' + monsterId + '/tasks/' + id, header(token))

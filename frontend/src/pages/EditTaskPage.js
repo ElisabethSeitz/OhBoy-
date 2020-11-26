@@ -5,13 +5,14 @@ import TaskForm from '../forms/TaskForm';
 
 export default function EditTaskPage() {
   const { monsterId, taskId } = useParams();
-  const { edit, tasks, remove } = useTasksByMonsterId(monsterId);
+  const { edit, tasks, remove, monster } = useTasksByMonsterId(monsterId);
   const history = useHistory();
   const task = tasks?.find((task) => task.id === taskId);
 
   return !task ? null : (
     <>
       <h5>edit this task</h5>
+      <img src={monster.image} alt="monster" />
       <TaskForm onSave={handleSave} task={task} />
       <button type="button" onClick={handleDelete}>
         Delete
