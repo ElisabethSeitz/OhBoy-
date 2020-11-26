@@ -55,10 +55,6 @@ public class MonsterService {
                 .balance(monster.getBalance())
                 .payoutDoneRewards(monster.getPayoutDoneRewards())
                 .scoreDoneTasks(monster.getScoreDoneTasks())
-                .countOpenTasks(monster.getCountOpenTasks())
-                .countDoneTasks(monster.getCountDoneTasks())
-                .countOpenRewards(monster.getCountOpenRewards())
-                .countDoneRewards(monster.getCountDoneRewards())
                 .build();
 
         return monsterMongoDao.save(updatedMonster);

@@ -58,9 +58,9 @@ class MonsterControllerTest {
     public void setupMonsterDao() {
         monsterDao.deleteAll();
         monsterDao.saveAll(List.of(
-                new Monster("someId", "someUserId", "someName", "someImage", 0, 0, 0, 0, 0, 0, 0),
-                new Monster("someId2", "facebook@1234", "someName2", "someImage2", 100, 50, 4, 3, 2, 6, 6),
-                new Monster("someId3", "someUserId3", "someName3", "someImage3", 0, 0, 0, 0, 0, 0, 0)
+                new Monster("someId", "someUserId", "someName", "someImage", 0, 0, 0),
+                new Monster("someId2", "facebook@1234", "someName2", "someImage2", 100, 50, 4),
+                new Monster("someId3", "someUserId3", "someName3", "someImage3", 0, 0, 0)
         ));
 
         userDao.deleteAll();
@@ -122,10 +122,6 @@ class MonsterControllerTest {
                 .image("someImage2")
                 .balance(100)
                 .scoreDoneTasks(4)
-                .countOpenTasks(3)
-                .countDoneTasks(2)
-                .countOpenRewards(6)
-                .countDoneRewards(6)
                 .payoutDoneRewards(50)
                 .build()
         ));
@@ -156,10 +152,6 @@ class MonsterControllerTest {
                 .image("some image")
                 .balance(0)
                 .scoreDoneTasks(0)
-                .countOpenTasks(0)
-                .countDoneTasks(0)
-                .countOpenRewards(0)
-                .countDoneRewards(0)
                 .payoutDoneRewards(0)
                 .build()
         ));
@@ -192,10 +184,6 @@ class MonsterControllerTest {
                 .balance(100)
                 .payoutDoneRewards(50)
                 .scoreDoneTasks(4)
-                .countOpenTasks(3)
-                .countDoneTasks(2)
-                .countOpenRewards(6)
-                .countDoneRewards(6)
                 .build();
 
         assertThat(response.getBody(), is(expectedMonster));
@@ -248,10 +236,6 @@ class MonsterControllerTest {
                 .balance(0)
                 .payoutDoneRewards(0)
                 .scoreDoneTasks(0)
-                .countOpenTasks(0)
-                .countDoneTasks(0)
-                .countOpenRewards(0)
-                .countDoneRewards(0)
                 .build();
 
         assertThat(savedMonster.get(), is(expectedMonster));

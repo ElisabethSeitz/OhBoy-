@@ -3,10 +3,13 @@ package de.neuefische.finalproject.ohboy.controller;
 import de.neuefische.finalproject.ohboy.dao.MonsterMongoDao;
 import de.neuefische.finalproject.ohboy.dao.TaskMongoDao;
 import de.neuefische.finalproject.ohboy.dao.UserDao;
+import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
+import de.neuefische.finalproject.ohboy.dto.AddTaskDto;
 import de.neuefische.finalproject.ohboy.dto.FacebookCodeDto;
 import de.neuefische.finalproject.ohboy.dto.FacebookUserDto;
 import de.neuefische.finalproject.ohboy.model.Monster;
 import de.neuefische.finalproject.ohboy.model.OhBoyUser;
+import de.neuefische.finalproject.ohboy.model.Status;
 import de.neuefische.finalproject.ohboy.model.Task;
 import de.neuefische.finalproject.ohboy.service.FacebookApiService;
 import de.neuefische.finalproject.ohboy.utils.IdUtils;
@@ -71,7 +74,7 @@ class TaskControllerTest {
         ));
 
         monsterDao.deleteAll();
-        monsterDao.save(new Monster("someId2", "facebook@123", "someName2", "someImage2", 100, 50, 4, 3, 2, 6, 6));
+        monsterDao.save(new Monster("someMonsterId2", "facebook@1234", "someName2", "someImage2", 100, 50, 4));
     }
 
     private String getTasksUrl() {
@@ -136,4 +139,31 @@ class TaskControllerTest {
 
             assertThat(response.getBody(), is(stockTasks.toArray()));
         }
+
+    @Test
+    public void postTaskShouldAddANewTask() {
+        // GIVEN
+        String url = getTasksUrl() + "/someMonsterId2/tasks";
+        AddTaskDto taskToAdd = new AddTaskDto(
+                "some description",
+                10
+        );
+        when(mockedIdUtils.generateId()).thenReturn("some generated id");
+
+        // WHEN
+        HttpEntity<AddTaskDto> entity = getValidAuthorizationEntity(taskToAdd);
+        ResponseEntity<Task> response = restTemplate.exchange(url, HttpMethod.POST,entity, Task.class);
+
+        // THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+        assertThat(response.getBody(), is(Task.builder()
+                .id("some generated id")
+                .userId("facebook@1234")
+                .monsterId("someMonsterId2")
+                .description("some description")
+                .score(10)
+                .status(OPEN)
+                .build()
+        ));
+    }
     }

@@ -10,4 +10,5 @@ public interface MonsterMongoDao extends PagingAndSortingRepository<Monster,Stri
     List<Monster> findAll();
 
     List<Monster> findAllByUserId(String userId);
+
 }

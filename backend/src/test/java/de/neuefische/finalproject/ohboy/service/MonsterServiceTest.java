@@ -28,10 +28,10 @@ class MonsterServiceTest {
     final MonsterService monsterService = new MonsterService(monsterMongoDao, idUtils);
 
     final List<Monster> monsters = new ArrayList<>(List.of(
-            new Monster("some id", "@facebookSomeUserId", "some name", "some image", 0, 0, 0, 0, 0, 0, 0),
-            new Monster("some id2", "@facebookSomeUserId2", "some name2", "some image2", 0, 0, 0, 0, 0, 0, 0),
-            new Monster("some id3", "@facebookSomeUserId3", "some name3", "some image3", 0, 0, 0, 0, 0, 0, 0),
-            new Monster("some id4", "@facebookSomeUserI4", "some name4", "some image4", 0, 0, 0, 0, 0, 0, 0)
+            new Monster("some id", "@facebookSomeUserId", "some name", "some image", 0, 0, 0),
+            new Monster("some id2", "@facebookSomeUserId2", "some name2", "some image2", 0, 0, 0),
+            new Monster("some id3", "@facebookSomeUserId3", "some name3", "some image3", 0, 0, 0),
+            new Monster("some id4", "@facebookSomeUserI4", "some name4", "some image4", 0, 0, 0)
     ));
 
     final List<Monster> getStockMonsters(){
@@ -52,10 +52,6 @@ class MonsterServiceTest {
                 .balance(0)
                 .scoreDoneTasks(0)
                 .payoutDoneRewards(0)
-                .countDoneRewards(0)
-                .countDoneTasks(0)
-                .countOpenTasks(0)
-                .countOpenRewards(0)
                 .build()
         ));
 
@@ -87,10 +83,6 @@ class MonsterServiceTest {
                .balance(0)
                .scoreDoneTasks(0)
                .payoutDoneRewards(0)
-               .countDoneRewards(0)
-               .countDoneTasks(0)
-               .countOpenTasks(0)
-               .countOpenRewards(0)
                .build();
 
         when(idUtils.generateId()).thenReturn(expectedId);
@@ -124,10 +116,6 @@ class MonsterServiceTest {
                 .balance(5)
                 .payoutDoneRewards(10)
                 .scoreDoneTasks(20)
-                .countOpenTasks(2)
-                .countDoneTasks(4)
-                .countOpenRewards(6)
-                .countDoneRewards(7)
                 .build();
 
         Monster updatedMonster = Monster.builder()
@@ -138,10 +126,6 @@ class MonsterServiceTest {
                 .balance(5)
                 .payoutDoneRewards(10)
                 .scoreDoneTasks(20)
-                .countOpenTasks(2)
-                .countDoneTasks(4)
-                .countOpenRewards(6)
-                .countDoneRewards(7)
                 .build();
 
         when(monsterMongoDao.findById(monsterId)).thenReturn(Optional.of(monster));
@@ -175,10 +159,6 @@ class MonsterServiceTest {
                 .balance(5)
                 .payoutDoneRewards(10)
                 .scoreDoneTasks(20)
-                .countOpenTasks(2)
-                .countDoneTasks(4)
-                .countOpenRewards(6)
-                .countDoneRewards(7)
                 .build();
 
         when(monsterMongoDao.findById(monsterId)).thenReturn(Optional.of(monster));
@@ -229,10 +209,6 @@ class MonsterServiceTest {
                 .balance(5)
                 .payoutDoneRewards(10)
                 .scoreDoneTasks(20)
-                .countOpenTasks(2)
-                .countDoneTasks(4)
-                .countOpenRewards(6)
-                .countDoneRewards(7)
                 .build()));
 
         //When
@@ -256,10 +232,6 @@ class MonsterServiceTest {
                 .balance(5)
                 .payoutDoneRewards(10)
                 .scoreDoneTasks(20)
-                .countOpenTasks(2)
-                .countDoneTasks(4)
-                .countOpenRewards(6)
-                .countDoneRewards(7)
                 .build()));
 
         //When
