@@ -74,6 +74,20 @@ public class TaskService {
         return taskMongoDao.save(updatedTask);
     }
 
+    public Task updateStatus(String taskId, String userId) {
+        Task task = taskMongoDao.findById(taskId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if(task.getStatus().equals(Status.OPEN)){
+            task.setStatus(Status.DONE);
+        } else task.setStatus(Status.OPEN);
+
+        if(!Objects.equals(task.getUserId(), userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
+        return taskMongoDao.save(task);
+    }
+
     public void remove(String taskId, String userId) {
         Task task = taskMongoDao.findById(taskId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
