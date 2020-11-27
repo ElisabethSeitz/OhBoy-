@@ -2,6 +2,7 @@ import {
   addTask,
   getTasksByMonsterId,
   removeTask,
+  updateStatus,
   updateTask,
 } from '../service/TaskService';
 import UserContext from '../contexts/UserContext';
@@ -36,10 +37,21 @@ export default function useTasksByMonsterId(monsterId) {
       .catch(console.log);
   };
 
+  const editStatus = (taskId) => {
+    updateStatus(taskId, monsterId, token)
+      .then((updatedTask) => {
+        const newState = tasks.map((task) =>
+          task.id === updatedTask.id ? updatedTask : task
+        );
+        setTasks(newState);
+      })
+      .catch(console.log);
+  };
+
   const remove = (taskId) =>
     removeTask(taskId, monsterId, token)
       .then(() => setTasks(tasks.filter((task) => task.id !== taskId)))
       .catch(console.log);
 
-  return { monster, tasks, create, edit, remove };
+  return { monster, tasks, create, edit, remove, editStatus };
 }

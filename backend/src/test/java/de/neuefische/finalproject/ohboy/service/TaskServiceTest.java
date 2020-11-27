@@ -356,4 +356,247 @@ class TaskServiceTest {
             assertThat(exception.getStatus(), is(HttpStatus.NOT_FOUND));
         }
     }
+
+    @Test
+    @DisplayName("The \"updateStatus\" method should return the updated Task object")
+    void updateStatusInDone() {
+        //Given
+        String taskId = "randomId";
+        Instant expectedTime = Instant.parse("2020-10-26T10:00:00Z");
+
+        Task task = Task.builder()
+                .id(taskId)
+                .userId("someUserId")
+                .monsterId("someMonsterId")
+                .description("someDescription")
+                .score(10)
+                .status(OPEN)
+                .build();
+
+        Task updatedTask = Task.builder()
+                .id(taskId)
+                .userId("someUserId")
+                .monsterId("someMonsterId")
+                .description("someDescription")
+                .score(10)
+                .status(DONE)
+                .timestampOfDone(expectedTime)
+                .build();
+
+        Monster monster = Monster.builder()
+                .id("someMonsterId")
+                .build();
+
+        when(timestampUtils.generateTimeStampEpochSeconds()).thenReturn(expectedTime);
+        when(taskMongoDao.findById(taskId)).thenReturn(Optional.of(task));
+        when(monsterMongoDao.findById("someMonsterId")).thenReturn(Optional.of(monster));
+        when(taskMongoDao.save(updatedTask)).thenReturn(updatedTask);
+
+        //When
+        Task result = taskService.updateStatus(taskId, "someMonsterId", "someUserId");
+
+        //Then
+        assertThat(result, is(updatedTask));
+        verify(taskMongoDao).save(updatedTask);
+    }
+
+    @Test
+    @DisplayName("The \"updateStatus\" method should return the updated Task object")
+    void updateStatusInOpen() {
+        //Given
+        String taskId = "randomId";
+        Instant savedTime = Instant.parse("2020-10-26T10:00:00Z");
+
+        Task task = Task.builder()
+                .id(taskId)
+                .userId("someUserId")
+                .monsterId("someMonsterId")
+                .description("someDescription")
+                .score(10)
+                .status(DONE)
+                .timestampOfDone(savedTime)
+                .build();
+
+        Task updatedTask = Task.builder()
+                .id(taskId)
+                .userId("someUserId")
+                .monsterId("someMonsterId")
+                .description("someDescription")
+                .score(10)
+                .status(OPEN)
+                .timestampOfDone(null)
+                .build();
+
+        Monster monster = Monster.builder()
+                .id("someMonsterId")
+                .build();
+
+        when(taskMongoDao.findById(taskId)).thenReturn(Optional.of(task));
+        when(monsterMongoDao.findById("someMonsterId")).thenReturn(Optional.of(monster));
+        when(taskMongoDao.save(updatedTask)).thenReturn(updatedTask);
+
+        //When
+        Task result = taskService.updateStatus(taskId, "someMonsterId", "someUserId");
+
+        //Then
+        assertThat(result, is(updatedTask));
+        verify(taskMongoDao).save(updatedTask);
+    }
+
+    @Test
+    @DisplayName("The \"updateStatus\" method should save the updated Monster object")
+    void updateStatusInDoneMonster() {
+        //Given
+        String taskId = "randomId";
+
+        Task task = Task.builder()
+                .id(taskId)
+                .userId("someUserId")
+                .monsterId("someMonsterId")
+                .description("someDescription")
+                .score(10)
+                .status(OPEN)
+                .build();
+
+        Monster monster = Monster.builder()
+                .id("someMonsterId")
+                .userId("someUserId")
+                .name("someName")
+                .image("someImage")
+                .scoreDoneTasks(0)
+                .payoutDoneRewards(0)
+                .balance(0)
+                .build();
+
+        Monster updatedMonster = Monster.builder()
+                .id("someMonsterId")
+                .userId("someUserId")
+                .name("someName")
+                .image("someImage")
+                .scoreDoneTasks(10)
+                .payoutDoneRewards(0)
+                .balance(0)
+                .build();
+
+        when(taskMongoDao.findById(taskId)).thenReturn(Optional.of(task));
+        when(monsterMongoDao.findById("someMonsterId")).thenReturn(Optional.of(monster));
+        when(monsterMongoDao.save(updatedMonster)).thenReturn(updatedMonster);
+
+        //When
+        taskService.updateStatus(taskId, "someMonsterId", "someUserId");
+
+        //Then
+        verify(monsterMongoDao).save(updatedMonster);
+    }
+
+    @Test
+    @DisplayName("The \"updateStatus\" method should save the updated Monster object")
+    void updateStatusInOpenMonster() {
+        //Given
+        String taskId = "randomId";
+
+        Task task = Task.builder()
+                .id(taskId)
+                .userId("someUserId")
+                .monsterId("someMonsterId")
+                .description("someDescription")
+                .score(10)
+                .status(DONE)
+                .build();
+
+        Monster monster = Monster.builder()
+                .id("someMonsterId")
+                .userId("someUserId")
+                .name("someName")
+                .image("someImage")
+                .scoreDoneTasks(25)
+                .payoutDoneRewards(0)
+                .balance(0)
+                .build();
+
+        Monster updatedMonster = Monster.builder()
+                .id("someMonsterId")
+                .userId("someUserId")
+                .name("someName")
+                .image("someImage")
+                .scoreDoneTasks(15)
+                .payoutDoneRewards(0)
+                .balance(0)
+                .build();
+
+        when(taskMongoDao.findById(taskId)).thenReturn(Optional.of(task));
+        when(monsterMongoDao.findById("someMonsterId")).thenReturn(Optional.of(monster));
+        when(monsterMongoDao.save(updatedMonster)).thenReturn(updatedMonster);
+
+        //When
+        taskService.updateStatus(taskId, "someMonsterId", "someUserId");
+
+        //Then
+        verify(monsterMongoDao).save(updatedMonster);
+    }
+
+    @Test
+    @DisplayName("The \"updateStatus\" method should throw forbidden when user with not matching userId try to modify a Task object")
+    void updateStatusForbiddenUserId() {
+        //Given
+        String taskId = "randomId";
+
+        Task task = Task.builder()
+                .id(taskId)
+                .userId("someUserId")
+                .monsterId("someMonsterId")
+                .description("some description")
+                .score(10)
+                .status(OPEN)
+                .build();
+
+        Monster monster = Monster.builder()
+                .id("someMonsterId")
+                .build();
+
+        when(taskMongoDao.findById(taskId)).thenReturn(Optional.of(task));
+        when(monsterMongoDao.findById("someMonsterId")).thenReturn(Optional.of(monster));
+
+        //When
+        try {
+            taskService.updateStatus(taskId, "someMonsterId", "some otherUserId");
+            fail("missing exception");
+        } catch (ResponseStatusException exception) {
+            assertThat(exception.getStatus(), is(HttpStatus.FORBIDDEN));
+        }
+    }
+
+    @Test
+    @DisplayName("The \"updateStatus\" method should throw not found when taskId not found")
+    void updateStatusTaskIdNotFound() {
+        //Given
+        String taskId = "randomId";
+
+        when(taskMongoDao.findById(taskId)).thenReturn(Optional.empty());
+
+        //When
+        try {
+            taskService.updateStatus(taskId, "someMonsterId", "someUserId");
+            fail("missing exception");
+        } catch (ResponseStatusException exception) {
+            assertThat(exception.getStatus(), is(HttpStatus.NOT_FOUND));
+        }
+    }
+
+    @Test
+    @DisplayName("The \"updateStatus\" method should throw not found when monsterId not found")
+    void updateStatusMonsterIdNotFound() {
+        //Given
+        String taskId = "randomId";
+
+        when(monsterMongoDao.findById(taskId)).thenReturn(Optional.empty());
+
+        //When
+        try {
+            taskService.updateStatus(taskId, "someMonsterId", "someUserId");
+            fail("missing exception");
+        } catch (ResponseStatusException exception) {
+            assertThat(exception.getStatus(), is(HttpStatus.NOT_FOUND));
+        }
+    }
 }
