@@ -1,10 +1,12 @@
 package de.neuefische.finalproject.ohboy.controller;
 
 import de.neuefische.finalproject.ohboy.dao.MonsterMongoDao;
+import de.neuefische.finalproject.ohboy.dao.TaskMongoDao;
 import de.neuefische.finalproject.ohboy.dao.UserDao;
 import de.neuefische.finalproject.ohboy.dto.*;
 import de.neuefische.finalproject.ohboy.model.Monster;
 import de.neuefische.finalproject.ohboy.model.OhBoyUser;
+import de.neuefische.finalproject.ohboy.model.Task;
 import de.neuefische.finalproject.ohboy.service.FacebookApiService;
 import de.neuefische.finalproject.ohboy.utils.IdUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,10 +20,13 @@ import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static de.neuefische.finalproject.ohboy.model.Status.DONE;
+import static de.neuefische.finalproject.ohboy.model.Status.OPEN;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
@@ -53,9 +58,12 @@ class MonsterControllerTest {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private TaskMongoDao taskDao;
+
 
     @BeforeEach
-    public void setupMonsterDao() {
+    public void setupDao() {
         monsterDao.deleteAll();
         monsterDao.saveAll(List.of(
                 new Monster("someId", "someUserId", "someName", "someImage", 0, 0, 0),
@@ -65,6 +73,13 @@ class MonsterControllerTest {
 
         userDao.deleteAll();
         userDao.save(new OhBoyUser("FacebookUser", "facebook@1234", true));
+
+        taskDao.deleteAll();
+        taskDao.saveAll(List.of(
+                Task.builder().id("someTaskId").userId("facebook@1234").monsterId("someId2").description("someDescription").score(5).status(DONE).timestampOfDone(Instant.parse("1970-01-01T00:00:00Z")).build(),
+                Task.builder().id("someTaskId2").userId("facebook@1234").monsterId("someId2").description("someDescription2").score(10).status(OPEN).build(),
+                Task.builder().id("someTaskId3").userId("someUserId3").monsterId("someId3").description("someDescription3").score(15).status(OPEN).build()
+        ));
     }
 
     private String getMonstersUrl() {
@@ -273,6 +288,21 @@ class MonsterControllerTest {
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
         boolean monsterPresent = monsterDao.findById("someId2").isPresent();
         assertThat(monsterPresent, is(false));
+    }
+
+    @Test
+    public void removeMonsterShouldRemoveAllRelatedTasks() {
+        //GIVEN
+        String url = getMonstersUrl() + "/someId2";
+
+        //WHEN
+        HttpEntity<Void> entity = getValidAuthorizationEntity(null);
+        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, Void.class);
+
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+        boolean relatedTasks = taskDao.findAllByMonsterId("someId2").isEmpty();
+        assertThat(relatedTasks, is(true));
     }
 
     @Test

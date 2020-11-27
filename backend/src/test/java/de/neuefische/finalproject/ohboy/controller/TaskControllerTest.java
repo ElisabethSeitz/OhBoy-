@@ -60,7 +60,7 @@ class TaskControllerTest {
     private MonsterMongoDao monsterDao;
 
     @BeforeEach
-    public void setupTaskDao() {
+    public void setupDao() {
         taskDao.deleteAll();
         taskDao.saveAll(List.of(
                 Task.builder().id("someId").userId("facebook@1234").monsterId("someMonsterId").description("someDescription").score(5).status(DONE).timestampOfDone(Instant.parse("1970-01-01T00:00:00Z")).build(),
