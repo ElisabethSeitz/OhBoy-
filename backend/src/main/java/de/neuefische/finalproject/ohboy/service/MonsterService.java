@@ -1,9 +1,11 @@
 package de.neuefische.finalproject.ohboy.service;
 
 import de.neuefische.finalproject.ohboy.dao.MonsterMongoDao;
+import de.neuefische.finalproject.ohboy.dao.TaskMongoDao;
 import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
 import de.neuefische.finalproject.ohboy.dto.UpdateMonsterDto;
 import de.neuefische.finalproject.ohboy.model.Monster;
+import de.neuefische.finalproject.ohboy.model.Task;
 import de.neuefische.finalproject.ohboy.utils.IdUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,13 +19,15 @@ import java.util.Objects;
 public class MonsterService {
 
     private final MonsterMongoDao monsterMongoDao;
+    private final TaskMongoDao taskMongoDao;
     private final IdUtils idUtils;
 
 
     @Autowired
-    public MonsterService(MonsterMongoDao monsterMongoDao, IdUtils idUtils) {
+    public MonsterService(MonsterMongoDao monsterMongoDao, IdUtils idUtils, TaskMongoDao taskMongoDao) {
         this.monsterMongoDao = monsterMongoDao;
         this.idUtils = idUtils;
+        this.taskMongoDao = taskMongoDao;
     }
 
     public List<Monster> findAllByUserId(String userId) {
@@ -67,6 +71,9 @@ public class MonsterService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
+        List<Task> relatedTasks = taskMongoDao.findAllByMonsterId(monsterId);
+
         monsterMongoDao.deleteById(monsterId);
+        taskMongoDao.deleteAll(relatedTasks);
     }
 }
