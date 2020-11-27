@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export default function Task({ task, monsterId, editStatus }) {
+export default function Task({ task, monsterId, editStatus, updateBalance }) {
   function DisplayEditButton() {
     const statusOpen = task.status === 'OPEN';
     if (statusOpen) {
@@ -34,5 +34,7 @@ export default function Task({ task, monsterId, editStatus }) {
 
   function handleClick() {
     editStatus(task.id);
+    const score = task.status === 'OPEN' ? task.score : -task.score;
+    updateBalance(score);
   }
 }

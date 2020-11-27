@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import MonsterForm from '../forms/MonsterForm';
 import MonsterContext from '../contexts/MonsterContext';
 import { useHistory, useParams } from 'react-router-dom';
+import Confirmation from '../components/Confirmation';
 
 export default function EditMonsterPage() {
   const { edit, monsters, remove } = useContext(MonsterContext);
@@ -13,9 +14,11 @@ export default function EditMonsterPage() {
     <>
       <h5>edit your monster</h5>
       <MonsterForm onSave={handleSave} monster={monster} />
-      <button type="button" onClick={handleDelete}>
-        Delete
-      </button>
+      <Confirmation
+        onClick={handleDelete}
+        label="Delete"
+        question="All related tasks and rewards will be deleted as well. Delete?"
+      />
     </>
   );
 

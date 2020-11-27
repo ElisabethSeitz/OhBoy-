@@ -7,6 +7,9 @@ export default function TaskPage() {
   const { monsterId } = useParams();
   const { monster, tasks, editStatus } = useTasksByMonsterId(monsterId);
   const [status, setStatus] = useState('OPEN');
+  const [balance, setBalance] = useState(
+    monster?.scoreDoneTasks - monster?.payoutDoneRewards
+  );
 
   const filteredTasks = tasks?.filter((task) => task.status === status);
 
@@ -20,7 +23,7 @@ export default function TaskPage() {
       </>
       <img src={monster.image} alt="monster" />
       <>
-        <p>{monster.scoreDoneTasks - monster.payoutDoneRewards}</p>
+        <p>{balance}</p>
         <p>balance</p>
       </>
       <h3>{monster.name}</h3>
@@ -30,6 +33,7 @@ export default function TaskPage() {
         tasks={filteredTasks}
         monsterId={monsterId}
         editStatus={editStatus}
+        updateBalance={updateBalance}
       />
       <Link to={'/monsters/' + monsterId + '/tasks/create'}>add</Link>
     </>
@@ -41,5 +45,9 @@ export default function TaskPage() {
 
   function handleOnClickDONE() {
     setStatus('DONE');
+  }
+
+  function updateBalance(scoreTask) {
+    setBalance(balance + scoreTask);
   }
 }
