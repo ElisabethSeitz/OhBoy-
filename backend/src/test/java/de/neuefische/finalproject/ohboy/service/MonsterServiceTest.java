@@ -27,17 +27,6 @@ class MonsterServiceTest {
 
     final MonsterService monsterService = new MonsterService(monsterMongoDao, idUtils);
 
-    final List<Monster> monsters = new ArrayList<>(List.of(
-            new Monster("some id", "@facebookSomeUserId", "some name", "some image", 0, 0, 0),
-            new Monster("some id2", "@facebookSomeUserId2", "some name2", "some image2", 0, 0, 0),
-            new Monster("some id3", "@facebookSomeUserId3", "some name3", "some image3", 0, 0, 0),
-            new Monster("some id4", "@facebookSomeUserI4", "some name4", "some image4", 0, 0, 0)
-    ));
-
-    final List<Monster> getStockMonsters(){
-        return monsters;
-    }
-
     @Test
     @DisplayName("The \"findAllByUserId\" method should return all Monster objects that match the UserId in a list")
     void findAllByUserId() {

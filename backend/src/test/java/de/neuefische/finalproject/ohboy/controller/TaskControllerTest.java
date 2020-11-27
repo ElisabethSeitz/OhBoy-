@@ -274,4 +274,62 @@ class TaskControllerTest {
         //THEN
         assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
+
+    @Test
+    public void removeTaskShouldRemoveExistingTask() {
+        //GIVEN
+        String url = getTasksUrl() + "someMonsterId2/tasks/someId2";
+
+        //WHEN
+        HttpEntity<Void> entity = getValidAuthorizationEntity(null);
+        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, Void.class);
+
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+        boolean taskPresent = taskDao.findById("someId2").isPresent();
+        assertThat(taskPresent, is(false));
+    }
+
+    @Test
+    public void removeTaskWithNotMatchingUserIdShouldReturnForbidden() {
+        //GIVEN
+        String url = getTasksUrl() + "someMonsterId3/tasks/someId3";
+
+        //WHEN
+        HttpEntity<Void> entity = getValidAuthorizationEntity(null);
+        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, Void.class);
+
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.FORBIDDEN));
+        boolean taskPresent = taskDao.findById("someId3").isPresent();
+        assertThat(taskPresent, is(true));
+    }
+
+    @Test
+    public void removeTaskWithStatusDoneShouldReturnForbidden() {
+        //GIVEN
+        String url = getTasksUrl() + "someMonsterId/tasks/someId";
+
+        //WHEN
+        HttpEntity<Void> entity = getValidAuthorizationEntity(null);
+        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, Void.class);
+
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.FORBIDDEN));
+        boolean taskPresent = taskDao.findById("someId").isPresent();
+        assertThat(taskPresent, is(true));
+    }
+
+    @Test
+    public void removeTaskWhenNoExistingTaskShouldReturnNotFound() {
+        //GIVEN
+        String url = getTasksUrl() + "someMonsterId/tasks/someIdXY";
+
+        //WHEN
+        HttpEntity<Void> entity = getValidAuthorizationEntity(null);
+        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, Void.class);
+
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
+    }
 }

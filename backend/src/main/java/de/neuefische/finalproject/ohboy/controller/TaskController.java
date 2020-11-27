@@ -1,10 +1,7 @@
 package de.neuefische.finalproject.ohboy.controller;
 
-import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
 import de.neuefische.finalproject.ohboy.dto.AddTaskDto;
-import de.neuefische.finalproject.ohboy.dto.UpdateMonsterDto;
 import de.neuefische.finalproject.ohboy.dto.UpdateTaskDto;
-import de.neuefische.finalproject.ohboy.model.Monster;
 import de.neuefische.finalproject.ohboy.model.Task;
 import de.neuefische.finalproject.ohboy.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +39,10 @@ public class TaskController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         return taskService.update(updatedTask, principal.getName());
+    }
+
+    @DeleteMapping("{monsterId}/tasks/{taskId}")
+    public void remove(@PathVariable String taskId, Principal principal) {
+        taskService.remove(taskId, principal.getName());
     }
 }

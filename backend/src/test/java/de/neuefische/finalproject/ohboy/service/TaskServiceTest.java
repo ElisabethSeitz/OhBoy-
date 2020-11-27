@@ -34,16 +34,6 @@ class TaskServiceTest {
 
     final TaskService taskService = new TaskService(taskMongoDao, idUtils, timestampUtils, monsterMongoDao);
 
-    final List<Task> tasks = new ArrayList<>(List.of(
-            new Task("someId", "someUserId", "someMonsterId", "someDescription", 5, DONE, Instant.parse("1970-01-01T00:00:00Z")),
-            new Task("someId2", "someUserId2", "someMonsterId2", "someDescription2", 10, OPEN, Instant.parse("1970-01-01T00:00:00Z")),
-            new Task("someId3", "someUserId3", "someMonsterId3", "someDescription3", 15, OPEN, Instant.parse("1970-01-01T00:00:00Z"))
-    ));
-
-    final List<Task> getStockTasks(){
-        return tasks;
-    }
-
     @Test
     @DisplayName("The \"findAllByMonsterId\" method should return all Task objects that match the MonsterId in a list")
     void findAllByMonsterId() {
@@ -280,4 +270,90 @@ class TaskServiceTest {
         }
     }
 
+    @Test
+    @DisplayName("The \"remove\" method should remove the removed Task object")
+    void remove() {
+        //Given
+        String taskId = "randomId";
+
+        when(taskMongoDao.findById(taskId)).thenReturn(Optional.of(Task.builder()
+                .id(taskId)
+                .userId("some userId")
+                .monsterId("some monsterId")
+                .description("some description")
+                .score(5)
+                .status(OPEN)
+                .build()));
+
+        //When
+        taskService.remove(taskId,"some userId");
+
+        //Then
+        verify(taskMongoDao).deleteById(taskId);
+    }
+
+    @Test
+    @DisplayName("The \"remove\" method should throw forbidden when user with not matching userId try to remove a Task object")
+    void removeForbiddenUserId() {
+        //Given
+        String taskId = "randomId";
+
+        when(taskMongoDao.findById(taskId)).thenReturn(Optional.of(Task.builder()
+                .id(taskId)
+                .userId("some userId")
+                .monsterId("some monsterId")
+                .description("some description")
+                .score(5)
+                .status(OPEN)
+                .build()));
+
+        //When
+        try {
+            taskService.remove(taskId, "some otherUserId");
+            fail("missing exception");
+        } catch (ResponseStatusException exception) {
+            assertThat(exception.getStatus(), is(HttpStatus.FORBIDDEN));
+        }
+    }
+
+    @Test
+    @DisplayName("The \"remove\" method should throw forbidden when Task object with Status DONE should be removed")
+    void removeForbiddenStatusDone() {
+        //Given
+        String taskId = "randomId";
+
+        when(taskMongoDao.findById(taskId)).thenReturn(Optional.of(Task.builder()
+                .id(taskId)
+                .userId("some userId")
+                .monsterId("some monsterId")
+                .description("some description")
+                .score(5)
+                .status(DONE)
+                .build()));
+
+        //When
+        try {
+            taskService.remove(taskId, "some userId");
+            fail("missing exception");
+        } catch (ResponseStatusException exception) {
+            assertThat(exception.getStatus(), is(HttpStatus.FORBIDDEN));
+        }
+    }
+
+    @Test
+    @DisplayName("The \"remove\" method should throw not found when id not found")
+    void removeNotFound() {
+        //Given
+        String taskId = "randomId";
+
+        when(taskMongoDao.findById(taskId)).thenReturn(Optional.empty());
+
+        //When
+        try {
+            taskService.remove(taskId, "someUserId");
+            fail("missing exception");
+        } catch (ResponseStatusException exception) {
+            assertThat(exception.getStatus(), is(HttpStatus.NOT_FOUND));
+        }
+    }
 }
