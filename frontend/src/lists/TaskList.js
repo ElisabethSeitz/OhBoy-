@@ -5,7 +5,7 @@ export default function TaskList({
   tasks,
   monsterId,
   editStatus,
-  updateBalance,
+  updateBalanceAndScore,
 }) {
   return (
     <ul>
@@ -15,7 +15,7 @@ export default function TaskList({
             task={task}
             monsterId={monsterId}
             editStatus={editStatus}
-            updateBalance={updateBalance}
+            updateBalanceAndScore={updateBalanceAndScore}
           />
         </li>
       ))}
