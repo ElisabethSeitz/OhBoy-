@@ -69,7 +69,10 @@ class TaskControllerTest {
         ));
 
         monsterDao.deleteAll();
-        monsterDao.save(new Monster("someMonsterId2", "facebook@1234", "someName2", "someImage2", 100, 50, 4));
+        monsterDao.saveAll(List.of(
+                new Monster("someMonsterId2", "facebook@1234", "someName2", "someImage2", 100, 50, 4),
+                new Monster("someMonsterId", "facebook@1234", "someName", "someImage", 10, 5, 15),
+                new Monster("someMonsterId3", "someUserId3", "someName3", "someImage3", 25, 10, 30)));
     }
 
     private String getTasksUrl() {
@@ -331,5 +334,176 @@ class TaskControllerTest {
 
         //THEN
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
+    }
+
+    @Test
+    public void updateTaskStatusInDoneShouldUpdateExistingTask() {
+        //GIVEN
+        String url = getTasksUrl() + "someMonsterId2/tasks/someId2/status";
+
+        when(mockedTimestampUtils.generateTimeStampEpochSeconds()).thenReturn(Instant.parse("2018-11-30T18:35:24.00Z"));
+
+        //WHEN
+        HttpEntity<Void> entity = getValidAuthorizationEntity(null);
+        ResponseEntity<Task> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Task.class);
+
+        //THEN
+        Optional<Task> savedTask = taskDao.findById("someId2");
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+
+        Task expectedTask = Task.builder()
+                .id("someId2")
+                .userId("facebook@1234")
+                .monsterId("someMonsterId2")
+                .description("someDescription2")
+                .score(10)
+                .status(Status.DONE)
+                .timestampOfDone(Instant.parse("2018-11-30T18:35:24.00Z"))
+                .build();
+
+        assertThat(response.getBody(), is(expectedTask));
+        assertThat(savedTask.get(), is(expectedTask));
+    }
+
+    @Test
+    public void updateTaskStatusInOpenShouldUpdateExistingTask() {
+        //GIVEN
+        String url = getTasksUrl() + "someMonsterId/tasks/someId/status";
+
+        //WHEN
+        HttpEntity<Void> entity = getValidAuthorizationEntity(null);
+        ResponseEntity<Task> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Task.class);
+
+        //THEN
+        Optional<Task> savedTask = taskDao.findById("someId");
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+
+        Task expectedTask = Task.builder()
+                .id("someId")
+                .userId("facebook@1234")
+                .monsterId("someMonsterId")
+                .description("someDescription")
+                .score(5)
+                .status(Status.OPEN)
+                .timestampOfDone(null)
+                .build();
+
+        assertThat(response.getBody(), is(expectedTask));
+        assertThat(savedTask.get(), is(expectedTask));
+    }
+
+    @Test
+    public void updateTaskStatusInDoneShouldUpdateExistingMonster() {
+        //GIVEN
+        String url = getTasksUrl() + "someMonsterId2/tasks/someId2/status";
+
+        //WHEN
+        HttpEntity<Void> entity = getValidAuthorizationEntity(null);
+        ResponseEntity<Task> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Task.class);
+
+        //THEN
+        Optional<Monster> savedMonster = monsterDao.findById("someMonsterId2");
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+
+        Monster expectedMonster = Monster.builder()
+                .id("someMonsterId2")
+                .userId("facebook@1234")
+                .name("someName2")
+                .image("someImage2")
+                .scoreDoneTasks(14)
+                .payoutDoneRewards(50)
+                .balance(100)
+                .build();
+
+        assertThat(savedMonster.get(), is(expectedMonster));
+    }
+
+    @Test
+    public void updateTaskStatusInOpenShouldUpdateExistingMonster() {
+        //GIVEN
+        String url = getTasksUrl() + "someMonsterId/tasks/someId/status";
+
+        //WHEN
+        HttpEntity<Void> entity = getValidAuthorizationEntity(null);
+        ResponseEntity<Task> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Task.class);
+
+        //THEN
+        Optional<Monster> savedMonster = monsterDao.findById("someMonsterId");
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+
+        Monster expectedMonster = Monster.builder()
+                .id("someMonsterId")
+                .userId("facebook@1234")
+                .name("someName")
+                .image("someImage")
+                .scoreDoneTasks(10)
+                .payoutDoneRewards(5)
+                .balance(10)
+                .build();
+
+        assertThat(savedMonster.get(), is(expectedMonster));
+    }
+
+    @Test
+    public void updateTaskStatusWhenNoExistingTaskShouldReturnNotFound() {
+        //GIVEN
+        String url = getTasksUrl() + "someMonsterId2/tasks/someIdXY/status";
+
+        //WHEN
+        HttpEntity<Void> entity = getValidAuthorizationEntity(null);
+        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
+
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
+    }
+
+    @Test
+    public void updateTaskStatusWhenNoExistingMonsterShouldReturnNotFound() {
+        //GIVEN
+        String url = getTasksUrl() + "someMonsterIdXY/tasks/someId2/status";
+
+        //WHEN
+        HttpEntity<Void> entity = getValidAuthorizationEntity(null);
+        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
+
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
+    }
+
+    @Test
+    public void updateTaskStatusWithNotMatchingUserIdShouldReturnForbidden() {
+        //GIVEN
+        String url = getTasksUrl() + "someMonsterId3/tasks/someId3/status";
+
+        //WHEN
+        HttpEntity<Void> entity = getValidAuthorizationEntity(null);
+        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
+
+        //THEN
+        Optional<Task> savedTask = taskDao.findById("someId3");
+        Optional<Monster> savedMonster = monsterDao.findById("someMonsterId3");
+        assertThat(response.getStatusCode(), is(HttpStatus.FORBIDDEN));
+
+        Task expectedTask = Task.builder()
+                .id("someId3")
+                .userId("someUserId3")
+                .monsterId("someMonsterId3")
+                .description("someDescription3")
+                .score(15)
+                .status(OPEN)
+                .build();
+
+        Monster expectedMonster = Monster.builder()
+                .id("someMonsterId3")
+                .userId("someUserId3")
+                .name("someName3")
+                .image("someImage3")
+                .balance(25)
+                .payoutDoneRewards(10)
+                .scoreDoneTasks(30)
+                .build();
+
+        assertThat(savedTask.get(), is(expectedTask));
+        assertThat(savedMonster.get(), is(expectedMonster));
     }
 }
