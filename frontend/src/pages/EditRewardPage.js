@@ -11,8 +11,8 @@ export default function EditRewardPage() {
 
   return !reward ? null : (
     <>
-      <h5>edit this task</h5>
-      <img src={monster.image} alt="monster" />
+      <h5>edit this reward</h5>
+      <img src={monster?.image} alt="monster" />
       <RewardForm onSave={handleSave} reward={reward} />
       <button type="button" onClick={handleDelete}>
         Delete

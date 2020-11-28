@@ -14,7 +14,7 @@ export default function RewardForm({ onSave, reward = initialState }) {
   return (
     <form onSubmit={handleSubmit}>
       <label>
-        task
+        reward
         <input
           name="description"
           value={rewardData.description}
