@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import TaskList from '../lists/TaskList';
 import useTasksByMonsterId from '../hook/useTasksByMonsterId.js';
 
 export default function TaskPage() {
+  const history = useHistory();
   const { monsterId } = useParams();
   const { monster, tasks, editStatus } = useTasksByMonsterId(monsterId);
   const [status, setStatus] = useState('OPEN');
@@ -22,7 +23,11 @@ export default function TaskPage() {
         <p>{countTasks}</p>
         <p>tasks</p>
       </>
-      <img src={monster.image} alt="monster" />
+      <img
+        src={monster.image}
+        alt="monster"
+        onClick={() => history.push('/monsters')}
+      />
       <DisplayBalanceOrScore />
       <h3>{monster.name}</h3>
       <button onClick={handleOnClickOPEN}>open</button>
@@ -33,7 +38,10 @@ export default function TaskPage() {
         editStatus={editStatus}
         updateBalanceAndScore={updateBalanceAndScore}
       />
-      <Link to={'/monsters/' + monsterId + '/tasks/create'}>add</Link>
+      <div>
+        <Link to={'/monsters/' + monsterId + '/tasks/create'}>add</Link>
+      </div>
+      <Link to={'/monsters/' + monsterId + '/rewards'}>rewards</Link>
     </>
   );
 
