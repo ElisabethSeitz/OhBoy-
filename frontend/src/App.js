@@ -11,6 +11,9 @@ import EditMonsterPage from './pages/EditMonsterPage';
 import TaskPage from './pages/TaskPage';
 import AddTaskPage from './pages/AddTaskPage';
 import EditTaskPage from './pages/EditTaskPage';
+import RewardPage from './pages/RewardPage';
+import AddRewardPage from './pages/AddRewardPage';
+import EditRewardPage from './pages/EditRewardPage';
 
 function App() {
   return (
@@ -40,6 +43,19 @@ function App() {
           <ProtectedRoute
             path="/monsters/:monsterId/tasks/edit/:taskId"
             component={EditTaskPage}
+          />
+          <ProtectedRoute
+            exact
+            path="/monsters/:monsterId/rewards"
+            component={RewardPage}
+          />
+          <ProtectedRoute
+            path="/monsters/:monsterId/rewards/create"
+            component={AddRewardPage}
+          />
+          <ProtectedRoute
+            path="/monsters/:monsterId/rewards/edit/:rewardId"
+            component={EditRewardPage}
           />
           <Route path="/">
             <Redirect to="/monsters" />
