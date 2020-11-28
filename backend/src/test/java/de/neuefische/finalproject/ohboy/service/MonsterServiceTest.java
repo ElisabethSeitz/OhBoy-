@@ -1,10 +1,12 @@
 package de.neuefische.finalproject.ohboy.service;
 
 import de.neuefische.finalproject.ohboy.dao.MonsterMongoDao;
+import de.neuefische.finalproject.ohboy.dao.RewardMongoDao;
 import de.neuefische.finalproject.ohboy.dao.TaskMongoDao;
 import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
 import de.neuefische.finalproject.ohboy.dto.UpdateMonsterDto;
 import de.neuefische.finalproject.ohboy.model.Monster;
+import de.neuefische.finalproject.ohboy.model.Reward;
 import de.neuefische.finalproject.ohboy.model.Task;
 import de.neuefische.finalproject.ohboy.utils.IdUtils;
 import org.junit.jupiter.api.DisplayName;
@@ -27,8 +29,9 @@ class MonsterServiceTest {
     final IdUtils idUtils = mock(IdUtils.class);
     final MonsterMongoDao monsterMongoDao = mock(MonsterMongoDao.class);
     final TaskMongoDao taskMongoDao = mock(TaskMongoDao.class);
+    final RewardMongoDao rewardMongoDao = mock(RewardMongoDao.class);
 
-    final MonsterService monsterService = new MonsterService(monsterMongoDao, idUtils, taskMongoDao);
+    final MonsterService monsterService = new MonsterService(monsterMongoDao, idUtils, taskMongoDao, rewardMongoDao);
 
     @Test
     @DisplayName("The \"findAllByUserId\" method should return all Monster objects that match the UserId in a list")
@@ -239,6 +242,43 @@ class MonsterServiceTest {
 
         //Then
         verify(taskMongoDao).deleteAll(List.of(Task.builder()
+                .id("someId")
+                .monsterId(monsterId)
+                .userId("some userId")
+                .description("some description")
+                .score(10)
+                .build()));
+    }
+
+    @Test
+    @DisplayName("The \"remove\" method should remove the related Reward objects")
+    void removeRelatedRewards() {
+        //Given
+        String monsterId = "randomId";
+
+        when(monsterMongoDao.findById(monsterId)).thenReturn(Optional.of(Monster.builder()
+                .id(monsterId)
+                .userId("some userId")
+                .name("some name")
+                .image("some image")
+                .balance(5)
+                .payoutDoneRewards(10)
+                .scoreDoneTasks(20)
+                .build()));
+
+        when(rewardMongoDao.findAllByMonsterId(monsterId)).thenReturn(List.of(Reward.builder()
+                .id("someId")
+                .monsterId(monsterId)
+                .userId("some userId")
+                .description("some description")
+                .score(10)
+                .build()));
+
+        //When
+        monsterService.remove(monsterId,"some userId");
+
+        //Then
+        verify(rewardMongoDao).deleteAll(List.of(Reward.builder()
                 .id("someId")
                 .monsterId(monsterId)
                 .userId("some userId")

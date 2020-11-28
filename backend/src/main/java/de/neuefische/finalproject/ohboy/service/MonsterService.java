@@ -1,10 +1,12 @@
 package de.neuefische.finalproject.ohboy.service;
 
 import de.neuefische.finalproject.ohboy.dao.MonsterMongoDao;
+import de.neuefische.finalproject.ohboy.dao.RewardMongoDao;
 import de.neuefische.finalproject.ohboy.dao.TaskMongoDao;
 import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
 import de.neuefische.finalproject.ohboy.dto.UpdateMonsterDto;
 import de.neuefische.finalproject.ohboy.model.Monster;
+import de.neuefische.finalproject.ohboy.model.Reward;
 import de.neuefische.finalproject.ohboy.model.Task;
 import de.neuefische.finalproject.ohboy.utils.IdUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +22,16 @@ public class MonsterService {
 
     private final MonsterMongoDao monsterMongoDao;
     private final TaskMongoDao taskMongoDao;
+    private final RewardMongoDao rewardMongoDao;
     private final IdUtils idUtils;
 
 
     @Autowired
-    public MonsterService(MonsterMongoDao monsterMongoDao, IdUtils idUtils, TaskMongoDao taskMongoDao) {
+    public MonsterService(MonsterMongoDao monsterMongoDao, IdUtils idUtils, TaskMongoDao taskMongoDao, RewardMongoDao rewardMongoDao) {
         this.monsterMongoDao = monsterMongoDao;
         this.idUtils = idUtils;
         this.taskMongoDao = taskMongoDao;
+        this.rewardMongoDao = rewardMongoDao;
     }
 
     public List<Monster> findAllByUserId(String userId) {
@@ -72,8 +76,10 @@ public class MonsterService {
         }
 
         List<Task> relatedTasks = taskMongoDao.findAllByMonsterId(monsterId);
+        List<Reward> relatedRewards = rewardMongoDao.findAllByMonsterId(monsterId);
 
         monsterMongoDao.deleteById(monsterId);
         taskMongoDao.deleteAll(relatedTasks);
+        rewardMongoDao.deleteAll(relatedRewards);
     }
 }
