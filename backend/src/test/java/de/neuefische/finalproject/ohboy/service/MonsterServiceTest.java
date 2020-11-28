@@ -1,9 +1,11 @@
 package de.neuefische.finalproject.ohboy.service;
 
 import de.neuefische.finalproject.ohboy.dao.MonsterMongoDao;
+import de.neuefische.finalproject.ohboy.dao.TaskMongoDao;
 import de.neuefische.finalproject.ohboy.dto.AddMonsterDto;
 import de.neuefische.finalproject.ohboy.dto.UpdateMonsterDto;
 import de.neuefische.finalproject.ohboy.model.Monster;
+import de.neuefische.finalproject.ohboy.model.Task;
 import de.neuefische.finalproject.ohboy.utils.IdUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,8 +26,9 @@ class MonsterServiceTest {
     //Given
     final IdUtils idUtils = mock(IdUtils.class);
     final MonsterMongoDao monsterMongoDao = mock(MonsterMongoDao.class);
+    final TaskMongoDao taskMongoDao = mock(TaskMongoDao.class);
 
-    final MonsterService monsterService = new MonsterService(monsterMongoDao, idUtils);
+    final MonsterService monsterService = new MonsterService(monsterMongoDao, idUtils, taskMongoDao);
 
     @Test
     @DisplayName("The \"findAllByUserId\" method should return all Monster objects that match the UserId in a list")
@@ -205,6 +208,43 @@ class MonsterServiceTest {
 
         //Then
         verify(monsterMongoDao).deleteById(monsterId);
+    }
+
+    @Test
+    @DisplayName("The \"remove\" method should remove the related Task objects")
+    void removeRelatedTasks() {
+        //Given
+        String monsterId = "randomId";
+
+        when(monsterMongoDao.findById(monsterId)).thenReturn(Optional.of(Monster.builder()
+                .id(monsterId)
+                .userId("some userId")
+                .name("some name")
+                .image("some image")
+                .balance(5)
+                .payoutDoneRewards(10)
+                .scoreDoneTasks(20)
+                .build()));
+
+        when(taskMongoDao.findAllByMonsterId(monsterId)).thenReturn(List.of(Task.builder()
+                .id("someId")
+                .monsterId(monsterId)
+                .userId("some userId")
+                .description("some description")
+                .score(10)
+                .build()));
+
+        //When
+        monsterService.remove(monsterId,"some userId");
+
+        //Then
+        verify(taskMongoDao).deleteAll(List.of(Task.builder()
+                .id("someId")
+                .monsterId(monsterId)
+                .userId("some userId")
+                .description("some description")
+                .score(10)
+                .build()));
     }
 
     @Test
