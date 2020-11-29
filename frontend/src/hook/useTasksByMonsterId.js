@@ -6,7 +6,6 @@ import {
   updateTask,
 } from '../service/TaskService';
 import UserContext from '../contexts/UserContext';
-import MonsterContext from '../contexts/MonsterContext';
 import { useContext, useEffect, useState } from 'react';
 
 export default function useTasksByMonsterId(monsterId) {
@@ -16,7 +15,7 @@ export default function useTasksByMonsterId(monsterId) {
   useEffect(() => {
     tokenIsValid() &&
       getTasksByMonsterId(token, monsterId).then(setTasks).catch(console.log);
-  }, [monsterId, tokenIsValid]);
+  }, [monsterId, tokenIsValid, token]);
 
   const tasksFilter = async (status, reloadTasks) => {
     let tasksToFilter = tasks;

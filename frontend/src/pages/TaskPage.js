@@ -23,6 +23,7 @@ export default function TaskPage() {
 
   useEffect(() => {
     tasksFilter(status, false).then(setFilteredTasks);
+    // eslint-disable-next-line
   }, [status]);
 
   return !monster ? null : (
