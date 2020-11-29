@@ -1,47 +1,47 @@
-import React, { useState } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
-import TaskList from '../lists/TaskList';
-import useTasksByMonsterId from '../hook/useTasksByMonsterId.js';
+import React, { useState } from 'react';
+import useRewardsByMonsterId from '../hook/useRewardsByMonsterId';
+import RewardList from '../lists/RewardList';
 
-export default function TaskPage() {
+export default function RewardPage() {
   const history = useHistory();
   const { monsterId } = useParams();
-  const { monster, tasks, editStatus } = useTasksByMonsterId(monsterId);
+  const { monster, rewards, editStatus } = useRewardsByMonsterId(monsterId);
   const [status, setStatus] = useState('OPEN');
   const [balance, setBalance] = useState(
     monster?.scoreDoneTasks - monster?.payoutDoneRewards
   );
-  const [score, setScore] = useState(monster?.scoreDoneTasks);
+  const [payout, setPayout] = useState(monster?.payoutDoneRewards);
 
-  const filteredTasks = tasks?.filter((task) => task.status === status);
+  const filteredRewards = rewards?.filter((reward) => reward.status === status);
 
-  const countTasks = filteredTasks.length;
+  const countRewards = filteredRewards.length;
 
   return !monster ? null : (
     <>
       <>
-        <p>{countTasks}</p>
-        <p>tasks</p>
+        <p>{countRewards}</p>
+        <p>rewards</p>
       </>
       <img
         src={monster.image}
         alt="monster"
         onClick={() => history.push('/monsters')}
       />
-      <DisplayBalanceOrScore />
+      <DisplayBalanceOrPayout />
       <h3>{monster.name}</h3>
       <button onClick={handleOnClickOPEN}>open</button>
       <button onClick={handleOnClickDONE}>done</button>
-      <TaskList
-        tasks={filteredTasks}
+      <RewardList
+        rewards={filteredRewards}
         monsterId={monsterId}
         editStatus={editStatus}
-        updateBalanceAndScore={updateBalanceAndScore}
+        updateBalanceAndPayout={updateBalanceAndPayout}
       />
       <div>
-        <Link to={'/monsters/' + monsterId + '/tasks/create'}>add</Link>
+        <Link to={'/monsters/' + monsterId + '/rewards/create'}>add</Link>
       </div>
-      <Link to={'/monsters/' + monsterId + '/rewards'}>rewards</Link>
+      <Link to={'/monsters/' + monsterId + '/tasks'}>tasks</Link>
     </>
   );
 
@@ -53,12 +53,12 @@ export default function TaskPage() {
     setStatus('DONE');
   }
 
-  function updateBalanceAndScore(scoreTask) {
-    setBalance(balance + scoreTask);
-    setScore(score + scoreTask);
+  function updateBalanceAndPayout(scoreReward) {
+    setBalance(balance - scoreReward);
+    setPayout(payout + scoreReward);
   }
 
-  function DisplayBalanceOrScore() {
+  function DisplayBalanceOrPayout() {
     if (status === 'OPEN') {
       return (
         <>
@@ -69,8 +69,8 @@ export default function TaskPage() {
     }
     return (
       <>
-        <p>{score}</p>
-        <p>score</p>
+        <p>{payout}</p>
+        <p>payout</p>
       </>
     );
   }

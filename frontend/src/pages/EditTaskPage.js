@@ -12,7 +12,7 @@ export default function EditTaskPage() {
   return !task ? null : (
     <>
       <h5>edit this task</h5>
-      <img src={monster.image} alt="monster" />
+      <img src={monster?.image} alt="monster" />
       <TaskForm onSave={handleSave} task={task} />
       <button type="button" onClick={handleDelete}>
         Delete
