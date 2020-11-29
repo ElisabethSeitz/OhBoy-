@@ -29,7 +29,6 @@ export default function TaskPage() {
   return !monster ? null : (
     <>
       <>
-        <Header currentMonsterId={monsterId} />
         <p>{filteredTasks.length}</p>
         <p>tasks</p>
       </>
