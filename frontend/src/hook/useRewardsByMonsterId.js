@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react';
-import MonsterContext from '../contexts/MonsterContext';
 import UserContext from '../contexts/UserContext';
 import {
   addReward,
@@ -10,25 +9,31 @@ import {
 } from '../service/RewardService';
 
 export default function useRewardsByMonsterId(monsterId) {
-  const { monsters } = useContext(MonsterContext);
   const { token, tokenIsValid } = useContext(UserContext);
   const [rewards, setRewards] = useState([]);
-
-  const monster = monsters.find((monster) => monster.id === monsterId);
 
   useEffect(() => {
     tokenIsValid() &&
       getRewardsByMonsterId(token, monsterId)
         .then(setRewards)
         .catch(console.log);
-  }, [token, tokenIsValid, monsterId]);
+  }, [monsterId, tokenIsValid, token]);
+
+  const rewardsFilter = async (status, reloadRewards) => {
+    let rewardsToFilter = rewards;
+    if (reloadRewards) {
+      rewardsToFilter = await getRewardsByMonsterId(token, monsterId);
+      setRewards(rewardsToFilter);
+    }
+    return rewardsToFilter.filter((reward) => reward.status === status);
+  };
 
   const create = (description, score) =>
     addReward(description, score, token, monsterId)
       .then((addedReward) => setRewards([...rewards, addedReward]))
       .catch(console.log);
 
-  const edit = (rewardId, description, score) => {
+  const edit = (rewardId, description, score) =>
     updateReward(rewardId, description, score, monsterId, token)
       .then((updatedReward) => {
         const newState = rewards.map((reward) =>
@@ -37,9 +42,8 @@ export default function useRewardsByMonsterId(monsterId) {
         setRewards(newState);
       })
       .catch(console.log);
-  };
 
-  const editStatus = (rewardId) => {
+  const editStatus = (rewardId) =>
     updateStatus(rewardId, monsterId, token)
       .then((updatedReward) => {
         const newState = rewards.map((reward) =>
@@ -48,7 +52,6 @@ export default function useRewardsByMonsterId(monsterId) {
         setRewards(newState);
       })
       .catch(console.log);
-  };
 
   const remove = (rewardId) =>
     removeReward(rewardId, monsterId, token)
@@ -57,5 +60,5 @@ export default function useRewardsByMonsterId(monsterId) {
       )
       .catch(console.log);
 
-  return { monster, rewards, create, edit, remove, editStatus };
+  return { rewards, rewardsFilter, create, edit, remove, editStatus };
 }

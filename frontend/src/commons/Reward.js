@@ -1,12 +1,7 @@
 import { Link } from 'react-router-dom';
 import React from 'react';
 
-export default function Reward({
-  reward,
-  monsterId,
-  editStatus,
-  updateBalanceAndPayout,
-}) {
+export default function Reward({ reward, monsterId, editStatus }) {
   function DisplayEditButton() {
     const statusOpen = reward.status === 'OPEN';
     if (statusOpen) {
@@ -39,7 +34,5 @@ export default function Reward({
 
   function handleClick() {
     editStatus(reward.id);
-    const score = reward.status === 'OPEN' ? reward.score : -reward.score;
-    updateBalanceAndPayout(score);
   }
 }

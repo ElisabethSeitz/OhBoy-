@@ -1,26 +1,34 @@
 import { Link, useParams, useHistory } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import useRewardsByMonsterId from '../hook/useRewardsByMonsterId';
 import RewardList from '../lists/RewardList';
+import MonsterContext from '../contexts/MonsterContext';
 
 export default function RewardPage() {
   const history = useHistory();
   const { monsterId } = useParams();
-  const { monster, rewards, editStatus } = useRewardsByMonsterId(monsterId);
+  const { refresh, monsters } = useContext(MonsterContext);
   const [status, setStatus] = useState('OPEN');
-  const [balance, setBalance] = useState(
-    monster?.scoreDoneTasks - monster?.payoutDoneRewards
-  );
-  const [payout, setPayout] = useState(monster?.payoutDoneRewards);
 
-  const filteredRewards = rewards?.filter((reward) => reward.status === status);
+  const [monster, setMonster] = useState();
+  const { rewardsFilter, editStatus } = useRewardsByMonsterId(monsterId);
+  const [filteredRewards, setFilteredRewards] = useState([]);
 
-  const countRewards = filteredRewards.length;
+  useEffect(() => {
+    setMonster(monsters.find((m) => m.id === monsterId));
+    rewardsFilter(status, true).then(setFilteredRewards);
+    // eslint-disable-next-line
+  }, [monsters]);
+
+  useEffect(() => {
+    rewardsFilter(status, false).then(setFilteredRewards);
+    // eslint-disable-next-line
+  }, [status]);
 
   return !monster ? null : (
     <>
       <>
-        <p>{countRewards}</p>
+        <p>{filteredRewards.length}</p>
         <p>rewards</p>
       </>
       <img
@@ -35,8 +43,7 @@ export default function RewardPage() {
       <RewardList
         rewards={filteredRewards}
         monsterId={monsterId}
-        editStatus={editStatus}
-        updateBalanceAndPayout={updateBalanceAndPayout}
+        editStatus={editRewardStatus}
       />
       <div>
         <Link to={'/monsters/' + monsterId + '/rewards/create'}>add</Link>
@@ -53,23 +60,25 @@ export default function RewardPage() {
     setStatus('DONE');
   }
 
-  function updateBalanceAndPayout(scoreReward) {
-    setBalance(balance - scoreReward);
-    setPayout(payout + scoreReward);
+  async function editRewardStatus(taskId) {
+    await editStatus(taskId);
+    refresh();
   }
 
   function DisplayBalanceOrPayout() {
     if (status === 'OPEN') {
       return (
         <>
-          <p>{balance}</p>
+          <p>
+            {monster ? monster.scoreDoneTasks - monster.payoutDoneRewards : ''}
+          </p>
           <p>balance</p>
         </>
       );
     }
     return (
       <>
-        <p>{payout}</p>
+        <p>{monster?.payoutDoneRewards}</p>
         <p>payout</p>
       </>
     );
