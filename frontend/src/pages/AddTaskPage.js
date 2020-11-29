@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import TaskForm from '../forms/TaskForm';
 import useTasksByMonsterId from '../hook/useTasksByMonsterId';
+import MonsterContext from '../contexts/MonsterContext';
 
 export default function AddTaskPage() {
   const { monsterId } = useParams();
-  const { monster, create } = useTasksByMonsterId(monsterId);
+  const { monsters } = useContext(MonsterContext);
+  const { create } = useTasksByMonsterId(monsterId);
   const history = useHistory();
+
+  const monster = monsters?.find((monster) => monster.id === monsterId);
 
   return !monster ? null : (
     <>

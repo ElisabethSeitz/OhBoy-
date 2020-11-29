@@ -40,8 +40,13 @@ export default function MonsterContextProvider({ children }) {
       )
       .catch(console.log);
 
+  const refresh = () =>
+    getMonstersByUserId(token).then(setMonsters).catch(console.log);
+
   return (
-    <MonsterContext.Provider value={{ monsters, create, edit, remove }}>
+    <MonsterContext.Provider
+      value={{ monsters, create, edit, remove, refresh }}
+    >
       {children}
     </MonsterContext.Provider>
   );
