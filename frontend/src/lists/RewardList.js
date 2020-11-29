@@ -1,12 +1,7 @@
 import React from 'react';
 import Reward from '../commons/Reward';
 
-export default function RewardList({
-  rewards,
-  monsterId,
-  editStatus,
-  updateBalanceAndPayout,
-}) {
+export default function RewardList({ rewards, monsterId, editStatus }) {
   return (
     <ul>
       {rewards?.map((reward) => (
@@ -15,7 +10,6 @@ export default function RewardList({
             reward={reward}
             monsterId={monsterId}
             editStatus={editStatus}
-            updateBalanceAndPayout={updateBalanceAndPayout}
           />
         </li>
       ))}

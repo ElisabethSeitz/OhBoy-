@@ -1,13 +1,17 @@
 import { useHistory, useParams } from 'react-router-dom';
-import React from 'react';
+import React, { useContext } from 'react';
 import useRewardsByMonsterId from '../hook/useRewardsByMonsterId';
 import RewardForm from '../forms/RewardForm';
+import MonsterContext from '../contexts/MonsterContext';
 
 export default function EditRewardPage() {
   const { monsterId, rewardId } = useParams();
-  const { edit, rewards, remove, monster } = useRewardsByMonsterId(monsterId);
+  const { monsters } = useContext(MonsterContext);
+  const { edit, rewards, remove } = useRewardsByMonsterId(monsterId);
   const history = useHistory();
+
   const reward = rewards?.find((reward) => reward.id === rewardId);
+  const monster = monsters?.find((monster) => monster.id === monsterId);
 
   return !reward ? null : (
     <>

@@ -1,26 +1,34 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import TaskList from '../lists/TaskList';
 import useTasksByMonsterId from '../hook/useTasksByMonsterId.js';
+import MonsterContext from '../contexts/MonsterContext';
 
 export default function TaskPage() {
   const history = useHistory();
   const { monsterId } = useParams();
-  const { monster, tasks, editStatus } = useTasksByMonsterId(monsterId);
+  const { refresh, monsters } = useContext(MonsterContext);
   const [status, setStatus] = useState('OPEN');
-  const [balance, setBalance] = useState(
-    monster?.scoreDoneTasks - monster?.payoutDoneRewards
-  );
-  const [score, setScore] = useState(monster?.scoreDoneTasks);
 
-  const filteredTasks = tasks?.filter((task) => task.status === status);
+  const [monster, setMonster] = useState();
+  const { tasksFilter, editStatus } = useTasksByMonsterId(monsterId);
+  const [filteredTasks, setFilteredTasks] = useState([]);
 
-  const countTasks = filteredTasks.length;
+  useEffect(() => {
+    setMonster(monsters.find((m) => m.id === monsterId));
+    tasksFilter(status, true).then(setFilteredTasks);
+    // eslint-disable-next-line
+  }, [monsters]);
+
+  useEffect(() => {
+    tasksFilter(status, false).then(setFilteredTasks);
+    // eslint-disable-next-line
+  }, [status]);
 
   return !monster ? null : (
     <>
       <>
-        <p>{countTasks}</p>
+        <p>{filteredTasks.length}</p>
         <p>tasks</p>
       </>
       <img
@@ -35,8 +43,7 @@ export default function TaskPage() {
       <TaskList
         tasks={filteredTasks}
         monsterId={monsterId}
-        editStatus={editStatus}
-        updateBalanceAndScore={updateBalanceAndScore}
+        editStatus={editTaskStatus}
       />
       <div>
         <Link to={'/monsters/' + monsterId + '/tasks/create'}>add</Link>
@@ -53,23 +60,25 @@ export default function TaskPage() {
     setStatus('DONE');
   }
 
-  function updateBalanceAndScore(scoreTask) {
-    setBalance(balance + scoreTask);
-    setScore(score + scoreTask);
+  async function editTaskStatus(taskId) {
+    await editStatus(taskId);
+    refresh();
   }
 
   function DisplayBalanceOrScore() {
     if (status === 'OPEN') {
       return (
         <>
-          <p>{balance}</p>
+          <p>
+            {monster ? monster.scoreDoneTasks - monster.payoutDoneRewards : ''}
+          </p>
           <p>balance</p>
         </>
       );
     }
     return (
       <>
-        <p>{score}</p>
+        <p>{monster?.scoreDoneTasks}</p>
         <p>score</p>
       </>
     );
