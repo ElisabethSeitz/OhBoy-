@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import TaskList from '../lists/TaskList';
 import useTasksByMonsterId from '../hook/useTasksByMonsterId.js';
-import Header from '../components/Header';
 import MonsterContext from '../contexts/MonsterContext';
 
 export default function TaskPage() {
