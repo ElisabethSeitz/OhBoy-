@@ -3,6 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import useTasksByMonsterId from '../hook/useTasksByMonsterId';
 import TaskForm from '../forms/TaskForm';
 import MonsterContext from '../contexts/MonsterContext';
+import Header from '../components/Header';
 
 export default function EditTaskPage() {
   const { monsterId, taskId } = useParams();
@@ -15,6 +16,12 @@ export default function EditTaskPage() {
 
   return !task ? null : (
     <>
+      <Header
+        currentMonsterId={monsterId}
+        task={true}
+        icons={true}
+        add={false}
+      />
       <h5>edit this task</h5>
       <img src={monster?.image} alt="monster" />
       <TaskForm onSave={handleSave} task={task} />

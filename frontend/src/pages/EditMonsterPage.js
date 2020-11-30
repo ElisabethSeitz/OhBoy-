@@ -3,6 +3,7 @@ import MonsterForm from '../forms/MonsterForm';
 import MonsterContext from '../contexts/MonsterContext';
 import { useHistory, useParams } from 'react-router-dom';
 import Confirmation from '../components/Confirmation';
+import Header from '../components/Header';
 
 export default function EditMonsterPage() {
   const { edit, monsters, remove } = useContext(MonsterContext);
@@ -12,6 +13,7 @@ export default function EditMonsterPage() {
 
   return !monster ? null : (
     <>
+      <Header icons={false} add={false} />
       <h5>edit your monster</h5>
       <MonsterForm onSave={handleSave} monster={monster} />
       <Confirmation

@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import useRewardsByMonsterId from '../hook/useRewardsByMonsterId';
 import RewardForm from '../forms/RewardForm';
 import MonsterContext from '../contexts/MonsterContext';
+import Header from '../components/Header';
 
 export default function AddRewardPage() {
   const { monsterId } = useParams();
@@ -14,6 +15,12 @@ export default function AddRewardPage() {
 
   return !monster ? null : (
     <>
+      <Header
+        currentMonsterId={monsterId}
+        task={false}
+        icons={true}
+        add={false}
+      />
       <h5>add a reward for {monster.name}</h5>
       <img src={monster.image} alt="monster" />
       <RewardForm onSave={handleSave} />

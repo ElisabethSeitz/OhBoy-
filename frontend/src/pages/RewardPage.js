@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import useRewardsByMonsterId from '../hook/useRewardsByMonsterId';
 import RewardList from '../lists/RewardList';
 import MonsterContext from '../contexts/MonsterContext';
+import Header from '../components/Header';
 
 export default function RewardPage() {
   const history = useHistory();
@@ -18,7 +19,7 @@ export default function RewardPage() {
     setMonster(monsters.find((m) => m.id === monsterId));
     rewardsFilter(status, true).then(setFilteredRewards);
     // eslint-disable-next-line
-  }, [monsters]);
+  }, [monsters, monsterId]);
 
   useEffect(() => {
     rewardsFilter(status, false).then(setFilteredRewards);
@@ -28,6 +29,12 @@ export default function RewardPage() {
   return !monster ? null : (
     <>
       <>
+        <Header
+          currentMonsterId={monsterId}
+          task={false}
+          icons={true}
+          add={true}
+        />
         <p>{filteredRewards.length}</p>
         <p>rewards</p>
       </>
