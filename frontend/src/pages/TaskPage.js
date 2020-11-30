@@ -3,6 +3,7 @@ import { Link, useParams, useHistory } from 'react-router-dom';
 import TaskList from '../lists/TaskList';
 import useTasksByMonsterId from '../hook/useTasksByMonsterId.js';
 import MonsterContext from '../contexts/MonsterContext';
+import Header from '../components/Header';
 
 export default function TaskPage() {
   const history = useHistory();
@@ -28,6 +29,7 @@ export default function TaskPage() {
   return !monster ? null : (
     <>
       <>
+        <Header currentMonsterId={monsterId} />
         <p>{filteredTasks.length}</p>
         <p>tasks</p>
       </>
