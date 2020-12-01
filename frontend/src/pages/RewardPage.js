@@ -4,6 +4,7 @@ import useRewardsByMonsterId from '../hook/useRewardsByMonsterId';
 import RewardList from '../lists/RewardList';
 import MonsterContext from '../contexts/MonsterContext';
 import Header from '../components/Header';
+import MonsterSection from '../components/MonsterSection';
 
 export default function RewardPage() {
   const { monsterId } = useParams();
@@ -27,19 +28,18 @@ export default function RewardPage() {
 
   return !monster ? null : (
     <>
-      <>
-        <Header
-          currentMonsterId={monsterId}
-          task={false}
-          icons={true}
-          add={true}
-        />
-        <p>{filteredRewards.length}</p>
-        <p>rewards</p>
-      </>
-      <img src={monster.image} alt="monster" />
-      <DisplayBalanceOrPayout />
-      <h3>{monster.name}</h3>
+      <Header
+        currentMonsterId={monsterId}
+        task={false}
+        icons={true}
+        add={true}
+      />
+      <MonsterSection
+        monster={monster}
+        filteredItems={filteredRewards}
+        status={status}
+        task={false}
+      />
       <button onClick={handleOnClickOPEN}>open</button>
       <button onClick={handleOnClickDONE}>done</button>
       <RewardList
@@ -61,24 +61,5 @@ export default function RewardPage() {
   async function editRewardStatus(taskId) {
     await editStatus(taskId);
     refresh();
-  }
-
-  function DisplayBalanceOrPayout() {
-    if (status === 'OPEN') {
-      return (
-        <>
-          <p>
-            {monster ? monster.scoreDoneTasks - monster.payoutDoneRewards : ''}
-          </p>
-          <p>balance</p>
-        </>
-      );
-    }
-    return (
-      <>
-        <p>{monster?.payoutDoneRewards}</p>
-        <p>payout</p>
-      </>
-    );
   }
 }

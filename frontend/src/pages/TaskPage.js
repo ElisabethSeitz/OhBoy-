@@ -4,6 +4,7 @@ import TaskList from '../lists/TaskList';
 import useTasksByMonsterId from '../hook/useTasksByMonsterId.js';
 import MonsterContext from '../contexts/MonsterContext';
 import Header from '../components/Header';
+import MonsterSection from '../components/MonsterSection';
 
 export default function TaskPage() {
   const { monsterId } = useParams();
@@ -27,19 +28,19 @@ export default function TaskPage() {
 
   return !monster ? null : (
     <>
-      <>
-        <Header
-          currentMonsterId={monsterId}
-          task={true}
-          icons={true}
-          add={true}
-        />
-        <p>{filteredTasks.length}</p>
-        <p>tasks</p>
-      </>
-      <img src={monster.image} alt="monster" />
-      <DisplayBalanceOrScore />
-      <h3>{monster.name}</h3>
+      <Header
+        currentMonsterId={monsterId}
+        task={true}
+        icons={true}
+        add={true}
+      />
+      <MonsterSection
+        monster={monster}
+        filteredItems={filteredTasks}
+        status={status}
+        task={true}
+      />
+
       <button onClick={handleOnClickOPEN}>open</button>
       <button onClick={handleOnClickDONE}>done</button>
       <TaskList
@@ -61,24 +62,5 @@ export default function TaskPage() {
   async function editTaskStatus(taskId) {
     await editStatus(taskId);
     refresh();
-  }
-
-  function DisplayBalanceOrScore() {
-    if (status === 'OPEN') {
-      return (
-        <>
-          <p>
-            {monster ? monster.scoreDoneTasks - monster.payoutDoneRewards : ''}
-          </p>
-          <p>balance</p>
-        </>
-      );
-    }
-    return (
-      <>
-        <p>{monster?.scoreDoneTasks}</p>
-        <p>score</p>
-      </>
-    );
   }
 }
