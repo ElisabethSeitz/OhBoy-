@@ -5,6 +5,7 @@ import RewardList from '../lists/RewardList';
 import MonsterContext from '../contexts/MonsterContext';
 import Header from '../components/Header';
 import MonsterSection from '../components/MonsterSection';
+import OpenDoneButtons from '../components/OpenDoneButtons';
 
 export default function RewardPage() {
   const { monsterId } = useParams();
@@ -40,8 +41,10 @@ export default function RewardPage() {
         status={status}
         task={false}
       />
-      <button onClick={handleOnClickOPEN}>open</button>
-      <button onClick={handleOnClickDONE}>done</button>
+      <OpenDoneButtons
+        handleOnClickDONE={handleOnClickDONE}
+        handleOnClickOPEN={handleOnClickOPEN}
+      />
       <RewardList
         rewards={filteredRewards}
         monsterId={monsterId}

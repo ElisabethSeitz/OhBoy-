@@ -5,6 +5,7 @@ import useTasksByMonsterId from '../hook/useTasksByMonsterId.js';
 import MonsterContext from '../contexts/MonsterContext';
 import Header from '../components/Header';
 import MonsterSection from '../components/MonsterSection';
+import OpenDoneButtons from '../components/OpenDoneButtons';
 
 export default function TaskPage() {
   const { monsterId } = useParams();
@@ -40,9 +41,11 @@ export default function TaskPage() {
         status={status}
         task={true}
       />
+      <OpenDoneButtons
+        handleOnClickDONE={handleOnClickDONE}
+        handleOnClickOPEN={handleOnClickOPEN}
+      />
 
-      <button onClick={handleOnClickOPEN}>open</button>
-      <button onClick={handleOnClickDONE}>done</button>
       <TaskList
         tasks={filteredTasks}
         monsterId={monsterId}

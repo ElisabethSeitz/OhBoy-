@@ -54,7 +54,7 @@ export default function MonsterSection({
 
 const MonsterSectionStyled = styled.section`
   display: grid;
-  grid-template-columns: 1fr min-content 2fr min-content 1fr;
+  grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
   grid-template-rows: min-content min-content min-content;
   justify-items: center;
 
