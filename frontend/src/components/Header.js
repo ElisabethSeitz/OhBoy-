@@ -28,7 +28,9 @@ export default function Header({
 
   return (
     <HeaderStyled>
-      <HeadingStyled>OhBoy!</HeadingStyled>
+      <HeadingStyled onClick={() => history.push('/monsters')}>
+        OhBoy!
+      </HeadingStyled>
       <DisplayMonsterImages />
       <DisplayTaskOrRewardIcon />
       <DisplayAdd />

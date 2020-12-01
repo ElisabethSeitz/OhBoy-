@@ -7,9 +7,7 @@ export default function MonsterPage() {
   return (
     <>
       <Header icons={false} monster={true} add={true} />
-      <h1>Monsters</h1>
       <MonsterList />
-      <Link to="/monsters/create">add</Link>
     </>
   );
 }
