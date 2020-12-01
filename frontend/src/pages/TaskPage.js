@@ -3,6 +3,7 @@ import { Link, useParams, useHistory } from 'react-router-dom';
 import TaskList from '../lists/TaskList';
 import useTasksByMonsterId from '../hook/useTasksByMonsterId.js';
 import MonsterContext from '../contexts/MonsterContext';
+import Header from '../components/Header';
 
 export default function TaskPage() {
   const history = useHistory();
@@ -18,7 +19,7 @@ export default function TaskPage() {
     setMonster(monsters.find((m) => m.id === monsterId));
     tasksFilter(status, true).then(setFilteredTasks);
     // eslint-disable-next-line
-  }, [monsters]);
+  }, [monsters, monsterId]);
 
   useEffect(() => {
     tasksFilter(status, false).then(setFilteredTasks);
@@ -28,6 +29,12 @@ export default function TaskPage() {
   return !monster ? null : (
     <>
       <>
+        <Header
+          currentMonsterId={monsterId}
+          task={true}
+          icons={true}
+          add={true}
+        />
         <p>{filteredTasks.length}</p>
         <p>tasks</p>
       </>
