@@ -1,4 +1,4 @@
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import React from 'react';
 import ListItem from '../components/ListItem';
 import { BsCheck, BsStarFill } from 'react-icons/bs';
