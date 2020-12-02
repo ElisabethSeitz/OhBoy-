@@ -69,12 +69,13 @@ const ButtonStyled = styled.button`
   opacity: 0.7;
   border: none;
   border-radius: 0 var(--size-s) var(--size-s) 0;
-  padding: 0;
+  margin: 2px;
 `;
 
 const ContentStyled = styled.div`
   display: grid;
   grid-template-rows: min-content min-content;
+  margin: 0 0 2px 2px;
 
   .taskDescription {
     margin: 0;
