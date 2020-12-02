@@ -28,7 +28,9 @@ export default function Header({
 
   return (
     <HeaderStyled>
-      <HeadingStyled>OhBoy!</HeadingStyled>
+      <HeadingStyled onClick={() => history.push('/monsters')}>
+        OhBoy!
+      </HeadingStyled>
       <DisplayMonsterImages />
       <DisplayTaskOrRewardIcon />
       <DisplayAdd />
@@ -94,7 +96,7 @@ export default function Header({
 
 const HeaderStyled = styled.header`
   display: grid;
-  grid-template-columns: 20% 50% 15% 15%;
+  grid-template-columns: min-content 4fr 1fr 1fr;
   align-items: center;
   padding: var(--size-s) 0;
   margin: 0 var(--size-s);
@@ -123,12 +125,14 @@ const BsCheckStyled = styled(BsCheck)`
   justify-self: end;
   width: 25px;
   height: 25px;
+  color: var(--grey-font);
 `;
 
 const BsStarStyled = styled(BsStar)`
   justify-self: end;
   width: 20px;
   height: 20px;
+  color: var(--grey-font);
 `;
 
 const BsFillPlusCircleFillStyled = styled(BsFillPlusCircleFill)`

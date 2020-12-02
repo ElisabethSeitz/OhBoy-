@@ -4,6 +4,7 @@ import useTasksByMonsterId from '../hook/useTasksByMonsterId';
 import TaskForm from '../forms/TaskForm';
 import MonsterContext from '../contexts/MonsterContext';
 import Header from '../components/Header';
+import MonsterSectionSmall from '../components/MonsterSectionSmall';
 
 export default function EditTaskPage() {
   const { monsterId, taskId } = useParams();
@@ -22,8 +23,7 @@ export default function EditTaskPage() {
         icons={true}
         add={false}
       />
-      <h5>edit this task</h5>
-      <img src={monster?.image} alt="monster" />
+      <MonsterSectionSmall monster={monster} task={true} add={false} />
       <TaskForm onSave={handleSave} task={task} />
       <button type="button" onClick={handleDelete}>
         Delete
