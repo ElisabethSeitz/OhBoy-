@@ -4,7 +4,7 @@ import styled from 'styled-components/macro';
 export default function MonsterSectionSmall({ monster, task, add }) {
   return (
     <MonsterSectionSmallStyled>
-      <img src={monster.image} alt={monster.name} />
+      <img className="monsterImage" src={monster?.image} alt={monster?.name} />
       <DisplayTaskOrReward />
     </MonsterSectionSmallStyled>
   );
@@ -39,4 +39,8 @@ const MonsterSectionSmallStyled = styled.section`
   grid-template-rows: min-content min-content;
   justify-items: center;
   text-align: center;
+
+  .monsterImage {
+    padding-top: var(--size-l);
+  }
 `;

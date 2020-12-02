@@ -2,12 +2,13 @@ import { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
   :root {
-   --green-main: #a0ca36;
+   --green-main: #A8CE00;
    /*--blue-75: #7589A2;
    --blue-50: #E0E4E8;
    --blue-25: #F8F8F8;*/
 
-   --blue-main: #5dbcd2;
+   --blue-main: #6AC2CC;
+   --red-main: #DE5A00;
    /*--orange-75: #FF9C86;
    --orange-50: #FFBDAF;
    --orange-25: #FFDED7;*/
@@ -15,6 +16,7 @@ export default createGlobalStyle`
    --black-main: #000;
    --grey-font: #AFA9A9;
    --grey-background: #F5F3F3;
+   --grey-medium: #DDD9D9;
    
   
    --size-xs: 4px;
@@ -24,8 +26,12 @@ export default createGlobalStyle`
    --size-xl: 24px;
    --size-xxl: 32px;
    
-   --black-shadow: 2px 2px 2px var(--black-main);
+   --grey-shadow: 5px 5px 5px var(--grey-medium);
+   --grey-border: 1px solid var(--grey-font);
    --black-border: 1px solid var(--black-main);
+   --blue-border: 1px solid var(--blue-main);
+   --green-border: 1px solid var(--green-main);
+   --red-border: 1px solid var(--red-main)
    
    //--blue-background: #E0E4E866;
   }

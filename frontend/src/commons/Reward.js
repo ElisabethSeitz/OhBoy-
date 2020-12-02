@@ -1,38 +1,99 @@
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import React from 'react';
+import ListItem from '../components/ListItem';
+import { BsCheck, BsStarFill } from 'react-icons/bs';
+import { GiPayMoney } from 'react-icons/gi';
+import styled from 'styled-components/macro';
 
 export default function Reward({ reward, monsterId, editStatus }) {
-  function DisplayEditButton() {
+  const history = useHistory();
+
+  function handleEdit() {
     const statusOpen = reward.status === 'OPEN';
     if (statusOpen) {
-      return (
-        <Link to={'/monsters/' + monsterId + '/rewards/edit/' + reward.id}>
-          edit
-        </Link>
+      return history.push(
+        '/monsters/' + monsterId + '/tasks/edit/' + reward.id
       );
     }
     return null;
   }
 
-  function DisplayChangeStatusButton() {
+  function DisplayChangeStatusIcons() {
     const statusOpen = reward.status === 'OPEN';
     if (statusOpen) {
-      return <button onClick={handleClick}>done</button>;
+      return (
+        <ButtonStyled onClick={handleClick}>
+          <BsCheckStyled />
+        </ButtonStyled>
+      );
     }
-    return <button onClick={handleClick}>open</button>;
+    return (
+      <ButtonStyled onClick={handleClick}>
+        <GiPayMoneyStyled />
+      </ButtonStyled>
+    );
   }
 
   return (
-    <div>
-      <p>{reward.description}</p>
-      <p>{reward.score}</p>
-      <p>{reward.status}</p>
-      <DisplayEditButton />
-      <DisplayChangeStatusButton />
-    </div>
+    <ListItem>
+      <ContentStyled onClick={handleEdit}>
+        <p className="rewardDescription">{reward.description}</p>
+        <p className="rewardScore">
+          <BsStarFillStyled />
+          {' ' + reward.score}
+        </p>
+      </ContentStyled>
+      <DisplayChangeStatusIcons />
+    </ListItem>
   );
 
   function handleClick() {
     editStatus(reward.id);
   }
 }
+
+const BsCheckStyled = styled(BsCheck)`
+  justify-self: end;
+  width: 30px;
+  height: 30px;
+  color: white;
+`;
+
+const GiPayMoneyStyled = styled(GiPayMoney)`
+  justify-self: end;
+  width: 30px;
+  height: 30px;
+  color: white;
+`;
+
+const ButtonStyled = styled.button`
+  background-color: var(--green-main);
+  opacity: 0.7;
+  border: none;
+  border-radius: 0 var(--size-s) var(--size-s) 0;
+  padding: 0;
+`;
+
+const ContentStyled = styled.div`
+  display: grid;
+  grid-template-rows: min-content min-content;
+
+  .rewardDescription {
+    margin: 0;
+    padding: var(--size-m);
+  }
+
+  .rewardScore {
+    margin: 0;
+    padding: var(--size-xs) var(--size-m);
+    border-radius: 0 0 0 var(--size-s);
+    background-color: var(--green-main);
+    opacity: 0.7;
+    color: white;
+  }
+`;
+
+const BsStarFillStyled = styled(BsStarFill)`
+  height: var(--size-m);
+  color: white;
+`;

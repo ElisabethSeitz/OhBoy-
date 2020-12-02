@@ -35,16 +35,18 @@ export default function RewardPage() {
         icons={true}
         add={true}
       />
-      <MonsterSection
-        monster={monster}
-        filteredItems={filteredRewards}
-        status={status}
-        task={false}
-      />
-      <OpenDoneButtons
-        handleOnClickDONE={handleOnClickDONE}
-        handleOnClickOPEN={handleOnClickOPEN}
-      />
+      <div>
+        <MonsterSection
+          monster={monster}
+          filteredItems={filteredRewards}
+          status={status}
+          task={false}
+        />
+        <OpenDoneButtons
+          handleOnClickDONE={handleOnClickDONE}
+          handleOnClickOPEN={handleOnClickOPEN}
+        />
+      </div>
       <RewardList
         rewards={filteredRewards}
         monsterId={monsterId}

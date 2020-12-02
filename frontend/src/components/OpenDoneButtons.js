@@ -20,12 +20,15 @@ export default function OpenDoneButtons({
 const OpenDoneButtonsStyled = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
+  padding-bottom: var(--size-l);
 
   .open {
     justify-self: right;
     background-color: var(--grey-background);
     border: solid var(--grey-font) 0.1em;
     border-radius: 5px 0 0 5px;
+    width: 6em;
+    height: 2em;
   }
 
   .done {
@@ -33,5 +36,7 @@ const OpenDoneButtonsStyled = styled.div`
     background-color: var(--grey-background);
     border: solid var(--grey-font) 0.1em;
     border-radius: 0 5px 5px 0;
+    width: 6em;
+    height: 2em;
   }
 `;

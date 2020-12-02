@@ -12,7 +12,7 @@ export default function MonsterSection({
       <p className="countTasks">{filteredItems.length}</p>
       <DisplayTasksOrRewards />
       <img className="monsterImage" src={monster.image} alt={monster.name} />
-      <h1 className="monsterName">{monster.name}</h1>
+      <p className="monsterName">{monster.name}</p>
       <DisplayBalanceOrScorePayout />
     </MonsterSectionStyled>
   );
@@ -55,67 +55,89 @@ export default function MonsterSection({
 const MonsterSectionStyled = styled.section`
   display: grid;
   grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
-  grid-template-rows: min-content min-content min-content;
+  grid-template-rows: min-content min-content min-content min-content;
   justify-items: center;
 
   .countTasks {
+    margin: 0;
+    padding-bottom: var(--size-s);
     grid-column: 2;
-    grid-row: 1;
+    grid-row: 2;
+    align-self: end;
   }
 
   .tasks {
+    margin: 0;
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 3;
     color: var(--grey-font);
   }
 
   .rewards {
+    margin: 0;
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 3;
     color: var(--grey-font);
   }
 
   .calculatedBalance {
+    margin: 0;
+    padding-bottom: var(--size-s);
     grid-column: 4;
-    grid-row: 1;
+    grid-row: 2;
+    align-self: end;
   }
 
   .calculatedScore {
+    margin: 0;
+    padding-bottom: var(--size-s);
     grid-column: 4;
-    grid-row: 1;
+    grid-row: 2;
+    align-self: end;
   }
 
   .calculatedPayout {
+    margin: 0;
+    padding-bottom: var(--size-s);
     grid-column: 4;
-    grid-row: 1;
+    grid-row: 2;
+    align-self: end;
   }
 
   .balance {
+    margin: 0;
     grid-column: 4;
-    grid-row: 2;
+    grid-row: 3;
     color: var(--grey-font);
   }
 
   .score {
+    margin: 0;
     grid-column: 4;
-    grid-row: 2;
+    grid-row: 3;
     color: var(--grey-font);
   }
 
   .payout {
+    margin: 0;
     grid-column: 4;
-    grid-row: 2;
+    grid-row: 3;
     color: var(--grey-font);
   }
 
   .monsterImage {
     grid-column: 3;
-    grid-row: span 2;
+    grid-row: span 3;
+    padding-top: var(--size-l);
   }
 
   .monsterName {
+    margin: 0;
+    padding-top: var(--size-s);
+    padding-bottom: var(--size-m);
     grid-column: 3;
-    grid-row: 3;
+    grid-row: 4;
     font-size: var(--size-l);
+    font-weight: 600;
   }
 `;

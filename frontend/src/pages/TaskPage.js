@@ -35,17 +35,18 @@ export default function TaskPage() {
         icons={true}
         add={true}
       />
-      <MonsterSection
-        monster={monster}
-        filteredItems={filteredTasks}
-        status={status}
-        task={true}
-      />
-      <OpenDoneButtons
-        handleOnClickDONE={handleOnClickDONE}
-        handleOnClickOPEN={handleOnClickOPEN}
-      />
-
+      <div>
+        <MonsterSection
+          monster={monster}
+          filteredItems={filteredTasks}
+          status={status}
+          task={true}
+        />
+        <OpenDoneButtons
+          handleOnClickDONE={handleOnClickDONE}
+          handleOnClickOPEN={handleOnClickOPEN}
+        />
+      </div>
       <TaskList
         tasks={filteredTasks}
         monsterId={monsterId}
