@@ -9,11 +9,13 @@ export default function MonsterSection({
 }) {
   return (
     <MonsterSectionStyled>
+      <div className="circle1" />
       <p className="countTasks">{filteredItems.length}</p>
       <DisplayTasksOrRewards />
       <img className="monsterImage" src={monster.image} alt={monster.name} />
       <p className="monsterName">{monster.name}</p>
       <DisplayBalanceOrScorePayout />
+      <div className="circle2" />
     </MonsterSectionStyled>
   );
 
@@ -134,10 +136,32 @@ const MonsterSectionStyled = styled.section`
   .monsterName {
     margin: 0;
     padding-top: var(--size-s);
-    padding-bottom: var(--size-m);
+    padding-bottom: var(--size-xs);
     grid-column: 3;
     grid-row: 4;
     font-size: var(--size-l);
     font-weight: 600;
+  }
+
+  .circle1 {
+    height: 90px;
+    width: 90px;
+    background-color: var(--blue-main);
+    grid-column: 2;
+    grid-row-start: 2;
+    grid-row-end: span 2;
+    opacity: 0.1;
+    border-radius: var(--size-s);
+  }
+
+  .circle2 {
+    height: 90px;
+    width: 90px;
+    background-color: var(--blue-main);
+    grid-column: 4;
+    grid-row-start: 2;
+    grid-row-end: span 2;
+    opacity: 0.1;
+    border-radius: var(--size-s);
   }
 `;

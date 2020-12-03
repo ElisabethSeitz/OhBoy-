@@ -76,6 +76,6 @@ export default App;
 
 const PageLayout = styled.div`
   display: grid;
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: min-content min-content 1fr min-content;
   height: 100vh;
 `;

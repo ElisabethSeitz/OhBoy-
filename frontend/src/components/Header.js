@@ -3,15 +3,9 @@ import MonsterContext from '../contexts/MonsterContext';
 import styled from 'styled-components/macro';
 import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import { BsStar, BsCheck, BsFillPlusCircleFill } from 'react-icons/bs';
+import { BsStar, BsCheck } from 'react-icons/bs';
 
-export default function Header({
-  icons,
-  currentMonsterId,
-  task,
-  monster,
-  add,
-}) {
+export default function Header({ icons, currentMonsterId, task }) {
   const { monsters } = useContext(MonsterContext);
   const history = useHistory();
 
@@ -33,7 +27,6 @@ export default function Header({
       </HeadingStyled>
       <DisplayMonsterImages />
       <DisplayTaskOrRewardIcon />
-      <DisplayAdd />
     </HeaderStyled>
   );
 
@@ -66,54 +59,55 @@ export default function Header({
   function TaskOrRewardIcon() {
     if (task) {
       return (
-        <BsStarStyled onClick={LinkTasksOrRewards(false, currentMonsterId)} />
+        <div className="rewards">
+          <BsStarStyled onClick={LinkTasksOrRewards(false, currentMonsterId)} />
+          <p className="rewardsText">rewards</p>
+        </div>
       );
     }
     return (
-      <BsCheckStyled onClick={LinkTasksOrRewards(true, currentMonsterId)} />
+      <div className="tasks">
+        <BsCheckStyled onClick={LinkTasksOrRewards(true, currentMonsterId)} />
+        <p>tasks</p>
+      </div>
     );
-  }
-
-  function DisplayAdd() {
-    if (add) {
-      return (
-        <BsFillPlusCircleFillStyled onClick={createAddLink(currentMonsterId)} />
-      );
-    }
-    return <div></div>;
-  }
-
-  function createAddLink(monsterId) {
-    if (monster) {
-      return () => history.push('/monsters/create');
-    }
-    if (task) {
-      return () => history.push('/monsters/' + monsterId + '/tasks/create');
-    } else
-      return () => history.push('/monsters/' + monsterId + '/rewards/create');
   }
 }
 
 const HeaderStyled = styled.header`
   display: grid;
-  grid-template-columns: min-content 4fr 1fr 1fr;
+  grid-template-columns: min-content 4fr 2fr var(--size-xxl);
   align-items: center;
   padding: var(--size-s) 0;
-  margin: 0 var(--size-s);
-  border-bottom: var(--black-border);
+  margin: 0;
+  border-bottom: var(--blue-border);
+  background-color: var(--beige-main);
+
+  .rewards {
+    font-size: var(--size-m);
+    color: var(--grey-font);
+    grid-column: 3;
+    margin: 0 0 0 var(--size-xxl);
+    padding: 0;
+
+    .rewardsText {
+      margin: 0;
+    }
+  }
 `;
 
 const HeadingStyled = styled.h1`
   margin: 0;
-  padding: var(--size-xs);
+  padding: var(--size-xs) var(--size-xl);
   color: black;
-  font-size: var(--size-l);
+  font-size: var(--size-xl);
 `;
 
 const HeaderMonsterImage = styled.img`
   width: 30px;
   height: 30px;
   margin-right: var(--size-s);
+  grid-row: span 2;
 `;
 
 const ImageContainer = styled.div`
@@ -129,14 +123,8 @@ const BsCheckStyled = styled(BsCheck)`
 `;
 
 const BsStarStyled = styled(BsStar)`
-  justify-self: end;
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   color: var(--grey-font);
-`;
-
-const BsFillPlusCircleFillStyled = styled(BsFillPlusCircleFill)`
-  justify-self: end;
-  width: 25px;
-  height: 25px;
+  margin: 0 0 0 var(--size-m);
 `;

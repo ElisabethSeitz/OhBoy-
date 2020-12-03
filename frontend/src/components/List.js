@@ -8,7 +8,7 @@ export default function List({ children }) {
 const ListStyled = styled.ul`
   overflow: scroll;
   margin: 0;
-  padding: 0 var(--size-xl);
+  padding: 0 var(--size-xxl);
 
   list-style: none;
 
@@ -19,6 +19,6 @@ const ListStyled = styled.ul`
   li:last-child:after {
     content: '';
     display: block;
-    height: 56px;
+    height: 30px;
   }
 `;

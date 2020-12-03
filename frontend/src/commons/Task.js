@@ -1,9 +1,9 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import ListItem from '../components/ListItem';
-import { BsCheck, BsStarFill } from 'react-icons/bs';
-import { IoTrophyOutline } from 'react-icons/io5';
+import { BsStarFill } from 'react-icons/bs';
 import styled from 'styled-components/macro';
+import ToggleButton from '../components/ToggleButton';
 
 export default function Task({ task, monsterId, editStatus }) {
   const history = useHistory();
@@ -16,22 +16,6 @@ export default function Task({ task, monsterId, editStatus }) {
     return null;
   }
 
-  function DisplayChangeStatusIcons() {
-    const statusOpen = task.status === 'OPEN';
-    if (statusOpen) {
-      return (
-        <ButtonStyled onClick={handleClick}>
-          <BsCheckStyled />
-        </ButtonStyled>
-      );
-    }
-    return (
-      <ButtonStyled onClick={handleClick}>
-        <BsTrophyStyled />
-      </ButtonStyled>
-    );
-  }
-
   return (
     <ListItem>
       <ContentStyled onClick={handleEdit}>
@@ -41,7 +25,7 @@ export default function Task({ task, monsterId, editStatus }) {
           {' ' + task.score}
         </p>
       </ContentStyled>
-      <DisplayChangeStatusIcons />
+      <ToggleButton status={task.status} onClick={handleClick} />
     </ListItem>
   );
 
@@ -50,36 +34,16 @@ export default function Task({ task, monsterId, editStatus }) {
   }
 }
 
-const BsCheckStyled = styled(BsCheck)`
-  justify-self: end;
-  width: 30px;
-  height: 30px;
-  color: white;
-`;
-
-const BsTrophyStyled = styled(IoTrophyOutline)`
-  justify-self: end;
-  width: 30px;
-  height: 30px;
-  color: white;
-`;
-
-const ButtonStyled = styled.button`
-  background-color: var(--blue-main);
-  opacity: 0.7;
-  border: none;
-  border-radius: 0 var(--size-s) var(--size-s) 0;
-  margin: 2px;
-`;
-
 const ContentStyled = styled.div`
   display: grid;
   grid-template-rows: min-content min-content;
-  margin: 0 0 2px 2px;
+  margin: 2px 2px 2px 2px;
+  background-color: white;
 
   .taskDescription {
     margin: 0;
     padding: var(--size-m);
+    border-radius: var(--size-s) 0 0 0;
   }
 
   .taskScore {

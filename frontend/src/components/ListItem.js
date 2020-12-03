@@ -9,6 +9,6 @@ const ItemStyled = styled.section`
   display: grid;
   grid-template-columns: 4fr 1fr;
   box-shadow: var(--grey-shadow);
-  border: var(--red-border);
+  border: var(--blue-border);
   border-radius: var(--size-s);
 `;
