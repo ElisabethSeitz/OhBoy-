@@ -5,7 +5,8 @@ import useTasksByMonsterId from '../hook/useTasksByMonsterId.js';
 import MonsterContext from '../contexts/MonsterContext';
 import Header from '../components/Header';
 import MonsterSection from '../components/MonsterSection';
-import OpenDoneButtons from '../components/OpenDoneButtons';
+import Footer from '../components/Footer';
+import OpenDoneSwitch from '../components/OpenDoneSwitch';
 
 export default function TaskPage() {
   const { monsterId } = useParams();
@@ -29,12 +30,7 @@ export default function TaskPage() {
 
   return !monster ? null : (
     <>
-      <Header
-        currentMonsterId={monsterId}
-        task={true}
-        icons={true}
-        add={true}
-      />
+      <Header currentMonsterId={monsterId} task={true} icons={true} />
       <div>
         <MonsterSection
           monster={monster}
@@ -42,7 +38,7 @@ export default function TaskPage() {
           status={status}
           task={true}
         />
-        <OpenDoneButtons
+        <OpenDoneSwitch
           handleOnClickDONE={handleOnClickDONE}
           handleOnClickOPEN={handleOnClickOPEN}
         />
@@ -51,6 +47,12 @@ export default function TaskPage() {
         tasks={filteredTasks}
         monsterId={monsterId}
         editStatus={editTaskStatus}
+      />
+      <Footer
+        currentMonsterId={monsterId}
+        add={true}
+        task={true}
+        monster={false}
       />
     </>
   );

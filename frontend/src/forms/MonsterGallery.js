@@ -5,11 +5,11 @@ export default function MonsterGallery({
   imageChangedHandler,
 }) {
   const images = [
-    '/monsterImages/monster0.jpg',
-    '/monsterImages/monster1.jpg',
-    '/monsterImages/monster2.jpg',
-    '/monsterImages/monster3.jpg',
-    '/monsterImages/monster4.jpg',
+    '/monsterImages/monster0.png',
+    '/monsterImages/monster1.png',
+    '/monsterImages/monster2.png',
+    '/monsterImages/monster3.png',
+    '/monsterImages/monster4.png',
   ];
 
   const savedMonsterIndex = savedMonsterImage

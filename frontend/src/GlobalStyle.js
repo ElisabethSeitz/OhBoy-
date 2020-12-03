@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import backgroundImage from './commons/backgroundImage.png';
 
 export default createGlobalStyle`
   :root {
@@ -7,8 +8,9 @@ export default createGlobalStyle`
    --blue-50: #E0E4E8;
    --blue-25: #F8F8F8;*/
 
-   --blue-main: #6AC2CC;
-   --red-main: #DE5A00;
+   --blue-main: #69A3B0;
+   --red-main: #F10058;
+   --beige-main: #fcfcfa;
    /*--orange-75: #FF9C86;
    --orange-50: #FFBDAF;
    --orange-25: #FFDED7;*/
@@ -31,9 +33,11 @@ export default createGlobalStyle`
    --black-border: 1px solid var(--black-main);
    --blue-border: 1px solid var(--blue-main);
    --green-border: 1px solid var(--green-main);
-   --red-border: 1px solid var(--red-main)
+   --red-border: 1px solid var(--red-main);
    
    //--blue-background: #E0E4E866;
+  
+  
   }
 
   * {
@@ -50,4 +54,9 @@ export default createGlobalStyle`
     font-family: inherit;
     //background: var(--blue-background);
   }
+  
+  body{
+    background-image: url(${backgroundImage});
+  }
+ 
 `;

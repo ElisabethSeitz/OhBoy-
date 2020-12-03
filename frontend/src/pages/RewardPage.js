@@ -5,7 +5,7 @@ import RewardList from '../lists/RewardList';
 import MonsterContext from '../contexts/MonsterContext';
 import Header from '../components/Header';
 import MonsterSection from '../components/MonsterSection';
-import OpenDoneButtons from '../components/OpenDoneButtons';
+import OpenDoneSwitch from '../components/OpenDoneSwitch';
 
 export default function RewardPage() {
   const { monsterId } = useParams();
@@ -42,7 +42,7 @@ export default function RewardPage() {
           status={status}
           task={false}
         />
-        <OpenDoneButtons
+        <OpenDoneSwitch
           handleOnClickDONE={handleOnClickDONE}
           handleOnClickOPEN={handleOnClickOPEN}
         />
