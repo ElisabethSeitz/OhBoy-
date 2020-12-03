@@ -68,7 +68,7 @@ export default function Header({ icons, currentMonsterId, task }) {
     return (
       <div className="tasks">
         <BsCheckStyled onClick={LinkTasksOrRewards(true, currentMonsterId)} />
-        <p>tasks</p>
+        <p className="tasksText">tasks</p>
       </div>
     );
   }
@@ -89,10 +89,22 @@ const HeaderStyled = styled.header`
     grid-column: 3;
     margin: 0 0 0 var(--size-xxl);
     padding: 0;
+  }
 
-    .rewardsText {
-      margin: 0;
-    }
+  .rewardsText {
+    margin: 0;
+  }
+
+  .tasks {
+    font-size: var(--size-m);
+    color: var(--grey-font);
+    grid-column: 3;
+    margin: 0 0 0 var(--size-xxl);
+    padding: 0;
+  }
+
+  .tasksText {
+    margin: 0;
   }
 `;
 
@@ -107,7 +119,6 @@ const HeaderMonsterImage = styled.img`
   width: 30px;
   height: 30px;
   margin-right: var(--size-s);
-  grid-row: span 2;
 `;
 
 const ImageContainer = styled.div`
@@ -116,10 +127,10 @@ const ImageContainer = styled.div`
 `;
 
 const BsCheckStyled = styled(BsCheck)`
-  justify-self: end;
-  width: 25px;
-  height: 25px;
+  width: 15px;
+  height: 15px;
   color: var(--grey-font);
+  margin: 0 0 0 var(--size-s);
 `;
 
 const BsStarStyled = styled(BsStar)`
