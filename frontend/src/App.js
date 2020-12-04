@@ -14,56 +14,68 @@ import EditTaskPage from './pages/EditTaskPage';
 import RewardPage from './pages/RewardPage';
 import AddRewardPage from './pages/AddRewardPage';
 import EditRewardPage from './pages/EditRewardPage';
+import styled from 'styled-components/macro';
 
 function App() {
   return (
     <UserContextProvider>
       <MonsterContextProvider>
-        <Switch>
-          <Route path="/login" component={LoginWithFacebook} />
-          <Route
-            path="/auth/facebook/redirect"
-            component={FacebookRedirectPage}
-          />
-          <ProtectedRoute exact path="/monsters" component={MonsterPage} />
-          <ProtectedRoute path="/monsters/create" component={AddMonsterPage} />
-          <ProtectedRoute
-            path="/monsters/edit/:id"
-            component={EditMonsterPage}
-          />
-          <ProtectedRoute
-            exact
-            path="/monsters/:monsterId/tasks"
-            component={TaskPage}
-          />
-          <ProtectedRoute
-            path="/monsters/:monsterId/tasks/create"
-            component={AddTaskPage}
-          />
-          <ProtectedRoute
-            path="/monsters/:monsterId/tasks/edit/:taskId"
-            component={EditTaskPage}
-          />
-          <ProtectedRoute
-            exact
-            path="/monsters/:monsterId/rewards"
-            component={RewardPage}
-          />
-          <ProtectedRoute
-            path="/monsters/:monsterId/rewards/create"
-            component={AddRewardPage}
-          />
-          <ProtectedRoute
-            path="/monsters/:monsterId/rewards/edit/:rewardId"
-            component={EditRewardPage}
-          />
-          <Route path="/">
-            <Redirect to="/monsters" />
-          </Route>
-        </Switch>
+        <PageLayout>
+          <Switch>
+            <Route path="/login" component={LoginWithFacebook} />
+            <Route
+              path="/auth/facebook/redirect"
+              component={FacebookRedirectPage}
+            />
+            <ProtectedRoute exact path="/monsters" component={MonsterPage} />
+            <ProtectedRoute
+              path="/monsters/create"
+              component={AddMonsterPage}
+            />
+            <ProtectedRoute
+              path="/monsters/edit/:id"
+              component={EditMonsterPage}
+            />
+            <ProtectedRoute
+              exact
+              path="/monsters/:monsterId/tasks"
+              component={TaskPage}
+            />
+            <ProtectedRoute
+              path="/monsters/:monsterId/tasks/create"
+              component={AddTaskPage}
+            />
+            <ProtectedRoute
+              path="/monsters/:monsterId/tasks/edit/:taskId"
+              component={EditTaskPage}
+            />
+            <ProtectedRoute
+              exact
+              path="/monsters/:monsterId/rewards"
+              component={RewardPage}
+            />
+            <ProtectedRoute
+              path="/monsters/:monsterId/rewards/create"
+              component={AddRewardPage}
+            />
+            <ProtectedRoute
+              path="/monsters/:monsterId/rewards/edit/:rewardId"
+              component={EditRewardPage}
+            />
+            <Route path="/">
+              <Redirect to="/monsters" />
+            </Route>
+          </Switch>
+        </PageLayout>
       </MonsterContextProvider>
     </UserContextProvider>
   );
 }
 
 export default App;
+
+const PageLayout = styled.div`
+  display: grid;
+  grid-template-rows: min-content min-content 1fr;
+  height: 100vh;
+`;

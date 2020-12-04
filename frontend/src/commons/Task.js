@@ -1,38 +1,62 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import ListItem from '../components/ListItem';
+import { BsStarFill } from 'react-icons/bs';
+import styled from 'styled-components/macro';
+import ToggleButton from '../components/ToggleButton';
 
 export default function Task({ task, monsterId, editStatus }) {
-  function DisplayEditButton() {
+  const history = useHistory();
+
+  function handleEdit() {
     const statusOpen = task.status === 'OPEN';
     if (statusOpen) {
-      return (
-        <Link to={'/monsters/' + monsterId + '/tasks/edit/' + task.id}>
-          edit
-        </Link>
-      );
+      return history.push('/monsters/' + monsterId + '/tasks/edit/' + task.id);
     }
     return null;
   }
 
-  function DisplayChangeStatusButton() {
-    const statusOpen = task.status === 'OPEN';
-    if (statusOpen) {
-      return <button onClick={handleClick}>done</button>;
-    }
-    return <button onClick={handleClick}>open</button>;
-  }
-
   return (
-    <div>
-      <p>{task.description}</p>
-      <p>{task.score}</p>
-      <p>{task.status}</p>
-      <DisplayEditButton />
-      <DisplayChangeStatusButton />
-    </div>
+    <ListItem>
+      <ContentStyled onClick={handleEdit}>
+        <p className="taskDescription">{task.description}</p>
+        <p className="taskScore">
+          <BsStarFillStyled />
+          {' ' + task.score}
+        </p>
+      </ContentStyled>
+      <ToggleButton status={task.status} onClick={handleClick} />
+    </ListItem>
   );
 
   function handleClick() {
     editStatus(task.id);
   }
 }
+
+const ContentStyled = styled.div`
+  display: grid;
+  grid-template-rows: min-content min-content;
+  margin: 2px 2px 2px 2px;
+  background-color: rgba(255, 255, 255, 0.6);
+
+  .taskDescription {
+    margin: 0;
+    padding: var(--size-m);
+    border-radius: var(--size-s) 0 0 0;
+  }
+
+  .taskScore {
+    margin: 0;
+    padding: var(--size-xs) var(--size-m);
+    border-radius: 0 0 0 var(--size-s);
+    background-color: var(--blue-main);
+    opacity: 0.7;
+    color: white;
+  }
+`;
+
+const BsStarFillStyled = styled(BsStarFill)`
+  height: var(--size-m);
+  color: white;
+`;

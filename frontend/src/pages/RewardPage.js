@@ -1,11 +1,14 @@
-import { Link, useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import React, { useContext, useEffect, useState } from 'react';
 import useRewardsByMonsterId from '../hook/useRewardsByMonsterId';
 import RewardList from '../lists/RewardList';
 import MonsterContext from '../contexts/MonsterContext';
+import Header from '../components/Header';
+import MonsterSection from '../components/MonsterSection';
+import OpenDoneSwitch from '../components/OpenDoneSwitch';
+import AddButton from '../components/AddButton';
 
 export default function RewardPage() {
-  const history = useHistory();
   const { monsterId } = useParams();
   const { refresh, monsters } = useContext(MonsterContext);
   const [status, setStatus] = useState('OPEN');
@@ -18,7 +21,7 @@ export default function RewardPage() {
     setMonster(monsters.find((m) => m.id === monsterId));
     rewardsFilter(status, true).then(setFilteredRewards);
     // eslint-disable-next-line
-  }, [monsters]);
+  }, [monsters, monsterId]);
 
   useEffect(() => {
     rewardsFilter(status, false).then(setFilteredRewards);
@@ -27,28 +30,30 @@ export default function RewardPage() {
 
   return !monster ? null : (
     <>
-      <>
-        <p>{filteredRewards.length}</p>
-        <p>rewards</p>
-      </>
-      <img
-        src={monster.image}
-        alt="monster"
-        onClick={() => history.push('/monsters')}
-      />
-      <DisplayBalanceOrPayout />
-      <h3>{monster.name}</h3>
-      <button onClick={handleOnClickOPEN}>open</button>
-      <button onClick={handleOnClickDONE}>done</button>
+      <Header currentMonsterId={monsterId} task={false} icons={true} />
+      <div>
+        <MonsterSection
+          monster={monster}
+          filteredItems={filteredRewards}
+          status={status}
+          task={false}
+        />
+        <OpenDoneSwitch
+          handleOnClickDONE={handleOnClickDONE}
+          handleOnClickOPEN={handleOnClickOPEN}
+        />
+      </div>
       <RewardList
         rewards={filteredRewards}
         monsterId={monsterId}
         editStatus={editRewardStatus}
       />
-      <div>
-        <Link to={'/monsters/' + monsterId + '/rewards/create'}>add</Link>
-      </div>
-      <Link to={'/monsters/' + monsterId + '/tasks'}>tasks</Link>
+      <AddButton
+        monster={false}
+        task={false}
+        currentMonsterId={monsterId}
+        add={true}
+      />
     </>
   );
 
@@ -63,24 +68,5 @@ export default function RewardPage() {
   async function editRewardStatus(taskId) {
     await editStatus(taskId);
     refresh();
-  }
-
-  function DisplayBalanceOrPayout() {
-    if (status === 'OPEN') {
-      return (
-        <>
-          <p>
-            {monster ? monster.scoreDoneTasks - monster.payoutDoneRewards : ''}
-          </p>
-          <p>balance</p>
-        </>
-      );
-    }
-    return (
-      <>
-        <p>{monster?.payoutDoneRewards}</p>
-        <p>payout</p>
-      </>
-    );
   }
 }

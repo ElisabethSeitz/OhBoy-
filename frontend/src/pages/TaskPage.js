@@ -1,11 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import TaskList from '../lists/TaskList';
 import useTasksByMonsterId from '../hook/useTasksByMonsterId.js';
 import MonsterContext from '../contexts/MonsterContext';
+import Header from '../components/Header';
+import MonsterSection from '../components/MonsterSection';
+import OpenDoneSwitch from '../components/OpenDoneSwitch';
+import AddButton from '../components/AddButton';
 
 export default function TaskPage() {
-  const history = useHistory();
   const { monsterId } = useParams();
   const { refresh, monsters } = useContext(MonsterContext);
   const [status, setStatus] = useState('OPEN');
@@ -18,7 +21,7 @@ export default function TaskPage() {
     setMonster(monsters.find((m) => m.id === monsterId));
     tasksFilter(status, true).then(setFilteredTasks);
     // eslint-disable-next-line
-  }, [monsters]);
+  }, [monsters, monsterId]);
 
   useEffect(() => {
     tasksFilter(status, false).then(setFilteredTasks);
@@ -27,28 +30,30 @@ export default function TaskPage() {
 
   return !monster ? null : (
     <>
-      <>
-        <p>{filteredTasks.length}</p>
-        <p>tasks</p>
-      </>
-      <img
-        src={monster.image}
-        alt="monster"
-        onClick={() => history.push('/monsters')}
-      />
-      <DisplayBalanceOrScore />
-      <h3>{monster.name}</h3>
-      <button onClick={handleOnClickOPEN}>open</button>
-      <button onClick={handleOnClickDONE}>done</button>
+      <Header currentMonsterId={monsterId} task={true} icons={true} />
+      <div>
+        <MonsterSection
+          monster={monster}
+          filteredItems={filteredTasks}
+          status={status}
+          task={true}
+        />
+        <OpenDoneSwitch
+          handleOnClickDONE={handleOnClickDONE}
+          handleOnClickOPEN={handleOnClickOPEN}
+        />
+      </div>
       <TaskList
         tasks={filteredTasks}
         monsterId={monsterId}
         editStatus={editTaskStatus}
       />
-      <div>
-        <Link to={'/monsters/' + monsterId + '/tasks/create'}>add</Link>
-      </div>
-      <Link to={'/monsters/' + monsterId + '/rewards'}>rewards</Link>
+      <AddButton
+        monster={false}
+        task={true}
+        currentMonsterId={monsterId}
+        add={true}
+      />
     </>
   );
 
@@ -63,24 +68,5 @@ export default function TaskPage() {
   async function editTaskStatus(taskId) {
     await editStatus(taskId);
     refresh();
-  }
-
-  function DisplayBalanceOrScore() {
-    if (status === 'OPEN') {
-      return (
-        <>
-          <p>
-            {monster ? monster.scoreDoneTasks - monster.payoutDoneRewards : ''}
-          </p>
-          <p>balance</p>
-        </>
-      );
-    }
-    return (
-      <>
-        <p>{monster?.scoreDoneTasks}</p>
-        <p>score</p>
-      </>
-    );
   }
 }
