@@ -30,7 +30,7 @@ export default function RewardPage() {
 
   return !monster ? null : (
     <>
-      <Header currentMonsterId={monsterId} task={false} icons={true} />
+      <Header displayedMonsterId={monsterId} task={false} icons={true} />
       <div>
         <MonsterSection
           monster={monster}

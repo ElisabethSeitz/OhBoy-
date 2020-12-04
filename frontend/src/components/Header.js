@@ -1,17 +1,13 @@
 import React from 'react';
 import MonsterContext from '../contexts/MonsterContext';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { BsStar, BsCheck } from 'react-icons/bs';
 
-export default function Header({ icons, currentMonsterId, task }) {
+export default function Header({ icons, displayedMonsterId, task }) {
   const { monsters } = useContext(MonsterContext);
   const history = useHistory();
-
-  const monstersToDisplay = monsters?.filter(
-    (monster) => monster.id !== currentMonsterId
-  );
 
   const LinkTasksOrRewards = (task, monsterId) => {
     if (task) {
@@ -34,14 +30,17 @@ export default function Header({ icons, currentMonsterId, task }) {
     if (icons) {
       return (
         <ImageContainer>
-          {monstersToDisplay.map((monster) => (
-            <div key={monster.id}>
+          {monsters.map((monster) => (
+            <MonsterImages
+              key={monster.id}
+              currentMonster={monster.id === displayedMonsterId}
+            >
               <HeaderMonsterImage
                 src={monster.image}
                 alt={monster.name}
                 onClick={LinkTasksOrRewards(task, monster.id)}
               />
-            </div>
+            </MonsterImages>
           ))}
         </ImageContainer>
       );
@@ -60,14 +59,16 @@ export default function Header({ icons, currentMonsterId, task }) {
     if (task) {
       return (
         <div className="rewards">
-          <BsStarStyled onClick={LinkTasksOrRewards(false, currentMonsterId)} />
+          <BsStarStyled
+            onClick={LinkTasksOrRewards(false, displayedMonsterId)}
+          />
           <p className="rewardsText">rewards</p>
         </div>
       );
     }
     return (
       <div className="tasks">
-        <BsCheckStyled onClick={LinkTasksOrRewards(true, currentMonsterId)} />
+        <BsCheckStyled onClick={LinkTasksOrRewards(true, displayedMonsterId)} />
         <p className="tasksText">tasks</p>
       </div>
     );
@@ -118,12 +119,21 @@ const HeadingStyled = styled.h1`
 const HeaderMonsterImage = styled.img`
   width: 30px;
   height: 30px;
-  margin-right: var(--size-s);
+  margin: var(--size-xs) var(--size-xs) 0 var(--size-xs);
 `;
 
 const ImageContainer = styled.div`
   justify-self: end;
   display: flex;
+`;
+
+const MonsterImages = styled.div`
+  ${(props) =>
+    props.currentMonster &&
+    css`
+      background-color: rgba(105, 163, 176, 0.1);
+      border-radius: 60px;
+    `}
 `;
 
 const BsCheckStyled = styled(BsCheck)`

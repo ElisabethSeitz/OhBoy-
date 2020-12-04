@@ -30,7 +30,7 @@ export default function TaskPage() {
 
   return !monster ? null : (
     <>
-      <Header currentMonsterId={monsterId} task={true} icons={true} />
+      <Header displayedMonsterId={monsterId} task={true} icons={true} />
       <div>
         <MonsterSection
           monster={monster}
