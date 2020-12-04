@@ -1,4 +1,4 @@
-name: Deploy OhBoy
+name: Deploy OhKid
 
 on:
   push:
@@ -67,8 +67,8 @@ jobs:
       - name: push docker container to heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:push web -a oh-boy
+        run: heroku container:push web -a oh-kid
       - name: deploy/release docker container to heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:release web -a oh-boy
+        run: heroku container:release web -a oh-kid
