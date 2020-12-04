@@ -23,7 +23,7 @@ export default function Header({ icons, currentMonsterId, task }) {
   return (
     <HeaderStyled>
       <HeadingStyled onClick={() => history.push('/monsters')}>
-        OhBoy!
+        OhKid!
       </HeadingStyled>
       <DisplayMonsterImages />
       <DisplayTaskOrRewardIcon />
@@ -76,12 +76,13 @@ export default function Header({ icons, currentMonsterId, task }) {
 
 const HeaderStyled = styled.header`
   display: grid;
-  grid-template-columns: min-content 4fr 2fr var(--size-xxl);
   align-items: center;
+  grid-template-columns: min-content 4fr 2fr var(--size-xxl);
   padding: var(--size-s) 0;
   margin: 0;
   border-bottom: var(--blue-border);
   background-color: var(--beige-main);
+  justify-items: end;
 
   .rewards {
     font-size: var(--size-m);
@@ -99,7 +100,6 @@ const HeaderStyled = styled.header`
     font-size: var(--size-m);
     color: var(--grey-font);
     grid-column: 3;
-    margin: 0 0 0 var(--size-xxl);
     padding: 0;
   }
 

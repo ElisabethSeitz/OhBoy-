@@ -5,8 +5,8 @@ import useTasksByMonsterId from '../hook/useTasksByMonsterId.js';
 import MonsterContext from '../contexts/MonsterContext';
 import Header from '../components/Header';
 import MonsterSection from '../components/MonsterSection';
-import Footer from '../components/Footer';
 import OpenDoneSwitch from '../components/OpenDoneSwitch';
+import AddButton from '../components/AddButton';
 
 export default function TaskPage() {
   const { monsterId } = useParams();
@@ -48,11 +48,11 @@ export default function TaskPage() {
         monsterId={monsterId}
         editStatus={editTaskStatus}
       />
-      <Footer
+      <AddButton
+        monster={false}
+        task={true}
         currentMonsterId={monsterId}
         add={true}
-        task={true}
-        monster={false}
       />
     </>
   );

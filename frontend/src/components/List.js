@@ -19,6 +19,6 @@ const ListStyled = styled.ul`
   li:last-child:after {
     content: '';
     display: block;
-    height: 30px;
+    height: 45px;
   }
 `;

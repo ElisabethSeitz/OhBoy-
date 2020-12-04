@@ -40,7 +40,7 @@ const ContentStyled = styled.div`
   display: grid;
   grid-template-rows: min-content min-content;
   margin: 2px 2px 2px 2px;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.6);
 
   .rewardDescription {
     margin: 0;
