@@ -6,6 +6,7 @@ import MonsterContext from '../contexts/MonsterContext';
 import Header from '../components/Header';
 import MonsterSection from '../components/MonsterSection';
 import OpenDoneSwitch from '../components/OpenDoneSwitch';
+import AddButton from '../components/AddButton';
 
 export default function RewardPage() {
   const { monsterId } = useParams();
@@ -29,12 +30,7 @@ export default function RewardPage() {
 
   return !monster ? null : (
     <>
-      <Header
-        currentMonsterId={monsterId}
-        task={false}
-        icons={true}
-        add={true}
-      />
+      <Header currentMonsterId={monsterId} task={false} icons={true} />
       <div>
         <MonsterSection
           monster={monster}
@@ -51,6 +47,12 @@ export default function RewardPage() {
         rewards={filteredRewards}
         monsterId={monsterId}
         editStatus={editRewardStatus}
+      />
+      <AddButton
+        monster={false}
+        task={false}
+        currentMonsterId={monsterId}
+        add={true}
       />
     </>
   );

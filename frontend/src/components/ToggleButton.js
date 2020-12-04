@@ -15,5 +15,5 @@ const ToggleButtonStyled = styled.button`
   border-left: var(--blue-border);
   padding: 0;
   background-color: white;
-  opacity: 0.5;
+  opacity: 0.6;
 `;

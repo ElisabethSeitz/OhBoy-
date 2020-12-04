@@ -1,9 +1,9 @@
 import { useHistory } from 'react-router-dom';
 import React from 'react';
 import ListItem from '../components/ListItem';
-import { BsCheck, BsStarFill } from 'react-icons/bs';
-import { GiPayMoney } from 'react-icons/gi';
+import { BsStarFill } from 'react-icons/bs';
 import styled from 'styled-components/macro';
+import ToggleButton from '../components/ToggleButton';
 
 export default function Reward({ reward, monsterId, editStatus }) {
   const history = useHistory();
@@ -18,22 +18,6 @@ export default function Reward({ reward, monsterId, editStatus }) {
     return null;
   }
 
-  function DisplayChangeStatusIcons() {
-    const statusOpen = reward.status === 'OPEN';
-    if (statusOpen) {
-      return (
-        <ButtonStyled onClick={handleClick}>
-          <BsCheckStyled />
-        </ButtonStyled>
-      );
-    }
-    return (
-      <ButtonStyled onClick={handleClick}>
-        <GiPayMoneyStyled />
-      </ButtonStyled>
-    );
-  }
-
   return (
     <ListItem>
       <ContentStyled onClick={handleEdit}>
@@ -43,7 +27,7 @@ export default function Reward({ reward, monsterId, editStatus }) {
           {' ' + reward.score}
         </p>
       </ContentStyled>
-      <DisplayChangeStatusIcons />
+      <ToggleButton status={reward.status} onClick={handleClick} />
     </ListItem>
   );
 
@@ -52,36 +36,16 @@ export default function Reward({ reward, monsterId, editStatus }) {
   }
 }
 
-const BsCheckStyled = styled(BsCheck)`
-  justify-self: end;
-  width: 30px;
-  height: 30px;
-  color: white;
-`;
-
-const GiPayMoneyStyled = styled(GiPayMoney)`
-  justify-self: end;
-  width: 30px;
-  height: 30px;
-  color: white;
-`;
-
-const ButtonStyled = styled.button`
-  background-color: var(--green-main);
-  opacity: 0.7;
-  border: none;
-  border-radius: 0 var(--size-s) var(--size-s) 0;
-  margin: 2px;
-`;
-
 const ContentStyled = styled.div`
   display: grid;
   grid-template-rows: min-content min-content;
-  margin: 0 0 2px 2px;
+  margin: 2px 2px 2px 2px;
+  background-color: rgba(255, 255, 255, 0.6);
 
   .rewardDescription {
     margin: 0;
     padding: var(--size-m);
+    border-radius: var(--size-s) 0 0 0;
   }
 
   .rewardScore {
