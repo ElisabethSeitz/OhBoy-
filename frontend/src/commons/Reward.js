@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom';
 import React from 'react';
 import ListItem from '../components/ListItem';
-import { BsCheck, BsStarFill } from 'react-icons/bs';
+import { BsStarFill } from 'react-icons/bs';
 import styled from 'styled-components/macro';
 import ToggleButton from '../components/ToggleButton';
 
