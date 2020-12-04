@@ -13,7 +13,7 @@ describe('component test :: MonsterPage', () => {
     );
 
     //When
-    const monsterHeadLine = queryByRole('heading', { name: /OhBoy!/i });
+    const monsterHeadLine = queryByRole('heading', { name: /OhKid!/i });
 
     //Then
     expect(monsterHeadLine).toBeInTheDocument();
