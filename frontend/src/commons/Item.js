@@ -5,32 +5,31 @@ import { BsStarFill } from 'react-icons/bs';
 import styled from 'styled-components/macro';
 import ToggleButton from '../components/ToggleButton';
 
-export default function Task({ task, monsterId, editStatus }) {
+export default function Item({ itemType, monsterId, editStatus, item }) {
   const history = useHistory();
 
   function handleEdit() {
-    const statusOpen = task.status === 'OPEN';
-    if (statusOpen) {
-      return history.push('/monsters/' + monsterId + '/tasks/edit/' + task.id);
-    }
-    return null;
+    const statusOpen = item.status === 'OPEN';
+    return statusOpen && itemType === 'task'
+      ? history.push('/monsters/' + monsterId + '/tasks/edit/' + item.id)
+      : history.push('/monsters/' + monsterId + '/rewards/edit/' + item.id);
   }
 
   return (
     <ListItem>
       <ContentStyled onClick={handleEdit}>
-        <p className="taskDescription">{task.description}</p>
+        <p className="taskDescription">{item.description}</p>
         <p className="taskScore">
           <BsStarFillStyled />
-          {' ' + task.score}
+          {' ' + item.score}
         </p>
       </ContentStyled>
-      <ToggleButton status={task.status} onClick={handleClick} />
+      <ToggleButton status={item.status} onClick={handleClick} />
     </ListItem>
   );
 
   function handleClick() {
-    editStatus(task.id);
+    editStatus(item.id);
   }
 }
 
