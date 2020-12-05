@@ -3,28 +3,22 @@ import styled from 'styled-components/macro';
 import { BsPlus } from 'react-icons/bs';
 import { useHistory } from 'react-router-dom';
 
-export default function AddButton({ monster, task, currentMonsterId, add }) {
+export default function AddButton({ monster, itemType, currentMonsterId }) {
   const history = useHistory();
-  return <DisplayAdd />;
-
-  function DisplayAdd() {
-    if (add) {
-      return (
-        <AddButtonStyled onClick={createAddLink(currentMonsterId)}>
-          <BsPlusStyled />
-        </AddButtonStyled>
-      );
-    }
-    return null;
-  }
+  return (
+    <AddButtonStyled onClick={createAddLink(currentMonsterId)}>
+      <BsPlusStyled />
+    </AddButtonStyled>
+  );
 
   function createAddLink(monsterId) {
     if (monster) {
       return () => history.push('/monsters/create');
     }
-    if (task) {
+    if (itemType === 'task') {
       return () => history.push('/monsters/' + monsterId + '/tasks/create');
-    } else
+    }
+    if (itemType === 'reward')
       return () => history.push('/monsters/' + monsterId + '/rewards/create');
   }
 }

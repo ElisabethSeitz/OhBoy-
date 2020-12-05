@@ -5,15 +5,17 @@ import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { BsStar, BsCheck } from 'react-icons/bs';
 
-export default function Header({ icons, displayedMonsterId, task }) {
+export default function Header({ icons, displayedMonsterId, itemType }) {
   const { monsters } = useContext(MonsterContext);
   const history = useHistory();
 
-  const LinkTasksOrRewards = (task, monsterId) => {
-    if (task) {
+  const LinkTasksOrRewards = (itemType, monsterId) => {
+    if (itemType === 'task') {
+      return () => history.push('/monsters/' + monsterId + '/rewards');
+    }
+    if (itemType === 'reward') {
       return () => history.push('/monsters/' + monsterId + '/tasks');
     }
-    return () => history.push('/monsters/' + monsterId + '/rewards');
   };
 
   return (
@@ -38,7 +40,7 @@ export default function Header({ icons, displayedMonsterId, task }) {
               <HeaderMonsterImage
                 src={monster.image}
                 alt={monster.name}
-                onClick={LinkTasksOrRewards(task, monster.id)}
+                onClick={LinkTasksOrRewards(itemType, monster.id)}
               />
             </MonsterImages>
           ))}
@@ -56,22 +58,28 @@ export default function Header({ icons, displayedMonsterId, task }) {
   }
 
   function TaskOrRewardIcon() {
-    if (task) {
+    if (itemType === 'task') {
       return (
-        <div className="rewards">
-          <BsStarStyled
-            onClick={LinkTasksOrRewards(false, displayedMonsterId)}
-          />
-          <p className="rewardsText">rewards</p>
+        <div
+          className="items"
+          onClick={LinkTasksOrRewards(itemType, displayedMonsterId)}
+        >
+          <BsStarStyled />
+          <p className="itemText">rewards</p>
         </div>
       );
     }
-    return (
-      <div className="tasks">
-        <BsCheckStyled onClick={LinkTasksOrRewards(true, displayedMonsterId)} />
-        <p className="tasksText">tasks</p>
-      </div>
-    );
+    if (itemType === 'reward') {
+      return (
+        <div
+          className="items"
+          onClick={LinkTasksOrRewards(itemType, displayedMonsterId)}
+        >
+          <BsCheckStyled />
+          <p className="itemText">tasks</p>
+        </div>
+      );
+    }
   }
 }
 
@@ -85,26 +93,14 @@ const HeaderStyled = styled.header`
   background-color: var(--beige-main);
   justify-items: end;
 
-  .rewards {
-    font-size: var(--size-m);
-    color: var(--grey-font);
-    grid-column: 3;
-    margin: 0 0 0 var(--size-xxl);
-    padding: 0;
-  }
-
-  .rewardsText {
-    margin: 0;
-  }
-
-  .tasks {
+  .items {
     font-size: var(--size-m);
     color: var(--grey-font);
     grid-column: 3;
     padding: 0;
   }
 
-  .tasksText {
+  .itemText {
     margin: 0;
   }
 `;
@@ -113,7 +109,8 @@ const HeadingStyled = styled.h1`
   margin: 0;
   padding: var(--size-xs) var(--size-xl);
   color: black;
-  font-size: var(--size-xl);
+  font-size: var(--size-xxl);
+  font-family: 'Glass Antiqua';
 `;
 
 const HeaderMonsterImage = styled.img`
