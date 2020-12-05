@@ -1,7 +1,7 @@
 import React from 'react';
 import CheckIcon from '@material-ui/icons/Check';
 import ReplayIcon from '@material-ui/icons/Replay';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 
 export default function ToggleButton({ status, ...rest }) {
   const setIcon = status === 'OPEN' ? <CheckIcon /> : <ReplayIcon />;
@@ -16,4 +16,10 @@ const ToggleButtonStyled = styled.button`
   padding: 0;
   background-color: white;
   opacity: 0.6;
+
+  ${(props) =>
+    props.itemType === 'reward' &&
+    css`
+      border-left: var(--green-border);
+    `}
 `;

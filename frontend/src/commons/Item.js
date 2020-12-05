@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import ListItem from '../components/ListItem';
 import { BsStarFill } from 'react-icons/bs';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import ToggleButton from '../components/ToggleButton';
 
 export default function Item({ itemType, monsterId, editStatus, item }) {
@@ -16,15 +16,23 @@ export default function Item({ itemType, monsterId, editStatus, item }) {
   }
 
   return (
-    <ListItem>
+    <ListItem itemType={itemType}>
       <ContentStyled onClick={handleEdit}>
-        <p className="taskDescription">{item.description}</p>
-        <p className="taskScore">
+        <p className="itemDescription">{item.description}</p>
+        <p
+          className={`itemScore ${
+            itemType === 'reward' ? `rewardScore` : `itemScore`
+          }`}
+        >
           <BsStarFillStyled />
           {' ' + item.score}
         </p>
       </ContentStyled>
-      <ToggleButton status={item.status} onClick={handleClick} />
+      <ToggleButton
+        status={item.status}
+        onClick={handleClick}
+        itemType={itemType}
+      />
     </ListItem>
   );
 
@@ -39,19 +47,23 @@ const ContentStyled = styled.div`
   margin: 2px 2px 2px 2px;
   background-color: rgba(255, 255, 255, 0.6);
 
-  .taskDescription {
+  .itemDescription {
     margin: 0;
     padding: var(--size-m);
     border-radius: var(--size-s) 0 0 0;
   }
 
-  .taskScore {
+  .itemScore {
     margin: 0;
     padding: var(--size-xs) var(--size-m);
     border-radius: 0 0 0 var(--size-s);
     background-color: var(--blue-main);
     opacity: 0.7;
     color: white;
+  }
+
+  .itemScore.rewardScore {
+    background-color: var(--green-main);
   }
 `;
 

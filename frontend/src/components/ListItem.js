@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 
 export default function ListItem({ children, ...rest }) {
   return <ItemStyled {...rest}>{children}</ItemStyled>;
@@ -11,4 +11,10 @@ const ItemStyled = styled.section`
   box-shadow: var(--grey-shadow);
   border: var(--blue-border);
   border-radius: var(--size-s);
+
+  ${(props) =>
+    props.itemType === 'reward' &&
+    css`
+      border: var(--green-border);
+    `}
 `;
