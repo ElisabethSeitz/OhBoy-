@@ -2,6 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 import backgroundImage from './commons/backgroundImage.png';
 
 export default createGlobalStyle`
+
   :root {
    --green-main: #A8CE00;
    /*--blue-75: #7589A2;
@@ -37,7 +38,6 @@ export default createGlobalStyle`
    
    //--blue-background: #E0E4E866;
   
-  
   }
 
   * {
@@ -46,7 +46,8 @@ export default createGlobalStyle`
   
   html, body {
     margin: 0;
-    font-family: 'Roboto Light', sans-serif;
+    font-family: sans-serif;
+    font-weight: 400;
   }
    
   input, textarea {
