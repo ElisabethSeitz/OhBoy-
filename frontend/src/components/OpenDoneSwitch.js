@@ -35,7 +35,8 @@ const OpenDoneSwitchStyled = styled.div`
   grid-template-columns: 1fr min-content 1fr;
   justify-items: center;
 
-  .open {
+  .open,
+  .done {
     justify-self: right;
     margin: 8px 0 0 0;
     color: var(--blue-main);
@@ -43,7 +44,5 @@ const OpenDoneSwitchStyled = styled.div`
 
   .done {
     justify-self: left;
-    margin: 8px 0 0 0;
-    color: var(--blue-main);
   }
 `;

@@ -1,14 +1,15 @@
 import React from 'react';
-import Reward from '../commons/Reward';
 import List from '../components/List';
+import Item from '../commons/Item';
 
 export default function RewardList({ rewards, monsterId, editStatus }) {
   return (
     <List>
       {rewards?.map((reward) => (
         <li key={reward.id}>
-          <Reward
-            reward={reward}
+          <Item
+            itemType="reward"
+            item={reward}
             monsterId={monsterId}
             editStatus={editStatus}
           />

@@ -30,7 +30,7 @@ export default function TaskPage() {
 
   return !monster ? null : (
     <>
-      <Header displayedMonsterId={monsterId} task={true} icons={true} />
+      <Header displayedMonsterId={monsterId} itemType="task" icons={true} />
       <div>
         <MonsterSection
           monster={monster}
@@ -48,12 +48,7 @@ export default function TaskPage() {
         monsterId={monsterId}
         editStatus={editTaskStatus}
       />
-      <AddButton
-        monster={false}
-        task={true}
-        currentMonsterId={monsterId}
-        add={true}
-      />
+      <AddButton monster={false} itemType="task" currentMonsterId={monsterId} />
     </>
   );
 

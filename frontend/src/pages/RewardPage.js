@@ -30,7 +30,7 @@ export default function RewardPage() {
 
   return !monster ? null : (
     <>
-      <Header displayedMonsterId={monsterId} task={false} icons={true} />
+      <Header displayedMonsterId={monsterId} itemType="reward" icons={true} />
       <div>
         <MonsterSection
           monster={monster}
@@ -50,9 +50,8 @@ export default function RewardPage() {
       />
       <AddButton
         monster={false}
-        task={false}
+        itemType="reward"
         currentMonsterId={monsterId}
-        add={true}
       />
     </>
   );

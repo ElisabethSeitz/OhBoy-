@@ -16,12 +16,7 @@ export default function AddTaskPage() {
 
   return !monster ? null : (
     <>
-      <Header
-        currentMonsterId={monsterId}
-        task={true}
-        icons={true}
-        add={false}
-      />
+      <Header displayedMonsterId={monsterId} itemType="task" icons={true} />
       <MonsterSectionSmall monster={monster} task={true} add={true} />
       <TaskForm onSave={handleSave} />
     </>
