@@ -9,6 +9,7 @@ export default function AddButton({ monster, itemType, currentMonsterId }) {
     <AddButtonStyled
       onClick={createAddLink(currentMonsterId)}
       itemType={itemType}
+      monster={monster}
     >
       <BsPlusStyled />
     </AddButtonStyled>
@@ -41,6 +42,12 @@ const AddButtonStyled = styled.button`
     props.itemType === 'reward' &&
     css`
       background-color: var(--green-main);
+    `}
+
+  ${(props) =>
+    props.monster &&
+    css`
+      background-color: var(--orange-main);
     `}
 `;
 

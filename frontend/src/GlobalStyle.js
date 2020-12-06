@@ -10,7 +10,7 @@ export default createGlobalStyle`
    --blue-25: #F8F8F8;*/
 
    --blue-main: #69A3B0;
-   --red-main: #F10058;
+   --orange-main: #D13016;
    --beige-main: #fcfcfa;
    /*--orange-75: #FF9C86;
    --orange-50: #FFBDAF;
@@ -34,7 +34,7 @@ export default createGlobalStyle`
    --black-border: 1px solid var(--black-main);
    --blue-border: 1px solid var(--blue-main);
    --green-border: 1px solid var(--green-main);
-   --red-border: 1px solid var(--red-main);
+   --orange-border: 1px solid var(--orange-main);
    
    //--blue-background: #E0E4E866;
   

@@ -6,7 +6,8 @@ import AddButton from '../components/AddButton';
 export default function MonsterPage() {
   return (
     <>
-      <Header icons={false} />
+      <Header icons={false} monster={true} />
+      <div> </div>
       <MonsterList />
       <AddButton monster={true} />
     </>

@@ -5,7 +5,12 @@ import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { BsStar, BsCheck } from 'react-icons/bs';
 
-export default function Header({ icons, displayedMonsterId, itemType }) {
+export default function Header({
+  icons,
+  displayedMonsterId,
+  itemType,
+  monster,
+}) {
   const { monsters } = useContext(MonsterContext);
   const history = useHistory();
 
@@ -19,7 +24,7 @@ export default function Header({ icons, displayedMonsterId, itemType }) {
   };
 
   return (
-    <HeaderStyled itemType={itemType}>
+    <HeaderStyled itemType={itemType} monster={monster}>
       <HeadingStyled onClick={() => history.push('/monsters')}>
         OhKid!
       </HeadingStyled>
@@ -102,6 +107,12 @@ const HeaderStyled = styled.header`
     props.itemType === 'reward' &&
     css`
       border-bottom: var(--green-border);
+    `}
+
+  ${(props) =>
+    props.monster &&
+    css`
+      border-bottom: var(--orange-border);
     `}
 
   .items {

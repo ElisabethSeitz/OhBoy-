@@ -10,9 +10,14 @@ export default function Item({ itemType, monsterId, editStatus, item }) {
 
   function handleEdit() {
     const statusOpen = item.status === 'OPEN';
-    return statusOpen && itemType === 'task'
-      ? history.push('/monsters/' + monsterId + '/tasks/edit/' + item.id)
-      : history.push('/monsters/' + monsterId + '/rewards/edit/' + item.id);
+    if (statusOpen && itemType === 'task') {
+      return history.push('/monsters/' + monsterId + '/tasks/edit/' + item.id);
+    }
+    if (statusOpen && itemType === 'reward') {
+      return history.push(
+        '/monsters/' + monsterId + '/rewards/edit/' + item.id
+      );
+    }
   }
 
   return (
@@ -41,7 +46,6 @@ const ContentStyled = styled.div`
   display: grid;
   grid-template-rows: min-content min-content;
   margin: 2px 2px 2px 2px;
-  background-color: rgba(255, 255, 255, 0.6);
 
   .itemDescription {
     margin: 0;

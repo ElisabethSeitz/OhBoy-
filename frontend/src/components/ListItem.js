@@ -11,10 +11,17 @@ const ItemStyled = styled.section`
   box-shadow: var(--grey-shadow);
   border: var(--blue-border);
   border-radius: var(--size-s);
+  background-color: rgba(255, 255, 255, 0.6);
 
   ${(props) =>
     props.itemType === 'reward' &&
     css`
       border: var(--green-border);
+    `}
+
+  ${(props) =>
+    props.monster &&
+    css`
+      border: var(--orange-border);
     `}
 `;
