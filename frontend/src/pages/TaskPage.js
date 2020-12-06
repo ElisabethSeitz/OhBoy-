@@ -36,11 +36,12 @@ export default function TaskPage() {
           monster={monster}
           filteredItems={filteredTasks}
           status={status}
-          task={true}
+          itemType="task"
         />
         <OpenDoneSwitch
           handleOnClickDONE={handleOnClickDONE}
           handleOnClickOPEN={handleOnClickOPEN}
+          itemType="task"
         />
       </div>
       <TaskList

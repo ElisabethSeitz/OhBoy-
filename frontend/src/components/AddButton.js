@@ -1,12 +1,15 @@
 import React from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { BsPlus } from 'react-icons/bs';
 import { useHistory } from 'react-router-dom';
 
 export default function AddButton({ monster, itemType, currentMonsterId }) {
   const history = useHistory();
   return (
-    <AddButtonStyled onClick={createAddLink(currentMonsterId)}>
+    <AddButtonStyled
+      onClick={createAddLink(currentMonsterId)}
+      itemType={itemType}
+    >
       <BsPlusStyled />
     </AddButtonStyled>
   );
@@ -33,6 +36,12 @@ const AddButtonStyled = styled.button`
   bottom: 20px;
   right: 20px;
   box-shadow: var(--grey-shadow);
+
+  ${(props) =>
+    props.itemType === 'reward' &&
+    css`
+      background-color: var(--green-main);
+    `}
 `;
 
 const BsPlusStyled = styled(BsPlus)`

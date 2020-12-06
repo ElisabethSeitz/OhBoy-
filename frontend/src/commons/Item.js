@@ -17,13 +17,9 @@ export default function Item({ itemType, monsterId, editStatus, item }) {
 
   return (
     <ListItem itemType={itemType}>
-      <ContentStyled onClick={handleEdit}>
+      <ContentStyled onClick={handleEdit} itemType={itemType}>
         <p className="itemDescription">{item.description}</p>
-        <p
-          className={`itemScore ${
-            itemType === 'reward' ? `rewardScore` : `itemScore`
-          }`}
-        >
+        <p className="itemScore">
           <BsStarFillStyled />
           {' ' + item.score}
         </p>
@@ -60,10 +56,12 @@ const ContentStyled = styled.div`
     background-color: var(--blue-main);
     opacity: 0.7;
     color: white;
-  }
 
-  .itemScore.rewardScore {
-    background-color: var(--green-main);
+    ${(props) =>
+      props.itemType === 'reward' &&
+      css`
+        background-color: var(--green-main);
+      `}
   }
 `;
 

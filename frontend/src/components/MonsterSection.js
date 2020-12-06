@@ -1,14 +1,14 @@
 import React from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 
 export default function MonsterSection({
   monster,
   filteredItems,
   status,
-  task,
+  itemType,
 }) {
   return (
-    <MonsterSectionStyled>
+    <MonsterSectionStyled itemType={itemType}>
       <p className="countItems">{filteredItems.length}</p>
       <DisplayTasksOrRewards />
       <div className="background1" />
@@ -30,7 +30,7 @@ export default function MonsterSection({
         </>
       );
     }
-    if (status !== 'OPEN' && task) {
+    if (status !== 'OPEN' && itemType === 'task') {
       return (
         <>
           <p className="calculatedScore">{monster?.scoreDoneTasks}</p>
@@ -47,7 +47,7 @@ export default function MonsterSection({
   }
 
   function DisplayTasksOrRewards() {
-    if (task) {
+    if (itemType === 'task') {
       return <p className="tasks">tasks</p>;
     }
     return <p className="rewards">rewards</p>;
@@ -128,6 +128,12 @@ const MonsterSectionStyled = styled.section`
     grid-row-start: 2;
     grid-row-end: span 2;
     border-radius: var(--size-s);
+
+    ${(props) =>
+      props.itemType === 'reward' &&
+      css`
+        background-color: rgba(168, 206, 0, 0.1);
+      `}
   }
 
   .background2 {

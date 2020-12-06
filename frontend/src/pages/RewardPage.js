@@ -36,11 +36,12 @@ export default function RewardPage() {
           monster={monster}
           filteredItems={filteredRewards}
           status={status}
-          task={false}
+          itemType="reward"
         />
         <OpenDoneSwitch
           handleOnClickDONE={handleOnClickDONE}
           handleOnClickOPEN={handleOnClickOPEN}
+          itemType="reward"
         />
       </div>
       <RewardList

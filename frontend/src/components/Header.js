@@ -11,15 +11,15 @@ export default function Header({ icons, displayedMonsterId, itemType }) {
 
   const LinkTasksOrRewards = (itemType, monsterId) => {
     if (itemType === 'task') {
-      return () => history.push('/monsters/' + monsterId + '/rewards');
+      return () => history.push('/monsters/' + monsterId + '/tasks');
     }
     if (itemType === 'reward') {
-      return () => history.push('/monsters/' + monsterId + '/tasks');
+      return () => history.push('/monsters/' + monsterId + '/rewards');
     }
   };
 
   return (
-    <HeaderStyled>
+    <HeaderStyled itemType={itemType}>
       <HeadingStyled onClick={() => history.push('/monsters')}>
         OhKid!
       </HeadingStyled>
@@ -35,7 +35,12 @@ export default function Header({ icons, displayedMonsterId, itemType }) {
           {monsters.map((monster) => (
             <MonsterImages
               key={monster.id}
-              currentMonster={monster.id === displayedMonsterId}
+              currentMonsterTask={
+                monster.id === displayedMonsterId && itemType === 'task'
+              }
+              currentMonsterReward={
+                monster.id === displayedMonsterId && itemType === 'reward'
+              }
             >
               <HeaderMonsterImage
                 src={monster.image}
@@ -62,7 +67,7 @@ export default function Header({ icons, displayedMonsterId, itemType }) {
       return (
         <div
           className="items"
-          onClick={LinkTasksOrRewards(itemType, displayedMonsterId)}
+          onClick={LinkTasksOrRewards('reward', displayedMonsterId)}
         >
           <BsStarStyled />
           <p className="itemText">rewards</p>
@@ -73,7 +78,7 @@ export default function Header({ icons, displayedMonsterId, itemType }) {
       return (
         <div
           className="items"
-          onClick={LinkTasksOrRewards(itemType, displayedMonsterId)}
+          onClick={LinkTasksOrRewards('task', displayedMonsterId)}
         >
           <BsCheckStyled />
           <p className="itemText">tasks</p>
@@ -92,6 +97,12 @@ const HeaderStyled = styled.header`
   border-bottom: var(--blue-border);
   background-color: var(--beige-main);
   justify-items: end;
+
+  ${(props) =>
+    props.itemType === 'reward' &&
+    css`
+      border-bottom: var(--green-border);
+    `}
 
   .items {
     font-size: var(--size-m);
@@ -126,9 +137,16 @@ const ImageContainer = styled.div`
 
 const MonsterImages = styled.div`
   ${(props) =>
-    props.currentMonster &&
+    props.currentMonsterTask &&
     css`
       background-color: rgba(105, 163, 176, 0.1);
+      border-radius: 60px;
+    `}
+
+  ${(props) =>
+    props.currentMonsterReward &&
+    css`
+      background-color: rgba(168, 206, 0, 0.1);
       border-radius: 60px;
     `}
 `;
