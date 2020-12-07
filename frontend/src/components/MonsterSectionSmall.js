@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 
-export default function MonsterSectionSmall({ monster, task, add }) {
+export default function MonsterSectionSmall({ monster, itemType, actionType }) {
   return (
     <MonsterSectionSmallStyled>
       <img className="monsterImage" src={monster?.image} alt={monster?.name} />
@@ -10,24 +10,24 @@ export default function MonsterSectionSmall({ monster, task, add }) {
   );
 
   function DisplayTaskOrReward() {
-    if (add && task) {
+    if (itemType === 'task' && actionType === 'create') {
       return (
         <p>
           add a task <br /> for {monster.name}
         </p>
       );
     }
-    if (add && !task) {
+    if (itemType === 'reward' && actionType === 'create') {
       return (
         <p>
           add a reward <br /> for {monster.name}
         </p>
       );
     }
-    if (!add && task) {
+    if (itemType === 'task' && actionType === 'edit') {
       return <p>edit this task</p>;
     }
-    if (!add && !task) {
+    if (itemType === 'reward' && actionType === 'edit') {
       return <p>edit this reward</p>;
     }
   }

@@ -1,6 +1,8 @@
 import React from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import TextareaField from '../components/TextareaField';
+import InputField from '../components/InputField';
 
 const initialState = {
   description: '',
@@ -13,26 +15,28 @@ export default function RewardForm({ onSave, reward = initialState }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>
+      <TextareaField
+        itemType="reward"
+        placeholder="enter reward"
+        name="description"
+        value={rewardData.description}
+        onChange={handleChange}
+        type="text"
+        required
+      >
         reward
-        <input
-          name="description"
-          value={rewardData.description}
-          onChange={handleChange}
-          type="text"
-          required
-        />
-      </label>
-      <label>
+      </TextareaField>
+      <InputField
+        itemType="reward"
+        placeholder="0"
+        name="score"
+        value={rewardData.score}
+        onChange={handleChange}
+        type="number"
+        required
+      >
         score
-        <input
-          name="score"
-          value={rewardData.score}
-          onChange={handleChange}
-          type="number"
-          required
-        />
-      </label>
+      </InputField>
       <button>Save</button>
       <button type="button" onClick={handleCancel}>
         Cancel

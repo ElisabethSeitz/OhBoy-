@@ -9,19 +9,19 @@ const ItemStyled = styled.section`
   display: grid;
   grid-template-columns: 4fr 1fr;
   box-shadow: var(--grey-shadow);
-  border: var(--blue-border);
+  border: var(--orange-border);
   border-radius: var(--size-s);
   background-color: rgba(255, 255, 255, 0.6);
+
+  ${(props) =>
+    props.itemType === 'task' &&
+    css`
+      border: var(--blue-border);
+    `}
 
   ${(props) =>
     props.itemType === 'reward' &&
     css`
       border: var(--green-border);
-    `}
-
-  ${(props) =>
-    props.monster &&
-    css`
-      border: var(--orange-border);
     `}
 `;

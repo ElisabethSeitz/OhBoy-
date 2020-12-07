@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MonsterGallery from './MonsterGallery';
 import { useHistory } from 'react-router-dom';
+import InputField from '../components/InputField';
 
 const initialState = {
   name: '',
@@ -17,16 +18,16 @@ export default function MonsterForm({ onSave, monster = initialState }) {
         savedMonsterImage={monster.image}
         imageChangedHandler={setMonsterImage}
       />
-      <label>
+      <InputField
+        name="name"
+        placeholder="enter name"
+        value={monsterData.name}
+        onChange={handleChange}
+        type="text"
+        required
+      >
         name
-        <input
-          name="name"
-          value={monsterData.name}
-          onChange={handleChange}
-          type="text"
-          required
-        />
-      </label>
+      </InputField>
       <button>Save</button>
       <button type="button" onClick={handleCancel}>
         Cancel

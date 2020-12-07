@@ -7,9 +7,9 @@ import styled from 'styled-components/macro';
 export default function MonsterPage() {
   return (
     <MonsterPageLayout>
-      <Header icons={false} monster={true} />
+      <Header icons={false} />
       <MonsterList />
-      <AddButton monster={true} />
+      <AddButton itemType="monster" />
     </MonsterPageLayout>
   );
 }

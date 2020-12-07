@@ -3,20 +3,19 @@ import styled, { css } from 'styled-components/macro';
 import { BsPlus } from 'react-icons/bs';
 import { useHistory } from 'react-router-dom';
 
-export default function AddButton({ monster, itemType, currentMonsterId }) {
+export default function AddButton({ itemType, currentMonsterId }) {
   const history = useHistory();
   return (
     <AddButtonStyled
       onClick={createAddLink(currentMonsterId)}
       itemType={itemType}
-      monster={monster}
     >
       <BsPlusStyled />
     </AddButtonStyled>
   );
 
   function createAddLink(monsterId) {
-    if (monster) {
+    if (itemType === 'monster') {
       return () => history.push('/monsters/create');
     }
     if (itemType === 'task') {
@@ -32,22 +31,22 @@ const AddButtonStyled = styled.button`
   width: 50px;
   border: none;
   border-radius: 60px;
-  background-color: var(--blue-main);
+  background-color: var(--orange-main);
   position: absolute;
   bottom: 20px;
   right: 20px;
   box-shadow: var(--grey-shadow);
 
   ${(props) =>
-    props.itemType === 'reward' &&
+    props.itemType === 'task' &&
     css`
-      background-color: var(--green-main);
+      background-color: var(--blue-main);
     `}
 
   ${(props) =>
-    props.monster &&
+    props.itemType === 'reward' &&
     css`
-      background-color: var(--orange-main);
+      background-color: var(--green-main);
     `}
 `;
 

@@ -18,7 +18,11 @@ export default function EditRewardPage() {
   return !reward ? null : (
     <>
       <Header displayedMonsterId={monsterId} itemType="reward" icons={true} />
-      <MonsterSectionSmall monster={monster} task={false} add={false} />
+      <MonsterSectionSmall
+        monster={monster}
+        itemType="reward"
+        actionType="edit"
+      />
       <div>
         <RewardForm onSave={handleSave} reward={reward} />
         <button type="button" onClick={handleDelete}>

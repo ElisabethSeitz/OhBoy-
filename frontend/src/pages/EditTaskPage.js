@@ -18,7 +18,11 @@ export default function EditTaskPage() {
   return !task ? null : (
     <>
       <Header displayedMonsterId={monsterId} itemType="task" icons={true} />
-      <MonsterSectionSmall monster={monster} task={true} add={false} />
+      <MonsterSectionSmall
+        monster={monster}
+        itemType="task"
+        actionType="edit"
+      />
       <div>
         <TaskForm onSave={handleSave} task={task} />
         <button type="button" onClick={handleDelete}>

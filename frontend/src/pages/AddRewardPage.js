@@ -17,7 +17,11 @@ export default function AddRewardPage() {
   return !monster ? null : (
     <>
       <Header displayedMonsterId={monsterId} itemType="reward" icons={true} />
-      <MonsterSectionSmall monster={monster} task={false} add={true} />
+      <MonsterSectionSmall
+        monster={monster}
+        itemType="reward"
+        actionType="create"
+      />
       <RewardForm onSave={handleSave} />
     </>
   );

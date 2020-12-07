@@ -8,7 +8,7 @@ export default function Monster({ monster }) {
   const history = useHistory();
 
   return (
-    <ListItem monster={true}>
+    <ListItem>
       <ContentStyled onClick={handleClick}>
         <img src={monster.image} alt="monster" />
         <p>{monster.name}</p>
