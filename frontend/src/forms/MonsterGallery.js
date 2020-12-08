@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styled, { css } from 'styled-components/macro';
+import styled from 'styled-components/macro';
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 
 const images = [

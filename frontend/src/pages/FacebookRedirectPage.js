@@ -17,9 +17,5 @@ export default function FacebookRedirectPage() {
     // eslint-disable-next-line
   }, [code]);
 
-  return (
-    <>
-      <p>Success, welcome to OhBoy</p>
-    </>
-  );
+  return <></>;
 }
