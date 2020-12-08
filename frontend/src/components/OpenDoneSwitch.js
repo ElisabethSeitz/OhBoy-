@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Switch from '@material-ui/core/Switch';
 import styled, { css } from 'styled-components/macro';
 
@@ -7,7 +7,7 @@ export default function OpenDoneSwitch({
   handleOnClickOPEN,
   itemType,
 }) {
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     checked: false,
   });
 

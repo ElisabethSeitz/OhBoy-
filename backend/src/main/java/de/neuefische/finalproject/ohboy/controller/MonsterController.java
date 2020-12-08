@@ -13,7 +13,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping(value= "/api/monster")
+@RequestMapping("/api/monster")
 public class MonsterController {
 
     private final MonsterService monsterService;

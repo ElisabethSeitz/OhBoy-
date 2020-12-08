@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
+const images = [
+  '/monsterImages/monster0.png',
+  '/monsterImages/monster1.png',
+  '/monsterImages/monster2.png',
+  '/monsterImages/monster3.png',
+  '/monsterImages/monster4.png',
+];
+
 export default function MonsterGallery({
   savedMonsterImage,
-  imageChangedHandler,
+  handleImageChange,
 }) {
-  const images = [
-    '/monsterImages/monster0.png',
-    '/monsterImages/monster1.png',
-    '/monsterImages/monster2.png',
-    '/monsterImages/monster3.png',
-    '/monsterImages/monster4.png',
-  ];
-
   const savedMonsterIndex = savedMonsterImage
     ? images.indexOf(savedMonsterImage)
     : -1;
@@ -20,7 +20,7 @@ export default function MonsterGallery({
   const currentImage = images[imageIndex];
 
   useEffect(() => {
-    imageChangedHandler(currentImage);
+    handleImageChange(currentImage);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentImage]);
 

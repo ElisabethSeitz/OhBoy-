@@ -14,17 +14,17 @@ export default function RewardPage() {
   const [status, setStatus] = useState('OPEN');
 
   const [monster, setMonster] = useState();
-  const { rewardsFilter, editStatus } = useRewardsByMonsterId(monsterId);
+  const { filterRewards, editStatus } = useRewardsByMonsterId(monsterId);
   const [filteredRewards, setFilteredRewards] = useState([]);
 
   useEffect(() => {
     setMonster(monsters.find((m) => m.id === monsterId));
-    rewardsFilter(status, true).then(setFilteredRewards);
+    filterRewards(status, true).then(setFilteredRewards);
     // eslint-disable-next-line
   }, [monsters, monsterId]);
 
   useEffect(() => {
-    rewardsFilter(status, false).then(setFilteredRewards);
+    filterRewards(status, false).then(setFilteredRewards);
     // eslint-disable-next-line
   }, [status]);
 

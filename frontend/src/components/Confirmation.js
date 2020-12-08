@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Button from './Button';
-import styled, { css } from 'styled-components/macro';
+import styled from 'styled-components/macro';
 
 export default function Confirmation({ question, label, onClick }) {
   const [confirmed, setConfirmed] = useState(false);

@@ -19,7 +19,7 @@ export default function useRewardsByMonsterId(monsterId) {
         .catch(console.log);
   }, [monsterId, tokenIsValid, token]);
 
-  const rewardsFilter = async (status, reloadRewards) => {
+  const filterRewards = async (status, reloadRewards) => {
     let rewardsToFilter = rewards;
     if (reloadRewards) {
       rewardsToFilter = await getRewardsByMonsterId(token, monsterId);
@@ -60,5 +60,5 @@ export default function useRewardsByMonsterId(monsterId) {
       )
       .catch(console.log);
 
-  return { rewards, rewardsFilter, create, edit, remove, editStatus };
+  return { rewards, filterRewards, create, edit, remove, editStatus };
 }

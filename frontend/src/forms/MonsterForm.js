@@ -17,7 +17,7 @@ export default function MonsterForm({ onSave, monster = initialState }) {
     <form onSubmit={handleSubmit}>
       <MonsterGallery
         savedMonsterImage={monster.image}
-        imageChangedHandler={setMonsterImage}
+        handleImageChange={setMonsterImage}
       />
       <InputField
         name="name"
