@@ -10,9 +10,8 @@ export default function AddMonsterPage() {
 
   return (
     <>
-      <Header icons={false} add={false} />
-      <h5>add your monster</h5>
-      <MonsterForm onSave={handleSave} />
+      <Header icons={false} />
+      <MonsterForm onSave={handleSave} actionType="create" />
     </>
   );
 

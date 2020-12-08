@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import MonsterGallery from './MonsterGallery';
 import { useHistory } from 'react-router-dom';
+import InputField from '../components/InputField';
+import Button from '../components/Button';
 
 const initialState = {
   name: '',
   image: '',
 };
 
-export default function MonsterForm({ onSave, monster = initialState }) {
+export default function MonsterForm({
+  onSave,
+  monster = initialState,
+  actionType,
+}) {
   const [monsterData, setMonsterData] = useState(monster);
   const history = useHistory();
 
@@ -15,22 +21,22 @@ export default function MonsterForm({ onSave, monster = initialState }) {
     <form onSubmit={handleSubmit}>
       <MonsterGallery
         savedMonsterImage={monster.image}
-        imageChangedHandler={setMonsterImage}
+        handleImageChange={setMonsterImage}
+        actionType={actionType}
       />
-      <label>
+      <InputField
+        name="name"
+        value={monsterData.name}
+        onChange={handleChange}
+        type="text"
+        required
+      >
         name
-        <input
-          name="name"
-          value={monsterData.name}
-          onChange={handleChange}
-          type="text"
-          required
-        />
-      </label>
-      <button>Save</button>
-      <button type="button" onClick={handleCancel}>
+      </InputField>
+      <Button name="save">Save</Button>
+      <Button name="cancel" type="button" onClick={handleCancel}>
         Cancel
-      </button>
+      </Button>
     </form>
   );
 
@@ -48,6 +54,6 @@ export default function MonsterForm({ onSave, monster = initialState }) {
   }
 
   function handleCancel() {
-    history.goBack();
+    history.push('/monsters');
   }
 }

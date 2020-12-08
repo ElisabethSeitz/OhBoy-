@@ -5,6 +5,7 @@ import RewardForm from '../forms/RewardForm';
 import MonsterContext from '../contexts/MonsterContext';
 import Header from '../components/Header';
 import MonsterSectionSmall from '../components/MonsterSectionSmall';
+import Button from '../components/Button';
 
 export default function EditRewardPage() {
   const { monsterId, rewardId } = useParams();
@@ -17,17 +18,18 @@ export default function EditRewardPage() {
 
   return !reward ? null : (
     <>
-      <Header
-        currentMonsterId={monsterId}
-        task={false}
-        icons={true}
-        add={false}
+      <Header displayedMonsterId={monsterId} itemType="reward" icons={true} />
+      <MonsterSectionSmall
+        monster={monster}
+        itemType="reward"
+        actionType="edit"
       />
-      <MonsterSectionSmall monster={monster} task={false} add={false} />
-      <RewardForm onSave={handleSave} reward={reward} />
-      <button type="button" onClick={handleDelete}>
-        Delete
-      </button>
+      <div>
+        <RewardForm onSave={handleSave} reward={reward} monsterId={monsterId} />
+        <Button name="delete" type="button" onClick={handleDelete}>
+          Delete
+        </Button>
+      </div>
     </>
   );
 

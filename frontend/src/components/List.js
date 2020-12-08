@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 
-export default function List({ children }) {
-  return <ListStyled>{children}</ListStyled>;
+export default function List({ children, ...rest }) {
+  return <ListStyled {...rest}>{children}</ListStyled>;
 }
 
 const ListStyled = styled.ul`

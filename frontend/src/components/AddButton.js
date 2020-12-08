@@ -1,30 +1,27 @@
 import React from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { BsPlus } from 'react-icons/bs';
 import { useHistory } from 'react-router-dom';
 
-export default function AddButton({ monster, task, currentMonsterId, add }) {
+export default function AddButton({ itemType, currentMonsterId }) {
   const history = useHistory();
-  return <DisplayAdd />;
-
-  function DisplayAdd() {
-    if (add) {
-      return (
-        <AddButtonStyled onClick={createAddLink(currentMonsterId)}>
-          <BsPlusStyled />
-        </AddButtonStyled>
-      );
-    }
-    return null;
-  }
+  return (
+    <AddButtonStyled
+      onClick={createAddLink(currentMonsterId)}
+      itemType={itemType}
+    >
+      <BsPlusStyled />
+    </AddButtonStyled>
+  );
 
   function createAddLink(monsterId) {
-    if (monster) {
+    if (itemType === 'monster') {
       return () => history.push('/monsters/create');
     }
-    if (task) {
+    if (itemType === 'task') {
       return () => history.push('/monsters/' + monsterId + '/tasks/create');
-    } else
+    }
+    if (itemType === 'reward')
       return () => history.push('/monsters/' + monsterId + '/rewards/create');
   }
 }
@@ -34,11 +31,23 @@ const AddButtonStyled = styled.button`
   width: 50px;
   border: none;
   border-radius: 60px;
-  background-color: var(--blue-main);
+  background-color: var(--orange-main);
   position: absolute;
   bottom: 20px;
   right: 20px;
   box-shadow: var(--grey-shadow);
+
+  ${(props) =>
+    props.itemType === 'task' &&
+    css`
+      background-color: var(--blue-main);
+    `}
+
+  ${(props) =>
+    props.itemType === 'reward' &&
+    css`
+      background-color: var(--green-main);
+    `}
 `;
 
 const BsPlusStyled = styled(BsPlus)`

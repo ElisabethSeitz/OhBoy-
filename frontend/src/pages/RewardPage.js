@@ -14,33 +14,34 @@ export default function RewardPage() {
   const [status, setStatus] = useState('OPEN');
 
   const [monster, setMonster] = useState();
-  const { rewardsFilter, editStatus } = useRewardsByMonsterId(monsterId);
+  const { filterRewards, editStatus } = useRewardsByMonsterId(monsterId);
   const [filteredRewards, setFilteredRewards] = useState([]);
 
   useEffect(() => {
     setMonster(monsters.find((m) => m.id === monsterId));
-    rewardsFilter(status, true).then(setFilteredRewards);
+    filterRewards(status, true).then(setFilteredRewards);
     // eslint-disable-next-line
   }, [monsters, monsterId]);
 
   useEffect(() => {
-    rewardsFilter(status, false).then(setFilteredRewards);
+    filterRewards(status, false).then(setFilteredRewards);
     // eslint-disable-next-line
   }, [status]);
 
   return !monster ? null : (
     <>
-      <Header currentMonsterId={monsterId} task={false} icons={true} />
+      <Header displayedMonsterId={monsterId} itemType="reward" icons={true} />
       <div>
         <MonsterSection
           monster={monster}
           filteredItems={filteredRewards}
           status={status}
-          task={false}
+          itemType="reward"
         />
         <OpenDoneSwitch
           handleOnClickDONE={handleOnClickDONE}
           handleOnClickOPEN={handleOnClickOPEN}
+          itemType="reward"
         />
       </div>
       <RewardList
@@ -50,9 +51,8 @@ export default function RewardPage() {
       />
       <AddButton
         monster={false}
-        task={false}
+        itemType="reward"
         currentMonsterId={monsterId}
-        add={true}
       />
     </>
   );

@@ -30,17 +30,18 @@ export default function TaskPage() {
 
   return !monster ? null : (
     <>
-      <Header currentMonsterId={monsterId} task={true} icons={true} />
+      <Header displayedMonsterId={monsterId} itemType="task" icons={true} />
       <div>
         <MonsterSection
           monster={monster}
           filteredItems={filteredTasks}
           status={status}
-          task={true}
+          itemType="task"
         />
         <OpenDoneSwitch
           handleOnClickDONE={handleOnClickDONE}
           handleOnClickOPEN={handleOnClickOPEN}
+          itemType="task"
         />
       </div>
       <TaskList
@@ -48,12 +49,7 @@ export default function TaskPage() {
         monsterId={monsterId}
         editStatus={editTaskStatus}
       />
-      <AddButton
-        monster={false}
-        task={true}
-        currentMonsterId={monsterId}
-        add={true}
-      />
+      <AddButton monster={false} itemType="task" currentMonsterId={monsterId} />
     </>
   );
 

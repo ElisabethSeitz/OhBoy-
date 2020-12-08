@@ -1,21 +1,21 @@
 import React from 'react';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 
 export default function MonsterSection({
   monster,
   filteredItems,
   status,
-  task,
+  itemType,
 }) {
   return (
-    <MonsterSectionStyled>
-      <p className="countTasks">{filteredItems.length}</p>
+    <MonsterSectionStyled itemType={itemType}>
+      <p className="countItems">{filteredItems.length}</p>
       <DisplayTasksOrRewards />
-      <div className="circle1" />
+      <div className="background1" />
       <img className="monsterImage" src={monster.image} alt={monster.name} />
       <p className="monsterName">{monster.name}</p>
       <DisplayBalanceOrScorePayout />
-      <div className="circle2" />
+      <div className="background2" />
     </MonsterSectionStyled>
   );
 
@@ -30,7 +30,7 @@ export default function MonsterSection({
         </>
       );
     }
-    if (status !== 'OPEN' && task) {
+    if (status !== 'OPEN' && itemType === 'task') {
       return (
         <>
           <p className="calculatedScore">{monster?.scoreDoneTasks}</p>
@@ -47,7 +47,7 @@ export default function MonsterSection({
   }
 
   function DisplayTasksOrRewards() {
-    if (task) {
+    if (itemType === 'task') {
       return <p className="tasks">tasks</p>;
     }
     return <p className="rewards">rewards</p>;
@@ -60,21 +60,16 @@ const MonsterSectionStyled = styled.section`
   grid-template-rows: min-content min-content min-content min-content;
   justify-items: center;
 
-  .countTasks {
+  .countItems {
     margin: 0;
     padding-bottom: var(--size-s);
     grid-column: 2;
     grid-row: 2;
     align-self: end;
+    font-weight: 500;
   }
 
-  .tasks {
-    margin: 0;
-    grid-column: 2;
-    grid-row: 3;
-    color: var(--grey-font);
-  }
-
+  .tasks,
   .rewards {
     margin: 0;
     grid-column: 2;
@@ -82,28 +77,15 @@ const MonsterSectionStyled = styled.section`
     color: var(--grey-font);
   }
 
+  .calculatedScore,
+  .calculatedPayout,
   .calculatedBalance {
     margin: 0;
     padding-bottom: var(--size-s);
     grid-column: 4;
     grid-row: 2;
     align-self: end;
-  }
-
-  .calculatedScore {
-    margin: 0;
-    padding-bottom: var(--size-s);
-    grid-column: 4;
-    grid-row: 2;
-    align-self: end;
-  }
-
-  .calculatedPayout {
-    margin: 0;
-    padding-bottom: var(--size-s);
-    grid-column: 4;
-    grid-row: 2;
-    align-self: end;
+    font-weight: 500;
   }
 
   .balance {
@@ -113,13 +95,7 @@ const MonsterSectionStyled = styled.section`
     color: var(--grey-font);
   }
 
-  .score {
-    margin: 0;
-    grid-column: 4;
-    grid-row: 3;
-    color: var(--grey-font);
-  }
-
+  .score,
   .payout {
     margin: 0;
     grid-column: 4;
@@ -139,11 +115,12 @@ const MonsterSectionStyled = styled.section`
     padding-bottom: var(--size-xs);
     grid-column: 3;
     grid-row: 4;
-    font-size: var(--size-l);
-    font-weight: 600;
+    font-size: var(--size-xl);
+    font-family: 'Glass Antiqua';
   }
 
-  .circle1 {
+  .background1,
+  .background2 {
     height: 90px;
     width: 90px;
     background-color: rgba(105, 163, 176, 0.1);
@@ -151,15 +128,16 @@ const MonsterSectionStyled = styled.section`
     grid-row-start: 2;
     grid-row-end: span 2;
     border-radius: var(--size-s);
+
+    ${(props) =>
+      props.itemType === 'reward' &&
+      css`
+        background-color: rgba(168, 206, 0, 0.1);
+      `}
   }
 
-  .circle2 {
-    height: 90px;
-    width: 90px;
-    background-color: rgba(105, 163, 176, 0.1);
+  .background2 {
     grid-column: 4;
     grid-row-start: 2;
-    grid-row-end: span 2;
-    border-radius: var(--size-s);
   }
 `;

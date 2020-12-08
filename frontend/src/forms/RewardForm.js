@@ -1,42 +1,50 @@
 import React from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import TextareaField from '../components/TextareaField';
+import InputField from '../components/InputField';
+import Button from '../components/Button';
 
 const initialState = {
   description: '',
   score: '',
 };
 
-export default function RewardForm({ onSave, reward = initialState }) {
+export default function RewardForm({
+  onSave,
+  reward = initialState,
+  monsterId,
+}) {
   const [rewardData, setRewardData] = useState(reward);
   const history = useHistory();
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>
+      <TextareaField
+        itemType="reward"
+        name="description"
+        value={rewardData.description}
+        onChange={handleChange}
+        type="text"
+        required
+      >
         reward
-        <input
-          name="description"
-          value={rewardData.description}
-          onChange={handleChange}
-          type="text"
-          required
-        />
-      </label>
-      <label>
+      </TextareaField>
+      <InputField
+        itemType="reward"
+        placeholder="0"
+        name="score"
+        value={rewardData.score}
+        onChange={handleChange}
+        type="number"
+        required
+      >
         score
-        <input
-          name="score"
-          value={rewardData.score}
-          onChange={handleChange}
-          type="number"
-          required
-        />
-      </label>
-      <button>Save</button>
-      <button type="button" onClick={handleCancel}>
+      </InputField>
+      <Button name="save">Save</Button>
+      <Button name="cancel" type="button" onClick={handleCancel}>
         Cancel
-      </button>
+      </Button>
     </form>
   );
 
@@ -50,6 +58,6 @@ export default function RewardForm({ onSave, reward = initialState }) {
   }
 
   function handleCancel() {
-    history.goBack();
+    history.push('/monsters/' + monsterId + '/rewards');
   }
 }

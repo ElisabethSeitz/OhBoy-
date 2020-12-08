@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Switch from '@material-ui/core/Switch';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 
 export default function OpenDoneSwitch({
   handleOnClickDONE,
   handleOnClickOPEN,
+  itemType,
 }) {
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     checked: false,
   });
 
@@ -16,7 +17,7 @@ export default function OpenDoneSwitch({
   };
 
   return (
-    <OpenDoneSwitchStyled>
+    <OpenDoneSwitchStyled itemType={itemType}>
       <p className="open">open</p>
       <Switch
         checked={state.checked}
@@ -35,15 +36,20 @@ const OpenDoneSwitchStyled = styled.div`
   grid-template-columns: 1fr min-content 1fr;
   justify-items: center;
 
-  .open {
+  .open,
+  .done {
     justify-self: right;
     margin: 8px 0 0 0;
     color: var(--blue-main);
+
+    ${(props) =>
+      props.itemType === 'reward' &&
+      css`
+        color: var(--green-main);
+      `}
   }
 
   .done {
     justify-self: left;
-    margin: 8px 0 0 0;
-    color: var(--blue-main);
   }
 `;

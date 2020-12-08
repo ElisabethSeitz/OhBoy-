@@ -1,27 +1,25 @@
 import React from 'react';
 import MonsterContext from '../contexts/MonsterContext';
-import styled from 'styled-components/macro';
+import styled, { css } from 'styled-components/macro';
 import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { BsStar, BsCheck } from 'react-icons/bs';
 
-export default function Header({ icons, currentMonsterId, task }) {
+export default function Header({ icons, displayedMonsterId, itemType }) {
   const { monsters } = useContext(MonsterContext);
   const history = useHistory();
 
-  const monstersToDisplay = monsters?.filter(
-    (monster) => monster.id !== currentMonsterId
-  );
-
-  const LinkTasksOrRewards = (task, monsterId) => {
-    if (task) {
+  const LinkTasksOrRewards = (itemType, monsterId) => {
+    if (itemType === 'task') {
       return () => history.push('/monsters/' + monsterId + '/tasks');
     }
-    return () => history.push('/monsters/' + monsterId + '/rewards');
+    if (itemType === 'reward') {
+      return () => history.push('/monsters/' + monsterId + '/rewards');
+    }
   };
 
   return (
-    <HeaderStyled>
+    <HeaderStyled itemType={itemType}>
       <HeadingStyled onClick={() => history.push('/monsters')}>
         OhKid!
       </HeadingStyled>
@@ -34,14 +32,22 @@ export default function Header({ icons, currentMonsterId, task }) {
     if (icons) {
       return (
         <ImageContainer>
-          {monstersToDisplay.map((monster) => (
-            <div key={monster.id}>
+          {monsters.map((monster) => (
+            <MonsterImages
+              key={monster.id}
+              currentMonsterTask={
+                monster.id === displayedMonsterId && itemType === 'task'
+              }
+              currentMonsterReward={
+                monster.id === displayedMonsterId && itemType === 'reward'
+              }
+            >
               <HeaderMonsterImage
                 src={monster.image}
                 alt={monster.name}
-                onClick={LinkTasksOrRewards(task, monster.id)}
+                onClick={LinkTasksOrRewards(itemType, monster.id)}
               />
-            </div>
+            </MonsterImages>
           ))}
         </ImageContainer>
       );
@@ -57,20 +63,28 @@ export default function Header({ icons, currentMonsterId, task }) {
   }
 
   function TaskOrRewardIcon() {
-    if (task) {
+    if (itemType === 'task') {
       return (
-        <div className="rewards">
-          <BsStarStyled onClick={LinkTasksOrRewards(false, currentMonsterId)} />
-          <p className="rewardsText">rewards</p>
+        <div
+          className="items"
+          onClick={LinkTasksOrRewards('reward', displayedMonsterId)}
+        >
+          <BsStarStyled />
+          <p className="itemText">rewards</p>
         </div>
       );
     }
-    return (
-      <div className="tasks">
-        <BsCheckStyled onClick={LinkTasksOrRewards(true, currentMonsterId)} />
-        <p className="tasksText">tasks</p>
-      </div>
-    );
+    if (itemType === 'reward') {
+      return (
+        <div
+          className="items"
+          onClick={LinkTasksOrRewards('task', displayedMonsterId)}
+        >
+          <BsCheckStyled />
+          <p className="itemText">tasks</p>
+        </div>
+      );
+    }
   }
 }
 
@@ -80,30 +94,30 @@ const HeaderStyled = styled.header`
   grid-template-columns: min-content 4fr 2fr var(--size-xxl);
   padding: var(--size-s) 0;
   margin: 0;
-  border-bottom: var(--blue-border);
+  border-bottom: var(--orange-border);
   background-color: var(--beige-main);
   justify-items: end;
 
-  .rewards {
+  ${(props) =>
+    props.itemType === 'task' &&
+    css`
+      border-bottom: var(--blue-border);
+    `}
+
+  ${(props) =>
+    props.itemType === 'reward' &&
+    css`
+      border-bottom: var(--green-border);
+    `}
+
+  .items {
     font-size: var(--size-m);
     color: var(--grey-font);
     grid-column: 3;
-    margin: 0 0 0 var(--size-xxl);
     padding: 0;
   }
 
-  .rewardsText {
-    margin: 0;
-  }
-
-  .tasks {
-    font-size: var(--size-m);
-    color: var(--grey-font);
-    grid-column: 3;
-    padding: 0;
-  }
-
-  .tasksText {
+  .itemText {
     margin: 0;
   }
 `;
@@ -112,18 +126,35 @@ const HeadingStyled = styled.h1`
   margin: 0;
   padding: var(--size-xs) var(--size-xl);
   color: black;
-  font-size: var(--size-xl);
+  font-size: var(--size-xxl);
+  font-family: 'Glass Antiqua';
 `;
 
 const HeaderMonsterImage = styled.img`
   width: 30px;
   height: 30px;
-  margin-right: var(--size-s);
+  margin: var(--size-xs) var(--size-xs) 0 var(--size-xs);
 `;
 
 const ImageContainer = styled.div`
   justify-self: end;
   display: flex;
+`;
+
+const MonsterImages = styled.div`
+  ${(props) =>
+    props.currentMonsterTask &&
+    css`
+      background-color: rgba(105, 163, 176, 0.1);
+      border-radius: 90px;
+    `}
+
+  ${(props) =>
+    props.currentMonsterReward &&
+    css`
+      background-color: rgba(168, 206, 0, 0.1);
+      border-radius: 90px;
+    `}
 `;
 
 const BsCheckStyled = styled(BsCheck)`

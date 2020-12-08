@@ -1,41 +1,46 @@
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useState } from 'react';
+import InputField from '../components/InputField';
+import TextareaField from '../components/TextareaField';
+import Button from '../components/Button';
 
 const initialState = {
   description: '',
   score: '',
 };
 
-export default function TaskForm({ onSave, task = initialState }) {
+export default function TaskForm({ onSave, task = initialState, monsterId }) {
   const [taskData, setTaskData] = useState(task);
   const history = useHistory();
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>
+      <TextareaField
+        itemType="task"
+        name="description"
+        value={taskData.description}
+        onChange={handleChange}
+        type="text"
+        required
+      >
         task
-        <input
-          name="description"
-          value={taskData.description}
-          onChange={handleChange}
-          type="text"
-          required
-        />
-      </label>
-      <label>
+      </TextareaField>
+      <InputField
+        itemType="task"
+        placeholder="0"
+        name="score"
+        value={taskData.score}
+        onChange={handleChange}
+        type="number"
+        required
+      >
         score
-        <input
-          name="score"
-          value={taskData.score}
-          onChange={handleChange}
-          type="number"
-          required
-        />
-      </label>
-      <button>Save</button>
-      <button type="button" onClick={handleCancel}>
+      </InputField>
+      <Button name="save">Save</Button>
+      <Button name="cancel" type="button" onClick={handleCancel}>
         Cancel
-      </button>
+      </Button>
     </form>
   );
 
@@ -49,6 +54,6 @@ export default function TaskForm({ onSave, task = initialState }) {
   }
 
   function handleCancel() {
-    history.goBack();
+    history.push('/monsters/' + monsterId + '/tasks');
   }
 }
