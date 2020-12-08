@@ -38,7 +38,7 @@ const Logo = styled.img`
   justify-self: center;
 `;
 
-const FacebookButton = styled.button`
+const FacebookButton = styled.div`
   display: grid;
   grid-template-columns: min-content 1fr;
   grid-template-rows: 1fr;
@@ -47,7 +47,6 @@ const FacebookButton = styled.button`
   width: 225px;
   height: 40px;
   background-color: rgb(68, 120, 242);
-  border: none;
   align-items: center;
   justify-items: center;
   justify-self: center;
