@@ -146,14 +146,14 @@ const MonsterImages = styled.div`
     props.currentMonsterTask &&
     css`
       background-color: rgba(105, 163, 176, 0.1);
-      border-radius: 60px;
+      border-radius: 90px;
     `}
 
   ${(props) =>
     props.currentMonsterReward &&
     css`
       background-color: rgba(168, 206, 0, 0.1);
-      border-radius: 60px;
+      border-radius: 90px;
     `}
 `;
 

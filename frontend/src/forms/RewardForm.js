@@ -22,7 +22,6 @@ export default function RewardForm({
     <form onSubmit={handleSubmit}>
       <TextareaField
         itemType="reward"
-        placeholder="enter reward"
         name="description"
         value={rewardData.description}
         onChange={handleChange}

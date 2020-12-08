@@ -14,9 +14,8 @@ export default function EditMonsterPage() {
   return !monster ? null : (
     <>
       <Header icons={false} />
-      <h5>edit your monster</h5>
       <div>
-        <MonsterForm onSave={handleSave} monster={monster} />
+        <MonsterForm onSave={handleSave} monster={monster} actionType="edit" />
         <Confirmation
           onClick={handleDelete}
           label="Delete"

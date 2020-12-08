@@ -1,10 +1,12 @@
 import React from 'react';
 import styled, { css } from 'styled-components/macro';
 
-export default function Button({ children, ...rest }) {
+export default function Button({ children, name, ...rest }) {
   return (
-    <Container {...rest}>
-      <ButtonStyled {...rest}>{children}</ButtonStyled>
+    <Container name={name}>
+      <ButtonStyled name={name} {...rest}>
+        {children}
+      </ButtonStyled>
     </Container>
   );
 }

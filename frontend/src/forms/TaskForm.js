@@ -18,7 +18,6 @@ export default function TaskForm({ onSave, task = initialState, monsterId }) {
     <form onSubmit={handleSubmit}>
       <TextareaField
         itemType="task"
-        placeholder="enter task"
         name="description"
         value={taskData.description}
         onChange={handleChange}

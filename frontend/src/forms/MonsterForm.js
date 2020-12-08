@@ -9,7 +9,11 @@ const initialState = {
   image: '',
 };
 
-export default function MonsterForm({ onSave, monster = initialState }) {
+export default function MonsterForm({
+  onSave,
+  monster = initialState,
+  actionType,
+}) {
   const [monsterData, setMonsterData] = useState(monster);
   const history = useHistory();
 
@@ -18,10 +22,10 @@ export default function MonsterForm({ onSave, monster = initialState }) {
       <MonsterGallery
         savedMonsterImage={monster.image}
         handleImageChange={setMonsterImage}
+        actionType={actionType}
       />
       <InputField
         name="name"
-        placeholder="enter name"
         value={monsterData.name}
         onChange={handleChange}
         type="text"
