@@ -15,12 +15,14 @@ export default function EditMonsterPage() {
     <>
       <Header icons={false} />
       <h5>edit your monster</h5>
-      <MonsterForm onSave={handleSave} monster={monster} />
-      <Confirmation
-        onClick={handleDelete}
-        label="Delete"
-        question="All related tasks and rewards will be deleted as well. Delete?"
-      />
+      <div>
+        <MonsterForm onSave={handleSave} monster={monster} />
+        <Confirmation
+          onClick={handleDelete}
+          label="Delete"
+          question="All related tasks and rewards will be deleted as well. Delete?"
+        />
+      </div>
     </>
   );
 

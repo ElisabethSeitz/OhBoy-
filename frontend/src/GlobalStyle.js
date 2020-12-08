@@ -5,16 +5,10 @@ export default createGlobalStyle`
 
   :root {
    --green-main: #A8CE00;
-   /*--blue-75: #7589A2;
-   --blue-50: #E0E4E8;
-   --blue-25: #F8F8F8;*/
-
    --blue-main: #69A3B0;
    --orange-main: #D13016;
    --beige-main: #fcfcfa;
-   /*--orange-75: #FF9C86;
-   --orange-50: #FFBDAF;
-   --orange-25: #FFDED7;*/
+   
    
    --black-main: #000;
    --grey-font: #AFA9A9;
@@ -36,7 +30,6 @@ export default createGlobalStyle`
    --green-border: 1px solid var(--green-main);
    --orange-border: 1px solid var(--orange-main);
    
-   //--blue-background: #E0E4E866;
   
   }
 
@@ -53,7 +46,6 @@ export default createGlobalStyle`
   input, textarea {
     font-size: 1em;
     font-family: inherit;
-    //background: var(--blue-background);
   }
   
   body{

@@ -22,7 +22,7 @@ export default function AddTaskPage() {
         itemType="task"
         actionType="create"
       />
-      <TaskForm onSave={handleSave} />
+      <TaskForm monsterId={monsterId} onSave={handleSave} />
     </>
   );
 

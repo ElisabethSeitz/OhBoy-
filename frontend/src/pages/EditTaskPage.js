@@ -5,6 +5,7 @@ import TaskForm from '../forms/TaskForm';
 import MonsterContext from '../contexts/MonsterContext';
 import Header from '../components/Header';
 import MonsterSectionSmall from '../components/MonsterSectionSmall';
+import Button from '../components/Button';
 
 export default function EditTaskPage() {
   const { monsterId, taskId } = useParams();
@@ -24,10 +25,10 @@ export default function EditTaskPage() {
         actionType="edit"
       />
       <div>
-        <TaskForm onSave={handleSave} task={task} />
-        <button type="button" onClick={handleDelete}>
+        <TaskForm onSave={handleSave} task={task} monsterId={monsterId} />
+        <Button name="delete" type="button" onClick={handleDelete}>
           Delete
-        </button>
+        </Button>
       </div>
     </>
   );

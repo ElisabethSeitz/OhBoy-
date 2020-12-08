@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import MonsterGallery from './MonsterGallery';
 import { useHistory } from 'react-router-dom';
 import InputField from '../components/InputField';
+import Button from '../components/Button';
 
 const initialState = {
   name: '',
@@ -28,10 +29,10 @@ export default function MonsterForm({ onSave, monster = initialState }) {
       >
         name
       </InputField>
-      <button>Save</button>
-      <button type="button" onClick={handleCancel}>
+      <Button name="save">Save</Button>
+      <Button name="cancel" type="button" onClick={handleCancel}>
         Cancel
-      </button>
+      </Button>
     </form>
   );
 
@@ -49,6 +50,6 @@ export default function MonsterForm({ onSave, monster = initialState }) {
   }
 
   function handleCancel() {
-    history.goBack();
+    history.push('/monsters');
   }
 }

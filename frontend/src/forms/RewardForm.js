@@ -3,13 +3,18 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import TextareaField from '../components/TextareaField';
 import InputField from '../components/InputField';
+import Button from '../components/Button';
 
 const initialState = {
   description: '',
   score: '',
 };
 
-export default function RewardForm({ onSave, reward = initialState }) {
+export default function RewardForm({
+  onSave,
+  reward = initialState,
+  monsterId,
+}) {
   const [rewardData, setRewardData] = useState(reward);
   const history = useHistory();
 
@@ -37,10 +42,10 @@ export default function RewardForm({ onSave, reward = initialState }) {
       >
         score
       </InputField>
-      <button>Save</button>
-      <button type="button" onClick={handleCancel}>
+      <Button name="save">Save</Button>
+      <Button name="cancel" type="button" onClick={handleCancel}>
         Cancel
-      </button>
+      </Button>
     </form>
   );
 
@@ -54,6 +59,6 @@ export default function RewardForm({ onSave, reward = initialState }) {
   }
 
   function handleCancel() {
-    history.goBack();
+    history.push('/monsters/' + monsterId + '/rewards');
   }
 }

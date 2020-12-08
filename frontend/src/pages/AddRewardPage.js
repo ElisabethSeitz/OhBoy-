@@ -22,7 +22,7 @@ export default function AddRewardPage() {
         itemType="reward"
         actionType="create"
       />
-      <RewardForm onSave={handleSave} />
+      <RewardForm onSave={handleSave} monsterId={monsterId} />
     </>
   );
 
