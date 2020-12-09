@@ -4,8 +4,14 @@ import styled, { css } from 'styled-components/macro';
 import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { BsStar, BsCheck } from 'react-icons/bs';
+import { BiDoorOpen } from 'react-icons/bi';
 
-export default function Header({ icons, displayedMonsterId, itemType }) {
+export default function Header({
+  icons,
+  displayedMonsterId,
+  itemType,
+  onLogout,
+}) {
   const { monsters } = useContext(MonsterContext);
   const history = useHistory();
 
@@ -25,6 +31,7 @@ export default function Header({ icons, displayedMonsterId, itemType }) {
       </HeadingStyled>
       <DisplayMonsterImages />
       <DisplayTaskOrRewardIcon />
+      <DisplayLogout />
     </HeaderStyled>
   );
 
@@ -86,6 +93,17 @@ export default function Header({ icons, displayedMonsterId, itemType }) {
       );
     }
   }
+
+  function DisplayLogout() {
+    if (itemType === 'monster') {
+      return (
+        <div className="logout" onClick={() => onLogout()}>
+          <BiDoorOpenStyled />
+        </div>
+      );
+    }
+    return null;
+  }
 }
 
 const HeaderStyled = styled.header`
@@ -119,6 +137,12 @@ const HeaderStyled = styled.header`
 
   .itemText {
     margin: 0;
+  }
+
+  .logout {
+    grid-row: 1;
+    grid-column: 3;
+    height: 32px;
   }
 `;
 
@@ -169,4 +193,8 @@ const BsStarStyled = styled(BsStar)`
   height: 15px;
   color: var(--grey-font);
   margin: 0 0 0 var(--size-m);
+`;
+
+const BiDoorOpenStyled = styled(BiDoorOpen)`
+  font-size: var(--size-xxl);
 `;
