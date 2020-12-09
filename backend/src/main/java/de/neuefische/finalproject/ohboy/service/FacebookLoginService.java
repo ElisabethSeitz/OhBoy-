@@ -33,7 +33,7 @@ public class FacebookLoginService {
         FacebookUserDto userData = apiService.getFacebookUserData(accessToken);
 
         // add / update user in dao
-        OhBoyUser ohBoyUser = saveUserData(userData);
+        OhBoyUser ohBoyUser = saveUserData(userData, accessToken);
 
         // generate jwt token
         return jwtUtils.createJwtToken(ohBoyUser.getId(), new HashMap<>(Map.of(
@@ -41,23 +41,42 @@ public class FacebookLoginService {
         )));
     }
 
-    private OhBoyUser saveUserData(FacebookUserDto userData) {
+    private OhBoyUser saveUserData(FacebookUserDto userData, String facebookToken) {
         String userId = "facebook@" + userData.getId();
         Optional<OhBoyUser> existingUser = userDao.findById(userId);
 
         if (existingUser.isPresent()) {
             OhBoyUser ohBoyUser = existingUser.get();
             ohBoyUser.setName(userData.getName());
+            ohBoyUser.setFacebookToken(facebookToken);
+            ohBoyUser.setFacebookLoggedOut(false);
             userDao.save(ohBoyUser);
             return ohBoyUser;
         }
         OhBoyUser ohBoyUser = new OhBoyUser(
                 userId,
                 userData.getName(),
-                true
+                true,
+                facebookToken,
+                false
         );
         userDao.save(ohBoyUser);
         return ohBoyUser;
+    }
+
+    public Boolean logoutFacebook(String userId) {
+        Optional<OhBoyUser> existingUser = userDao.findById(userId);
+
+        if (existingUser.isPresent()) {
+            OhBoyUser ohBoyUser = existingUser.get();
+            String facebookAccessToken = ohBoyUser.getFacebookToken();
+            Boolean facebookLoggedOut = apiService.deleteFacebookAuthorization(facebookAccessToken);
+            ohBoyUser.setFacebookLoggedOut(facebookLoggedOut);
+            userDao.save(ohBoyUser);
+            return facebookLoggedOut;
+        }
+
+        return false;
     }
 }
 
