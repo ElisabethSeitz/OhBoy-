@@ -1,6 +1,7 @@
 package de.neuefische.finalproject.ohboy.service;
 
 import de.neuefische.finalproject.ohboy.dao.UserDao;
+import de.neuefische.finalproject.ohboy.dto.FacebookDeleteAuthorizationResponseDto;
 import de.neuefische.finalproject.ohboy.dto.FacebookUserDto;
 import de.neuefische.finalproject.ohboy.model.OhBoyUser;
 import de.neuefische.finalproject.ohboy.utils.JwtUtils;
@@ -41,14 +42,14 @@ public class FacebookLoginService {
         )));
     }
 
-    private OhBoyUser saveUserData(FacebookUserDto userData, String facebookToken) {
+    private OhBoyUser saveUserData(FacebookUserDto userData, String accessToken) {
         String userId = "facebook@" + userData.getId();
         Optional<OhBoyUser> existingUser = userDao.findById(userId);
 
         if (existingUser.isPresent()) {
             OhBoyUser ohBoyUser = existingUser.get();
             ohBoyUser.setName(userData.getName());
-            ohBoyUser.setFacebookToken(facebookToken);
+            ohBoyUser.setFacebookToken(accessToken);
             ohBoyUser.setFacebookLoggedOut(false);
             userDao.save(ohBoyUser);
             return ohBoyUser;
@@ -57,7 +58,7 @@ public class FacebookLoginService {
                 userId,
                 userData.getName(),
                 true,
-                facebookToken,
+                accessToken,
                 false
         );
         userDao.save(ohBoyUser);

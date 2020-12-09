@@ -1,11 +1,9 @@
 package de.neuefische.finalproject.ohboy.controller;
 
 import de.neuefische.finalproject.ohboy.dao.UserDao;
-import de.neuefische.finalproject.ohboy.dto.FacebookCodeDto;
-import de.neuefische.finalproject.ohboy.dto.FacebookConfigDto;
-import de.neuefische.finalproject.ohboy.dto.FacebookGetAccessTokenResponseDto;
-import de.neuefische.finalproject.ohboy.dto.FacebookUserDto;
+import de.neuefische.finalproject.ohboy.dto.*;
 import de.neuefische.finalproject.ohboy.model.OhBoyUser;
+import de.neuefische.finalproject.ohboy.service.FacebookApiService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.Test;
@@ -14,9 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.client.RestTemplate;
 
@@ -46,8 +42,30 @@ class FacebookLoginControllerTest {
     @MockBean
     private RestTemplate mockServerRestTemplate;
 
+    @MockBean
+    private FacebookApiService mockedFacebookApiService;
+
     @Autowired
     private UserDao userDao;
+
+    private String login(){
+        when(mockedFacebookApiService.getAccessTokenFromFacebook("code")).thenReturn("access_token");
+        when(mockedFacebookApiService.getFacebookUserData("access_token")).thenReturn(new FacebookUserDto("FacebookUser", "1234"));
+
+        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/auth/login/facebook", new FacebookCodeDto(
+                "code"
+        ), String.class);
+
+        return response.getBody();
+    }
+
+    private <T> HttpEntity<T> getValidAuthorizationEntity(T data) {
+        String token = login();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        return new HttpEntity<T>(data,headers);
+    }
 
     @Test
     public void getFacebookConfigShouldReturnClientIdAndRedirectUri() {
@@ -98,5 +116,35 @@ class FacebookLoginControllerTest {
         ));
 
     }
+
+    @Test
+    public void deleteFacebookAuthentication(){
+
+        // MOCK facebook delete authorization response
+        String deleteUrl ="https://graph.facebook.com/v9.0/me/permissions?access_token=access_token";
+        FacebookDeleteAuthorizationResponseDto success = new FacebookDeleteAuthorizationResponseDto(true);
+        ResponseEntity<FacebookDeleteAuthorizationResponseDto> responseMockSuccess = new ResponseEntity<>(success, HttpStatus.OK);
+        when(mockServerRestTemplate.exchange(eq(deleteUrl),eq(HttpMethod.DELETE),any(), eq(FacebookDeleteAuthorizationResponseDto.class))).thenReturn(responseMockSuccess);
+
+        //WHEN
+        HttpEntity<Void> entity = getValidAuthorizationEntity(null);
+        ResponseEntity<Boolean> response = restTemplate.exchange("http://localhost:" + port + "/auth/login/facebook/logout", HttpMethod.DELETE, entity, Boolean.class);
+
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+
+
+        Optional<OhBoyUser> savedUser = userDao.findById("facebook@1234");
+        assertThat(savedUser.get(), is(OhBoyUser
+                .builder()
+                .name("FacebookUser")
+                .id("facebook@1234")
+                .facebookUser(true)
+                .facebookToken("access_token")
+                .facebookLoggedOut(true)
+                .build()
+        ));
+
+    }
+
 
 }
