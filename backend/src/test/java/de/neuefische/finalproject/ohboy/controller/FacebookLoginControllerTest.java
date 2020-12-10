@@ -4,6 +4,8 @@ import de.neuefische.finalproject.ohboy.dao.UserDao;
 import de.neuefische.finalproject.ohboy.dto.*;
 import de.neuefische.finalproject.ohboy.model.OhBoyUser;
 import de.neuefische.finalproject.ohboy.service.FacebookApiService;
+import de.neuefische.finalproject.ohboy.utils.IdUtils;
+import de.neuefische.finalproject.ohboy.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,8 @@ import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,7 +30,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
-        "jwt.secretkey=somesecrettoken",
+        "jwt.secretkey=somesecretkey",
         "oauth.facebook.client.id=facebookClient",
         "oauth.facebook.client.secret=secret",
         "oauth.facebook.redirect.uri=redirectUri",
@@ -42,30 +46,12 @@ class FacebookLoginControllerTest {
     @MockBean
     private RestTemplate mockServerRestTemplate;
 
-    @MockBean
-    private FacebookApiService mockedFacebookApiService;
-
     @Autowired
     private UserDao userDao;
 
-    private String login(){
-        when(mockedFacebookApiService.getAccessTokenFromFacebook("code")).thenReturn("access_token");
-        when(mockedFacebookApiService.getFacebookUserData("access_token")).thenReturn(new FacebookUserDto("FacebookUser", "1234"));
+    @Autowired
+    private JwtUtils jwtUtils;
 
-        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/auth/login/facebook", new FacebookCodeDto(
-                "code"
-        ), String.class);
-
-        return response.getBody();
-    }
-
-    private <T> HttpEntity<T> getValidAuthorizationEntity(T data) {
-        String token = login();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
-        return new HttpEntity<T>(data,headers);
-    }
 
     @Test
     public void getFacebookConfigShouldReturnClientIdAndRedirectUri() {
@@ -102,7 +88,7 @@ class FacebookLoginControllerTest {
 
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
 
-        Claims claims = Jwts.parser().setSigningKey("somesecrettoken").parseClaimsJws(response.getBody()).getBody();
+        Claims claims = Jwts.parser().setSigningKey("somesecretkey").parseClaimsJws(response.getBody()).getBody();
 
         assertThat(claims.getSubject(), is("facebook@id123"));
         assertThat(claims.get("name"), is("name"));
@@ -112,13 +98,16 @@ class FacebookLoginControllerTest {
                 .builder()
                 .name("name")
                 .id("facebook@id123")
-                .facebookUser(true).build()
+                .facebookToken("access_token")
+                .facebookLoggedOut(false)
+                .facebookUser(true)
+                .build()
         ));
 
     }
 
     @Test
-    public void deleteFacebookAuthentication(){
+    public void deleteFacebookAuthorization(){
 
         // MOCK facebook delete authorization response
         String deleteUrl ="https://graph.facebook.com/v9.0/me/permissions?access_token=access_token";
@@ -126,12 +115,26 @@ class FacebookLoginControllerTest {
         ResponseEntity<FacebookDeleteAuthorizationResponseDto> responseMockSuccess = new ResponseEntity<>(success, HttpStatus.OK);
         when(mockServerRestTemplate.exchange(eq(deleteUrl),eq(HttpMethod.DELETE),any(), eq(FacebookDeleteAuthorizationResponseDto.class))).thenReturn(responseMockSuccess);
 
+        OhBoyUser existingUser = userDao.save(OhBoyUser
+                .builder()
+                .name("FacebookUser")
+                .id("facebook@1234")
+                .facebookUser(true)
+                .facebookToken("access_token")
+                .facebookLoggedOut(false)
+                .build());
+
+        String jwtToken = jwtUtils.createJwtToken(existingUser.getId(), new HashMap<>(Map.of(
+                "name", existingUser.getName())));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(jwtToken);
+
         //WHEN
-        HttpEntity<Void> entity = getValidAuthorizationEntity(null);
-        ResponseEntity<Boolean> response = restTemplate.exchange("http://localhost:" + port + "/auth/login/facebook/logout", HttpMethod.DELETE, entity, Boolean.class);
+        ResponseEntity<Boolean> response = restTemplate.exchange("http://localhost:" + port + "/auth/login/facebook/logout", HttpMethod.DELETE, new HttpEntity<>(null,headers), Boolean.class);
 
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
-
+        assertThat(response.getBody(), is(true));
 
         Optional<OhBoyUser> savedUser = userDao.findById("facebook@1234");
         assertThat(savedUser.get(), is(OhBoyUser
