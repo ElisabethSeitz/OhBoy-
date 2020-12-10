@@ -5,6 +5,13 @@ import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { BsStar, BsCheck } from 'react-icons/bs';
 import { BiDoorOpen } from 'react-icons/bi';
+import {
+  GiSecretDoor,
+  GiDoorway,
+  GiTreeDoor,
+  GiWoodenDoor,
+  GiHobbitDoor,
+} from 'react-icons/gi';
 
 export default function Header({
   icons,
@@ -192,9 +199,10 @@ const BsStarStyled = styled(BsStar)`
   width: 15px;
   height: 15px;
   color: var(--grey-font);
-  margin: 0 0 0 var(--size-m);
+  margin: 0 0 0 14px;
 `;
 
-const BiDoorOpenStyled = styled(BiDoorOpen)`
+const BiDoorOpenStyled = styled(GiDoorway)`
   font-size: var(--size-xxl);
+  color: rgba(0, 0, 0, 0.8);
 `;
