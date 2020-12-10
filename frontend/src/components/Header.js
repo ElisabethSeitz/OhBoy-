@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components/macro';
 import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { BsStar, BsCheck } from 'react-icons/bs';
-import { GiDoorway} from 'react-icons/gi';
+import { GiDoorway } from 'react-icons/gi';
 
 export default function Header({
   icons,
