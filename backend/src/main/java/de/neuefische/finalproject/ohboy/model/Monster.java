@@ -18,7 +18,6 @@ public class Monster {
     private String userId;
     private String name;
     private String image;
-    private int balance;
     private int payoutDoneRewards;
     private int scoreDoneTasks;
 

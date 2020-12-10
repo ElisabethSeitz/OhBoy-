@@ -465,7 +465,6 @@ class TaskServiceTest {
                 .image("someImage")
                 .scoreDoneTasks(0)
                 .payoutDoneRewards(0)
-                .balance(0)
                 .build();
 
         Monster updatedMonster = Monster.builder()
@@ -475,7 +474,6 @@ class TaskServiceTest {
                 .image("someImage")
                 .scoreDoneTasks(10)
                 .payoutDoneRewards(0)
-                .balance(0)
                 .build();
 
         when(taskMongoDao.findById(taskId)).thenReturn(Optional.of(task));
@@ -511,7 +509,6 @@ class TaskServiceTest {
                 .image("someImage")
                 .scoreDoneTasks(25)
                 .payoutDoneRewards(0)
-                .balance(0)
                 .build();
 
         Monster updatedMonster = Monster.builder()
@@ -521,7 +518,6 @@ class TaskServiceTest {
                 .image("someImage")
                 .scoreDoneTasks(15)
                 .payoutDoneRewards(0)
-                .balance(0)
                 .build();
 
         when(taskMongoDao.findById(taskId)).thenReturn(Optional.of(task));

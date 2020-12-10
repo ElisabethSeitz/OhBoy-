@@ -44,7 +44,6 @@ class MonsterServiceTest {
                 .userId(userId)
                 .name("some name")
                 .image("some image")
-                .balance(0)
                 .scoreDoneTasks(0)
                 .payoutDoneRewards(0)
                 .build()
@@ -75,7 +74,6 @@ class MonsterServiceTest {
                .userId("some UserId")
                .name("some name")
                .image("some image")
-               .balance(0)
                .scoreDoneTasks(0)
                .payoutDoneRewards(0)
                .build();
@@ -108,7 +106,6 @@ class MonsterServiceTest {
                 .userId("some userId")
                 .name("some name")
                 .image("some image")
-                .balance(5)
                 .payoutDoneRewards(10)
                 .scoreDoneTasks(20)
                 .build();
@@ -118,7 +115,6 @@ class MonsterServiceTest {
                 .userId("some userId")
                 .name("some updatedName")
                 .image("some updatedImage")
-                .balance(5)
                 .payoutDoneRewards(10)
                 .scoreDoneTasks(20)
                 .build();
@@ -151,7 +147,6 @@ class MonsterServiceTest {
                 .userId("some userId")
                 .name("some name")
                 .image("some image")
-                .balance(5)
                 .payoutDoneRewards(10)
                 .scoreDoneTasks(20)
                 .build();
@@ -201,7 +196,6 @@ class MonsterServiceTest {
                 .userId("some userId")
                 .name("some name")
                 .image("some image")
-                .balance(5)
                 .payoutDoneRewards(10)
                 .scoreDoneTasks(20)
                 .build()));
@@ -224,7 +218,6 @@ class MonsterServiceTest {
                 .userId("some userId")
                 .name("some name")
                 .image("some image")
-                .balance(5)
                 .payoutDoneRewards(10)
                 .scoreDoneTasks(20)
                 .build()));
@@ -261,7 +254,6 @@ class MonsterServiceTest {
                 .userId("some userId")
                 .name("some name")
                 .image("some image")
-                .balance(5)
                 .payoutDoneRewards(10)
                 .scoreDoneTasks(20)
                 .build()));
@@ -298,7 +290,6 @@ class MonsterServiceTest {
                 .userId("some userId")
                 .name("some name")
                 .image("some image")
-                .balance(5)
                 .payoutDoneRewards(10)
                 .scoreDoneTasks(20)
                 .build()));

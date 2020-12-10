@@ -70,9 +70,9 @@ class TaskControllerTest {
 
         monsterDao.deleteAll();
         monsterDao.saveAll(List.of(
-                new Monster("someMonsterId2", "facebook@1234", "someName2", "someImage2", 100, 50, 4),
-                new Monster("someMonsterId", "facebook@1234", "someName", "someImage", 10, 5, 15),
-                new Monster("someMonsterId3", "someUserId3", "someName3", "someImage3", 25, 10, 30)));
+                new Monster("someMonsterId2", "facebook@1234", "someName2", "someImage2", 50, 4),
+                new Monster("someMonsterId", "facebook@1234", "someName", "someImage", 5, 15),
+                new Monster("someMonsterId3", "someUserId3", "someName3", "someImage3", 10, 30)));
     }
 
     private String getTasksUrl() {
@@ -412,7 +412,6 @@ class TaskControllerTest {
                 .image("someImage2")
                 .scoreDoneTasks(14)
                 .payoutDoneRewards(50)
-                .balance(100)
                 .build();
 
         assertThat(savedMonster.get(), is(expectedMonster));
@@ -438,7 +437,6 @@ class TaskControllerTest {
                 .image("someImage")
                 .scoreDoneTasks(10)
                 .payoutDoneRewards(5)
-                .balance(10)
                 .build();
 
         assertThat(savedMonster.get(), is(expectedMonster));
@@ -498,7 +496,6 @@ class TaskControllerTest {
                 .userId("someUserId3")
                 .name("someName3")
                 .image("someImage3")
-                .balance(25)
                 .payoutDoneRewards(10)
                 .scoreDoneTasks(30)
                 .build();

@@ -60,7 +60,6 @@ public class MonsterService {
                 .userId(userId)
                 .name(update.getName())
                 .image(update.getImage())
-                .balance(monster.getBalance())
                 .payoutDoneRewards(monster.getPayoutDoneRewards())
                 .scoreDoneTasks(monster.getScoreDoneTasks())
                 .build();

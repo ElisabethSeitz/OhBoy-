@@ -69,9 +69,9 @@ class MonsterControllerTest {
     public void setupDao() {
         monsterDao.deleteAll();
         monsterDao.saveAll(List.of(
-                new Monster("someId", "someUserId", "someName", "someImage", 0, 0, 0),
-                new Monster("someId2", "facebook@1234", "someName2", "someImage2", 100, 50, 4),
-                new Monster("someId3", "someUserId3", "someName3", "someImage3", 0, 0, 0)
+                new Monster("someId", "someUserId", "someName", "someImage", 0, 0),
+                new Monster("someId2", "facebook@1234", "someName2", "someImage2", 50, 4),
+                new Monster("someId3", "someUserId3", "someName3", "someImage3", 0, 0)
         ));
 
         userDao.deleteAll();
@@ -145,7 +145,6 @@ class MonsterControllerTest {
                 .userId("facebook@1234")
                 .name("someName2")
                 .image("someImage2")
-                .balance(100)
                 .scoreDoneTasks(4)
                 .payoutDoneRewards(50)
                 .build()
@@ -175,7 +174,6 @@ class MonsterControllerTest {
                 .userId("facebook@1234")
                 .name("some name")
                 .image("some image")
-                .balance(0)
                 .scoreDoneTasks(0)
                 .payoutDoneRewards(0)
                 .build()
@@ -206,7 +204,6 @@ class MonsterControllerTest {
                 .userId("facebook@1234")
                 .name("updatedName")
                 .image("updatedImage")
-                .balance(100)
                 .payoutDoneRewards(50)
                 .scoreDoneTasks(4)
                 .build();
@@ -258,7 +255,6 @@ class MonsterControllerTest {
                 .userId("someUserId")
                 .name("someName")
                 .image("someImage")
-                .balance(0)
                 .payoutDoneRewards(0)
                 .scoreDoneTasks(0)
                 .build();

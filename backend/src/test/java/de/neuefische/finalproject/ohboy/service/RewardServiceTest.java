@@ -466,7 +466,6 @@ public class RewardServiceTest {
                 .image("someImage")
                 .scoreDoneTasks(0)
                 .payoutDoneRewards(0)
-                .balance(0)
                 .build();
 
         Monster updatedMonster = Monster.builder()
@@ -476,7 +475,6 @@ public class RewardServiceTest {
                 .image("someImage")
                 .scoreDoneTasks(0)
                 .payoutDoneRewards(10)
-                .balance(0)
                 .build();
 
         when(rewardMongoDao.findById(rewardId)).thenReturn(Optional.of(reward));
@@ -512,7 +510,6 @@ public class RewardServiceTest {
                 .image("someImage")
                 .scoreDoneTasks(0)
                 .payoutDoneRewards(25)
-                .balance(0)
                 .build();
 
         Monster updatedMonster = Monster.builder()
@@ -522,7 +519,6 @@ public class RewardServiceTest {
                 .image("someImage")
                 .scoreDoneTasks(0)
                 .payoutDoneRewards(15)
-                .balance(0)
                 .build();
 
         when(rewardMongoDao.findById(rewardId)).thenReturn(Optional.of(reward));
