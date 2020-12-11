@@ -18,5 +18,12 @@ public class OhBoyUser {
     private String id;
     private String name;
     private boolean facebookUser;
+    private String facebookToken;
+    private boolean facebookLoggedOut;
 
+    public OhBoyUser(String id, String name, boolean facebookUser) {
+        this.id = id;
+        this.name = name;
+        this.facebookUser = facebookUser;
+    }
 }

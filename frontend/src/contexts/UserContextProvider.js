@@ -7,6 +7,8 @@ import {
   loadUserDataFromLocalStorage,
   saveTokenToLocalStorage,
   saveUserDataToLocalStorage,
+  removeTokenFromLocalStorage,
+  removeUserDataFromLocalStorage,
 } from '../service/LocalStorage';
 
 export default function UserContextProvider({ children }) {
@@ -36,6 +38,14 @@ export default function UserContextProvider({ children }) {
       .post('/auth/login/facebook', { code })
       .then((response) => setToken(response.data));
 
+  const logoutFacebook = () =>
+    axios
+      .delete('/auth/login/facebook/logout', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(removeTokenFromLocalStorage)
+      .then(removeUserDataFromLocalStorage);
+
   return (
     <UserContext.Provider
       value={{
@@ -43,6 +53,7 @@ export default function UserContextProvider({ children }) {
         tokenIsValid,
         loginWithFacebookCode,
         userData,
+        logoutFacebook,
       }}
     >
       {children}

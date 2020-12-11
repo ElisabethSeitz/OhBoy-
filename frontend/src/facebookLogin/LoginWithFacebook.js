@@ -51,6 +51,7 @@ const FacebookButton = styled.div`
   justify-items: center;
   justify-self: center;
   align-self: center;
+  -webkit-appearance: none;
 
   .facebookLink {
     color: white;

@@ -1,6 +1,7 @@
 package de.neuefische.finalproject.ohboy.service;
 
 import de.neuefische.finalproject.ohboy.dao.UserDao;
+import de.neuefische.finalproject.ohboy.dto.FacebookDeleteAuthorizationResponseDto;
 import de.neuefische.finalproject.ohboy.dto.FacebookUserDto;
 import de.neuefische.finalproject.ohboy.model.OhBoyUser;
 import de.neuefische.finalproject.ohboy.utils.JwtUtils;
@@ -33,7 +34,7 @@ public class FacebookLoginService {
         FacebookUserDto userData = apiService.getFacebookUserData(accessToken);
 
         // add / update user in dao
-        OhBoyUser ohBoyUser = saveUserData(userData);
+        OhBoyUser ohBoyUser = saveUserData(userData, accessToken);
 
         // generate jwt token
         return jwtUtils.createJwtToken(ohBoyUser.getId(), new HashMap<>(Map.of(
@@ -41,23 +42,42 @@ public class FacebookLoginService {
         )));
     }
 
-    private OhBoyUser saveUserData(FacebookUserDto userData) {
+    private OhBoyUser saveUserData(FacebookUserDto userData, String accessToken) {
         String userId = "facebook@" + userData.getId();
         Optional<OhBoyUser> existingUser = userDao.findById(userId);
 
         if (existingUser.isPresent()) {
             OhBoyUser ohBoyUser = existingUser.get();
             ohBoyUser.setName(userData.getName());
+            ohBoyUser.setFacebookToken(accessToken);
+            ohBoyUser.setFacebookLoggedOut(false);
             userDao.save(ohBoyUser);
             return ohBoyUser;
         }
         OhBoyUser ohBoyUser = new OhBoyUser(
                 userId,
                 userData.getName(),
-                true
+                true,
+                accessToken,
+                false
         );
         userDao.save(ohBoyUser);
         return ohBoyUser;
+    }
+
+    public Boolean logoutFacebook(String userId) {
+        Optional<OhBoyUser> existingUser = userDao.findById(userId);
+
+        if (existingUser.isPresent()) {
+            OhBoyUser ohBoyUser = existingUser.get();
+            String facebookAccessToken = ohBoyUser.getFacebookToken();
+            Boolean facebookLoggedOut = apiService.deleteFacebookAuthorization(facebookAccessToken);
+            ohBoyUser.setFacebookLoggedOut(facebookLoggedOut);
+            userDao.save(ohBoyUser);
+            return facebookLoggedOut;
+        }
+
+        return false;
     }
 }
 

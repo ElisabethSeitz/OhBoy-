@@ -6,6 +6,8 @@ import de.neuefische.finalproject.ohboy.dto.FacebookConfigDto;
 import de.neuefische.finalproject.ohboy.service.FacebookLoginService;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("auth/login/facebook")
 public class FacebookLoginController {
@@ -30,5 +32,8 @@ public class FacebookLoginController {
         return facebookLoginService.getFacebookAccessToken(dto.getCode());
     }
 
-
+    @DeleteMapping("/logout")
+    public Boolean logoutFacebook (Principal principal) {
+        return facebookLoginService.logoutFacebook(principal.getName());
+    }
 }
