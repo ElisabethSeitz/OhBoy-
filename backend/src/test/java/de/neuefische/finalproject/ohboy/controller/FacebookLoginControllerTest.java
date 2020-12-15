@@ -3,8 +3,6 @@ package de.neuefische.finalproject.ohboy.controller;
 import de.neuefische.finalproject.ohboy.dao.UserDao;
 import de.neuefische.finalproject.ohboy.dto.*;
 import de.neuefische.finalproject.ohboy.model.OhBoyUser;
-import de.neuefische.finalproject.ohboy.service.FacebookApiService;
-import de.neuefische.finalproject.ohboy.utils.IdUtils;
 import de.neuefische.finalproject.ohboy.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
