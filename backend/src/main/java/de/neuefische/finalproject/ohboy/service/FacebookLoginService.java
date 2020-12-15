@@ -65,19 +65,16 @@ public class FacebookLoginService {
         return ohBoyUser;
     }
 
-    public Boolean logoutFacebook(String userId) {
+    public void logoutFacebook(String userId) {
         Optional<OhBoyUser> existingUser = userDao.findById(userId);
 
         if (existingUser.isPresent()) {
             OhBoyUser ohBoyUser = existingUser.get();
             String facebookAccessToken = ohBoyUser.getFacebookToken();
-            Boolean facebookLoggedOut = apiService.deleteFacebookAuthorization(facebookAccessToken);
+            boolean facebookLoggedOut = apiService.deleteFacebookAuthorization(facebookAccessToken);
             ohBoyUser.setFacebookLoggedOut(facebookLoggedOut);
             userDao.save(ohBoyUser);
-            return facebookLoggedOut;
         }
-
-        return false;
     }
 }
 
