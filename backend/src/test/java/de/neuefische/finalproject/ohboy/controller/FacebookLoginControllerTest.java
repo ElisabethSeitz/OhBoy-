@@ -129,10 +129,9 @@ class FacebookLoginControllerTest {
         headers.setBearerAuth(jwtToken);
 
         //WHEN
-        ResponseEntity<Boolean> response = restTemplate.exchange("http://localhost:" + port + "/auth/login/facebook/logout", HttpMethod.DELETE, new HttpEntity<>(null,headers), Boolean.class);
+        ResponseEntity<Void> response = restTemplate.exchange("http://localhost:" + port + "/auth/login/facebook/logout", HttpMethod.DELETE, new HttpEntity<>(null,headers), Void.class);
 
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
-        assertThat(response.getBody(), is(true));
 
         Optional<OhBoyUser> savedUser = userDao.findById("facebook@1234");
         assertThat(savedUser.get(), is(OhBoyUser
@@ -145,39 +144,5 @@ class FacebookLoginControllerTest {
                 .build()
         ));
 
-    }
-
-    @Test
-    public void deleteFacebookAuthorizationWhenUserNotExists(){
-
-        // MOCK facebook delete authorization response
-        String deleteUrl ="https://graph.facebook.com/v9.0/me/permissions?access_token=access_token";
-        FacebookDeleteAuthorizationResponseDto success = new FacebookDeleteAuthorizationResponseDto(true);
-        ResponseEntity<FacebookDeleteAuthorizationResponseDto> responseMockSuccess = new ResponseEntity<>(success, HttpStatus.OK);
-        when(mockServerRestTemplate.exchange(eq(deleteUrl),eq(HttpMethod.DELETE),any(), eq(FacebookDeleteAuthorizationResponseDto.class))).thenReturn(responseMockSuccess);
-
-        OhBoyUser existingUser = userDao.save(OhBoyUser
-                .builder()
-                .name("FacebookUser")
-                .id("facebook@1234")
-                .facebookUser(true)
-                .facebookToken("access_token")
-                .facebookLoggedOut(false)
-                .build());
-
-        String jwtToken = jwtUtils.createJwtToken("facebook@123", new HashMap<>(Map.of(
-                "name", existingUser.getName())));
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(jwtToken);
-
-        //WHEN
-        ResponseEntity<Boolean> response = restTemplate.exchange("http://localhost:" + port + "/auth/login/facebook/logout", HttpMethod.DELETE, new HttpEntity<>(null,headers), Boolean.class);
-
-        assertThat(response.getStatusCode(), is(HttpStatus.OK));
-        assertThat(response.getBody(), is(false));
-
-        Optional<OhBoyUser> savedUser = userDao.findById("facebook@123");
-        assertThat(savedUser.isPresent(),is(false));
     }
 }

@@ -33,7 +33,7 @@ public class FacebookLoginController {
     }
 
     @DeleteMapping("/logout")
-    public Boolean logoutFacebook (Principal principal) {
-        return facebookLoginService.logoutFacebook(principal.getName());
+    public void logoutFacebook (Principal principal) {
+        facebookLoginService.logoutFacebook(principal.getName());
     }
 }

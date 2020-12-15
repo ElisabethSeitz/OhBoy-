@@ -63,21 +63,22 @@ public class FacebookApiService {
         return response.getBody();
     }
 
-    public Boolean deleteFacebookAuthorization(String accessToken) {
+    public boolean deleteFacebookAuthorization(String accessToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         HttpEntity<Void> entity = new HttpEntity<>(null, headers);
 
-        ResponseEntity<FacebookDeleteAuthorizationResponseDto> response = template.exchange(
-                getFacebookApiDeleteAuthorizationUrl(accessToken),
-                HttpMethod.DELETE,
-                entity,
-                FacebookDeleteAuthorizationResponseDto.class);
-
-        if (response.getStatusCode() != HttpStatus.OK) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "failed delete facebook authorization");
-        }
-        return response.getBody().getSuccess();
+        try {
+            ResponseEntity<FacebookDeleteAuthorizationResponseDto> response = template.exchange(
+                    getFacebookApiDeleteAuthorizationUrl(accessToken),
+                    HttpMethod.DELETE,
+                    entity,
+                    FacebookDeleteAuthorizationResponseDto.class);
+            return response.getBody().getSuccess();
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+            }
     }
 
     private String getAccessTokenUrl(String code) {
